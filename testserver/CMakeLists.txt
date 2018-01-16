@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-
+ add_compile_options(-std=c++11)
 INCLUDE_DIRECTORIES( .  )
 INCLUDE_DIRECTORIES( ../common)
 INCLUDE_DIRECTORIES(../asio-1.10.8/include )
