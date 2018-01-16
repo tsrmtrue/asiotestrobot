@@ -58,14 +58,18 @@ public:
 		while (recent_msgs_.size() > max_recent_msgs)
 			recent_msgs_.pop_front();
 
-		for (auto participant : participants_)
-			participant->deliver(msg);
+		//for (auto participant : participants_)
+		//	participant->deliver(msg);
+
+		std::cout << message_count << "chat message  " << msg.data() << std::endl;
+		message_count++;
 	}
 
 private:
 	std::set<chat_participant_ptr> participants_;
 	enum { max_recent_msgs = 100 };
 	chat_message_queue recent_msgs_;
+	int message_count{ 0 };
 };
 
 //----------------------------------------------------------------------

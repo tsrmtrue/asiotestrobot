@@ -12,7 +12,7 @@
 #include <deque>
 #include <iostream>
 #include <thread>
-//#include <chrono>         // std::chrono::seconds
+#include <chrono>         // std::chrono::seconds
 #include "asio.hpp"
 #include "chat_message.hpp"
 
@@ -128,7 +128,7 @@ private:
 	chat_message_queue write_msgs_;
 };
 
-int main(int argc, char* argv[])
+void worker()
 {
 	try
 	{
@@ -136,19 +136,17 @@ int main(int argc, char* argv[])
 		tcp::resolver resolver(io_service);
 		auto endpoint_iterator=resolver.resolve({ "127.0.0.1", "9999" });
 		std::list<chat_client > list_allclient;
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 1; ++i)
 		{
 			chat_client c(io_service, endpoint_iterator);
-			list_allclient.emplace_back(c);
-
+			list_allclient.emplace_back(std::move(c));
 		}
-
-
-		std::thread t([&io_service]() { io_service.run(); });
-
+		int trycount = 0;
 		char line[chat_message::max_body_length + 1] = "hello world";
 		while (1)
 		{
+			io_service.run();
+
 			for(auto & c : list_allclient)
 			{
 				chat_message msg;
@@ -156,19 +154,34 @@ int main(int argc, char* argv[])
 				std::memcpy(msg.body(), line, msg.body_length());
 				msg.encode_header();
 				c.write(msg);
+				std::cout << trycount << " try send helloworld" << std::endl;
+				trycount++;
 			}
-			std::this_thread::sleep_for(std::chrono::seconds(100));
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 
 		for (auto & c : list_allclient)
 		{
 			c.close();
 		}
-		t.join();
+		//t.join();
 	}
 	catch (std::exception& e)
 	{
 		std::cerr << "Exception: " << e.what() << "\n";
+	}
+}
+
+int main(int argc, char* argv[])
+{
+
+	for (int i = 0; i < 10; ++i)
+	{
+		std::thread* t = new std::thread(worker);
+	}
+	while (1)
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
 	return 0;

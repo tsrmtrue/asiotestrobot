@@ -24,6 +24,7 @@ public:
   chat_message()
     : body_length_(0)
   {
+	  memset(data_, 0, sizeof(data_));
   }
 
   const char* data() const

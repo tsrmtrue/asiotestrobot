@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 INCLUDE_DIRECTORIES( .  )
 INCLUDE_DIRECTORIES( ../common)
-INCLUDE_DIRECTORIES(../../thirdparty/asio-1.10.8/include )
+INCLUDE_DIRECTORIES(../asio-1.10.8/include )
 
 ADD_DEFINITIONS(-DASIO_STANDALONE)
 
