@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0)
+
+INCLUDE_DIRECTORIES( .  )
+INCLUDE_DIRECTORIES( ../common)
+INCLUDE_DIRECTORIES(../../thirdparty/asio-1.10.8/include )
+
+ADD_DEFINITIONS(-DASIO_STANDALONE)
+
+PROJECT(robotserver)
+
+FILE(GLOB_RECURSE SRC_LIST *.cpp)
+AUX_SOURCE_DIRECTORY(../common SRC_LIST)
+
+ADD_EXECUTABLE(robotserver ${SRC_LIST})
