@@ -12,6 +12,7 @@
 #include <deque>
 #include <iostream>
 #include <thread>
+#include <list>
 #include <chrono>         // std::chrono::seconds
 #include "asio.hpp"
 #include "chat_message.hpp"
