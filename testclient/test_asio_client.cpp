@@ -100,6 +100,7 @@ private:
 		});
 	}
 
+	int trycount = 0;
 	void do_write()
 	{
 		asio::async_write(socket_,
@@ -109,6 +110,9 @@ private:
 		{
 			if (!ec)
 			{
+				std::cout << trycount << " try send "<< write_msgs_.front().data() << std::endl;
+				trycount++;
+
 				write_msgs_.pop_front();
 				if (!write_msgs_.empty())
 				{
@@ -203,8 +207,14 @@ int main(int argc, char* argv[])
     asio::io_service io_service;
 
     tcp::resolver resolver(io_service);
+
+	std::list<chat_client* > list_allclient;
     auto endpoint_iterator = resolver.resolve({ "127.0.0.1", "9999" });
-    chat_client c(io_service, endpoint_iterator);
+	for (int i = 0; i < 10; ++i)
+	{
+		chat_client* c = new chat_client(io_service, endpoint_iterator);
+		list_allclient.emplace_back(c);
+	}
 
     std::thread t([&io_service](){ io_service.run(); });
 
@@ -215,11 +225,17 @@ int main(int argc, char* argv[])
       	msg.body_length(std::strlen(line));
       	std::memcpy(msg.body(), line, msg.body_length());
       	msg.encode_header();
-      	c.write(msg);
+		for (auto * c :list_allclient)
+		{
+			c->write(msg);
+		}
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
 
-    c.close();
+    }
+	for (auto * c : list_allclient)
+	{
+		c->close();
+	}
     t.join();
 
 
