@@ -136,34 +136,43 @@ void worker()
 		asio::io_service io_service;
 		tcp::resolver resolver(io_service);
 		auto endpoint_iterator=resolver.resolve({ "127.0.0.1", "9999" });
-		std::list<chat_client > list_allclient;
+		std::list<chat_client* > list_allclient;
 		for (int i = 0; i < 1; ++i)
 		{
-			chat_client c(io_service, endpoint_iterator);
-			list_allclient.emplace_back(std::move(c));
+			chat_client* c = new chat_client(io_service, endpoint_iterator);
+			list_allclient.emplace_back(c);
 		}
 		int trycount = 0;
 		char line[chat_message::max_body_length + 1] = "hello world";
-		while (1)
-		{
-			io_service.run();
-
-			for(auto & c : list_allclient)
+			for(auto iter = list_allclient.begin(); iter != list_allclient.end(); ++iter)
 			{
 				chat_message msg;
 				msg.body_length(std::strlen(line));
 				std::memcpy(msg.body(), line, msg.body_length());
 				msg.encode_header();
-				c.write(msg);
+				(*iter)->write(msg);
 				std::cout << trycount << " try send helloworld" << std::endl;
 				trycount++;
 			}
-			std::this_thread::sleep_for(std::chrono::microseconds(1));
+		while (1)
+		{
+
+			for(auto iter = list_allclient.begin(); iter != list_allclient.end(); ++iter)
+			{
+				chat_message msg;
+				msg.body_length(std::strlen(line));
+				std::memcpy(msg.body(), line, msg.body_length());
+				msg.encode_header();
+				(*iter)->write(msg);
+				std::cout << trycount << " try send helloworld" << std::endl;
+				trycount++;
+			}
+			// std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 
-		for (auto & c : list_allclient)
+		for (auto * c : list_allclient)
 		{
-			c.close();
+			c->close();
 		}
 		//t.join();
 	}
@@ -176,14 +185,44 @@ void worker()
 int main(int argc, char* argv[])
 {
 
-	for (int i = 0; i < 10; ++i)
-	{
-		std::thread* t = new std::thread(worker);
-	}
-	while (1)
-	{
+	// asio::io_service io_service;
+
+	// std::thread* t = new std::thread(worker);
+	// for (int i = 0; i < 1; ++i)
+	// {
+	// }
+	// while (1)
+	// {
+	// 	io_service.run();
+	// 	std::this_thread::sleep_for(std::chrono::seconds(1));
+	// }
+
+	// t->join();
+
+
+    asio::io_service io_service;
+
+    tcp::resolver resolver(io_service);
+    auto endpoint_iterator = resolver.resolve({ "127.0.0.1", "9999" });
+    chat_client c(io_service, endpoint_iterator);
+
+    std::thread t([&io_service](){ io_service.run(); });
+
+    char line[chat_message::max_body_length + 1] = "hello world";
+    while (1)
+    {
+      	chat_message msg;
+      	msg.body_length(std::strlen(line));
+      	std::memcpy(msg.body(), line, msg.body_length());
+      	msg.encode_header();
+      	c.write(msg);
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}
+    }
+
+    c.close();
+    t.join();
+
+
 
 	return 0;
 }
