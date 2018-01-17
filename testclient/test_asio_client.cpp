@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
 
 	std::list<chat_client* > list_allclient;
     auto endpoint_iterator = resolver.resolve({ "127.0.0.1", "9999" });
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 1000; ++i)
 	{
 		chat_client* c = new chat_client(io_service, endpoint_iterator);
 		list_allclient.emplace_back(c);
@@ -219,12 +219,12 @@ int main(int argc, char* argv[])
     std::thread t([&io_service](){ io_service.run(); });
 
     char line[chat_message::max_body_length + 1] = "hello world";
-    while (1)
+    chat_message msg;
+    msg.body_length(std::strlen(line));
+    std::memcpy(msg.body(), line, msg.body_length());
+    msg.encode_header();
+   while (1)
     {
-      	chat_message msg;
-      	msg.body_length(std::strlen(line));
-      	std::memcpy(msg.body(), line, msg.body_length());
-      	msg.encode_header();
 		for (auto * c :list_allclient)
 		{
 			c->write(msg);
