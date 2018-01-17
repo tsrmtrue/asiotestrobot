@@ -11,5 +11,9 @@ PROJECT(robotclient)
 FILE(GLOB_RECURSE SRC_LIST *.cpp)
 AUX_SOURCE_DIRECTORY(../common SRC_LIST)
 
+IF (WIN32)  
+ELSE()
+    LINK_LIBRARIES( pthread )
+ENDIF()  
 
 ADD_EXECUTABLE(robotclient ${SRC_LIST})
