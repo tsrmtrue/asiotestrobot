@@ -216,14 +216,19 @@ int main(int argc, char* argv[])
 		list_allclient.emplace_back(c);
 	}
 
-    std::thread t([&io_service](){ io_service.run(); });
+	std::list<std::thread * > threadpool;
+	for(int i = 0; i<10; ++i)
+	{
+		std::thread* t = new std::thread([&io_service](){ io_service.run(); });
+		threadpool.push_back(t);
+	}
 
     char line[chat_message::max_body_length + 1] = "hello world";
     chat_message msg;
     msg.body_length(std::strlen(line));
     std::memcpy(msg.body(), line, msg.body_length());
     msg.encode_header();
-   while (1)
+    while (1)
     {
 		for (auto * c :list_allclient)
 		{
@@ -236,9 +241,10 @@ int main(int argc, char* argv[])
 	{
 		c->close();
 	}
-    t.join();
-
-
+	for (auto * t: threadpool)
+	{
+		t->join();
+	}
 
 	return 0;
 }
