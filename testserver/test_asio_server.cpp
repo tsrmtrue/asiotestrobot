@@ -22,7 +22,14 @@ using asio::ip::tcp;
 
 //----------------------------------------------------------------------
 
-typedef std::deque<chat_message> chat_message_queue;
+
+struct SMessage
+{
+	char buff[512]{ 0 };
+	std::size_t count{ 0 };
+};
+
+typedef std::deque<SMessage> chat_message_queue;
 
 //----------------------------------------------------------------------
 
@@ -30,7 +37,7 @@ class chat_participant
 {
 public:
 	virtual ~chat_participant() {}
-	virtual void deliver(const chat_message& msg) = 0;
+	virtual void deliver(const SMessage& msg) = 0;
 };
 
 typedef std::shared_ptr<chat_participant> chat_participant_ptr;
@@ -52,16 +59,16 @@ public:
 		participants_.erase(participant);
 	}
 
-	void deliver(const chat_message& msg)
+	void deliver(const SMessage& msg)
 	{
 		recent_msgs_.push_back(msg);
 		while (recent_msgs_.size() > max_recent_msgs)
 			recent_msgs_.pop_front();
 
-		//for (auto participant : participants_)
-		//	participant->deliver(msg);
+		for (auto participant : participants_)
+			participant->deliver(msg);
 
-		std::cout << message_count << "chat message  " << msg.data() << std::endl;
+		std::cout << message_count << "chat message  " << msg.buff << std::endl;
 		message_count++;
 	}
 
@@ -91,7 +98,7 @@ public:
 		do_read_header();
 	}
 
-	void deliver(const chat_message& msg)
+	void deliver(const SMessage& msg)
 	{
 		bool write_in_progress = !write_msgs_.empty();
 		write_msgs_.push_back(msg);
@@ -106,30 +113,14 @@ private:
 	{
 		auto self(shared_from_this());
 		asio::async_read(socket_,
-			asio::buffer(read_msg_.data(), chat_message::header_length),
-			[this, self](std::error_code ec, std::size_t /*length*/)
+			asio::buffer(read_msg_.buff, sizeof(read_msg_.buff)),
+			[this, self](std::error_code ec, std::size_t length)
 		{
-			if (!ec && read_msg_.decode_header())
+			if (!ec )
 			{
-				do_read_body();
-			}
-			else
-			{
-				room_.leave(shared_from_this());
-			}
-		});
-	}
-
-	void do_read_body()
-	{
-		auto self(shared_from_this());
-		asio::async_read(socket_,
-			asio::buffer(read_msg_.body(), read_msg_.body_length()),
-			[this, self](std::error_code ec, std::size_t /*length*/)
-		{
-			if (!ec)
-			{
+				read_msg_.count = length;
 				room_.deliver(read_msg_);
+
 				do_read_header();
 			}
 			else
@@ -139,12 +130,31 @@ private:
 		});
 	}
 
+	//void do_read_body()
+	//{
+	//	auto self(shared_from_this());
+	//	asio::async_read(socket_,
+	//		asio::buffer(read_msg_.body(), read_msg_.body_length()),
+	//		[this, self](std::error_code ec, std::size_t /*length*/)
+	//	{
+	//		if (!ec)
+	//		{
+	//			room_.deliver(read_msg_);
+	//			do_read_header();
+	//		}
+	//		else
+	//		{
+	//			room_.leave(shared_from_this());
+	//		}
+	//	});
+	//}
+
 	void do_write()
 	{
 		auto self(shared_from_this());
 		asio::async_write(socket_,
-			asio::buffer(write_msgs_.front().data(),
-				write_msgs_.front().length()),
+			asio::buffer(write_msgs_.front().buff,
+				write_msgs_.front().count),
 			[this, self](std::error_code ec, std::size_t /*length*/)
 		{
 			if (!ec)
@@ -164,7 +174,7 @@ private:
 
 	tcp::socket socket_;
 	chat_room& room_;
-	chat_message read_msg_;
+	SMessage read_msg_;
 	chat_message_queue write_msgs_;
 };
 
