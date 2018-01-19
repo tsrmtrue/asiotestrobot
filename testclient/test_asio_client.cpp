@@ -16,6 +16,7 @@
 #include <chrono>         // std::chrono::seconds
 #include "asio.hpp"
 #include "chat_message.hpp"
+#include "types/behaviac_types.h"
 
 using asio::ip::tcp;
 

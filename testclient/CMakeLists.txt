@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
- add_compile_options(-std=c++11)
+
+PROJECT(robotclient)
+
+add_compile_options(-std=c++11)
+
+FILE(GLOB_RECURSE SRC_LIST *.cpp)
+AUX_SOURCE_DIRECTORY(../common SRC_LIST)
+
 
 IF (WIN32)  
 ELSE()
@@ -11,17 +18,28 @@ ENDIF()
 
 INCLUDE_DIRECTORIES( .  )
 INCLUDE_DIRECTORIES( ../common)
+
 INCLUDE_DIRECTORIES(../asio-1.10.8/include )
+INCLUDE_DIRECTORIES(../behaviac/inc )
 
 ADD_DEFINITIONS(-DASIO_STANDALONE)
 ADD_DEFINITIONS(-DASIO_HAS_STD_CHRONO)
 
+#behaviac 
+INCLUDE_DIRECTORIES( ../common/behaviac_generated)
+INCLUDE_DIRECTORIES( ../common/behaviac_generated/behaviors)
+AUX_SOURCE_DIRECTORY(../common/behaviac_generated/behaviors SRC_LIST)
+AUX_SOURCE_DIRECTORY(../common/behaviac_generated/types/internal SRC_LIST)
+IF (WIN32)  
+    LINK_LIBRARIES( libbehaviac_msvc_debug )
+ELSE()
+ENDIF()  
+LINK_DIRECTORIES( ../behaviac/bin )
+#behaviac 
 
 
-PROJECT(robotclient)
 
-FILE(GLOB_RECURSE SRC_LIST *.cpp)
-AUX_SOURCE_DIRECTORY(../common SRC_LIST)
+
 
 IF (WIN32)  
 ELSE()
