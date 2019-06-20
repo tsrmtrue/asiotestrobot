@@ -1,0 +1,1 @@
+只要有多个system应用,就要抽象出entity
