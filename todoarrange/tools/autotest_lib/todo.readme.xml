@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="gbk"?>
+<!--整理目前代码
+1.把xml文档格式整理一下,不能再用老的了,重新整理parse模块   ====ok
+2.include要切实执行，递归调用=====ok
+3.几大功能：parse，生成各种数据结构 =======ok
+		   addassignment，，生成数据对齐统计信息 =====ok
+		   buildstructfmt，pack使用的格式 ，default value =====ok
+		   buildnamedtuple，一个namedtuple的类定义=======废除namedtuple
+		   buildnamedlist，一个namedlist的类定义，功能同上======ok
+		   build各种encode，decode函数 ====ok
+-->
+
+<!--version="0.1" 添加功能，namedlist增加标志位，每个结构都有开关，表示要不要加标志位，所有的标志位都是动态长度的
+1.修改encode，decode函数，在里面根据标志位来判断是否要add get，===ok
+2.namelist里也要增加一个标志位buf，先按照动态的标准来做，每一次赋值的时候都要做设置标志位的操作 =====ok
+3.将开关标志位设置为全局，要么所有的结构需要，要么所有的都不需要====目前全部为有标志位
+4.测试代码加上，======ok
+-->
+
+<!--version="0.2"  将完整的namedlist翻译成c++版本
+-->
+
+<!--将完整的namedlist翻译成java版本
+-->
+<root/>

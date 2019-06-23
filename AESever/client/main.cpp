@@ -17,9 +17,7 @@
 #include <utility>
 #include <thread>
 #include "asio.hpp"
-#include "network_listener.h"
-#include "message_center.h"
-#include "ae_timer.h"
+#include "network_connector.h"
 
 using asio::ip::tcp;
 
@@ -52,13 +50,9 @@ int main(int argc, char* argv[])
         sigset.async_wait(asio_signal_handler);
 
         //单体创建
-        //消息中心,创建timer
-        MessageCenter::CreateInstance();
-        AETimer::StartTimer(pio_service, MessageCenter::Instance(), 1000);
-
-        //网路
-        AsioListener::CreateInstance();
-        AsioListener::Instance()->Init(*pio_service,"127.0.0.1", 50000);
+        AsioConnector::CreateInstance();
+        AsioConnector::Instance()->Init(*pio_service);
+        AsioConnector::Instance()->DoConnector("127.0.0.1", "50000", 3);
 
         while (!main_threawd_exit)
         {
@@ -69,7 +63,7 @@ int main(int argc, char* argv[])
 
 
         //关闭单体
-        AsioListener::DestroyInstance();
+        AsioConnector::DestroyInstance();
 
 
         //asio放在工作者进程--仔细思考一下是否需要

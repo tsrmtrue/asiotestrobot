@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="gbk"?>
+<collection name="type_size" version="0.001" >
+  <includes>
+  </includes>
+
+  <typesize>
+	<!--这里定义c标准类型，可以跨平台使用-->
+  	<!--size在计算最大对齐的时候使用,python_format是pack参数-->
+    <type name="char"               size="1"           python_format="b"/>
+    <type name="unsigned char"      size="1"           python_format="B"/>
+    <type name="short"              size="2"           python_format="h"/>
+    <type name="unsigned short"     size="2"           python_format="H"/>
+    <type name="int"                size="4"           python_format="i"/>
+    <type name="unsigned int"       size="4"           python_format="I"/>
+    <type name="long"               size="4"           python_format="l"/>
+    <type name="unsigned long"      size="4"           python_format="L"/>
+    <type name="long long"          size="8"           python_format="q"/>
+    <type name="unsigned long long" size="8"           python_format="Q"/>
+    <type name="float"              size="4"           python_format="f"/>
+    <type name="double"             size="4"           python_format="d"/>
+    <!--以上都是c标准类型，可以直接嵌入代码，string是自定义的类型，需要翻译成char \w+[\d+]-->
+    <type name="string"             size="1"           python_format="s"/>
+  </typesize>
+
+  <defines>
+  </defines>
+
+  <structs>
+  </structs>
+
+  <protocols>
+  </protocols>
+</collection>

@@ -32,7 +32,7 @@ function(my_add_executable)
 endfunction(my_add_executable)
 
 #
-PROJECT(aeserver)
+PROJECT(aeclient)
 
 
 
@@ -115,5 +115,5 @@ ENDIF()
 SET(EXECUTABLE_OUTPUT_PATH ../exe)
 
 #ADD_EXECUTABLE(robotclient ${SRC_LIST})
-my_add_executable(aeserver ${SRC_LIST})
+my_add_executable(aeclient ${SRC_LIST})
 
