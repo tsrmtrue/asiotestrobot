@@ -1,6 +1,6 @@
 #include "network_peer.h"
 #include "message_center.h"
-
+#include <iostream>
 uint64_t AsioPeer::global_idx_ = 0;
 
 AsioPeer::~AsioPeer()
@@ -60,7 +60,7 @@ void AsioPeer::TryRead()
                 //尝试解包
 
                 //根据长度判断是否报文已经收满
-                size_t packet_length = read_msg_big_.msg.GetLen() + sizeof(UINT32);
+                size_t packet_length = read_msg_big_.GetLen() ;
                 if (packet_length > read_msg_big_.current_length_)
                 {
                     break;
@@ -68,10 +68,9 @@ void AsioPeer::TryRead()
 
                 //报文已经足够解析
                 char* _td_buff_ = new char[packet_length];
-                memcpy(_td_buff_, read_msg_big_.msg.buff_ + read_msg_big_.msg.start_index_, packet_length);
+                memcpy(_td_buff_, read_msg_big_.buff_ + read_msg_big_.start_index_, packet_length);
 
-                MessageCenter::Instance()->AddMessage(SMessageFromClient(GetSession(), packet_length, _td_buff_));
-
+                MessageCenter::Instance()->AddMessage(GetSession(), packet_length, (unsigned char *)_td_buff_);
 
                 //todo 解压缩操作
 
@@ -79,15 +78,16 @@ void AsioPeer::TryRead()
 
                 //整理收缓冲区.
                 read_msg_big_.current_length_ -= packet_length;
-                read_msg_big_.msg.start_index_ += packet_length;
+                read_msg_big_.start_index_ += packet_length;
             }
 
-            if (read_msg_big_.msg.start_index_ > MAX_RECV_BUFF_SIZE / 2)
+            if (read_msg_big_.start_index_ > MAX_RECV_BUFF_SIZE / 2)
             {
                 //自紧操作
-                memmove(read_msg_big_.msg.buff_, read_msg_big_.msg.buff_ + read_msg_big_.msg.start_index_, read_msg_big_.current_length_);
+                memmove(read_msg_big_.buff_, read_msg_big_.buff_ + read_msg_big_.start_index_, read_msg_big_.current_length_);
 
-                read_msg_big_.msg.start_index_ = 0;
+                read_msg_big_.start_index_ = 0;
+                std::cout << "memory move " << std::endl;
             }
             TryRead();
         }

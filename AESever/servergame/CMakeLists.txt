@@ -32,13 +32,13 @@ function(my_add_executable)
 endfunction(my_add_executable)
 
 #
-PROJECT(aeserver)
+PROJECT(gameserver)
 
 
 
 set(BUILD_USE_64BITS on)
 IF (WIN32)  
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj ")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj -std=c++11 ")
 
 ELSE()
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 ")
@@ -72,12 +72,15 @@ INCLUDE_DIRECTORIES(../event)
 INCLUDE_DIRECTORIES(../system)
 INCLUDE_DIRECTORIES(../component)
 INCLUDE_DIRECTORIES(../common)
+INCLUDE_DIRECTORIES(../protocol)
 
 
 
 #FILE(GLOB_RECURSE SRC_LIST *.cpp)
 AUX_SOURCE_DIRECTORY(./ SRC_LIST_1)
-AUX_SOURCE_DIRECTORY(../common SRC_LIST_2)
+AUX_SOURCE_DIRECTORY(../common SRC_LIST_1)
+AUX_SOURCE_DIRECTORY(../protocol SRC_LIST_1)
+AUX_SOURCE_DIRECTORY(../system SRC_LIST_1)
 
 
 #vs project里面增加但是没有用不知道为什么
@@ -92,7 +95,7 @@ AUX_SOURCE_DIRECTORY(../common SRC_LIST_2)
 
 set(SRC_LIST 
 		${SRC_LIST_1}
-		${SRC_LIST_2}
+		# ${SRC_LIST_2}
 		)
 
 
@@ -115,5 +118,5 @@ ENDIF()
 SET(EXECUTABLE_OUTPUT_PATH ../exe)
 
 #ADD_EXECUTABLE(robotclient ${SRC_LIST})
-my_add_executable(aeserver ${SRC_LIST})
+my_add_executable(gameserver ${SRC_LIST})
 

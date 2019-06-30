@@ -49,6 +49,8 @@ def build_member_encode_4_cpp(member):
     name = member[1]
     count = member[2]
     refer = member[3]
+    print "___________3_______________"
+
     if refer <> "":
         refer = refer[2:-2]
     single_standard_type_template = """
@@ -64,6 +66,7 @@ def build_member_encode_4_cpp(member):
     }
 
 """
+
     array_bytes_template = """
     {
         %(check_count)s
@@ -132,11 +135,15 @@ def build_member_encode_4_cpp(member):
         return -1;
     }
 """
+
+    print "___________4_______________"
+
     for_limit = "%(count)s"%(locals())
     if count == "":
         for_limit = "1"
     if refer <> "":
         for_limit = "st.%(refer)s"%(locals())
+    print "___________5_______________"
 
     check_count = ""
     if count <> "" and refer <> "":
@@ -145,8 +152,10 @@ def build_member_encode_4_cpp(member):
         {
             return -1;
         }"""%(locals())
+    print "___________6_______________"
 
     if isMemberNumber(member):
+        print "___________7_______________"
 
         hton_ = get_hton_by_type(type)
         if hton_ == None:
@@ -199,13 +208,13 @@ def build_struct_encode_4_cpp(structName):
     
     global g_encoding_function_decl
     g_encoding_function_decl.append(encodeFunction)
-    
+    print struct
     members_encode = string.join(map(build_member_encode_4_cpp, struct), '\n');
     return encode_template%(locals())
 
     
 def build_encode_4_cpp_cpp(headFile):
-    print headFile
+    # print headFile
     encode_template = """#ifdef WIN32
 #include <Winsock2.h>
 #else
@@ -398,11 +407,11 @@ def build_decode_4_cpp_cpp(headFile):
     return decode_template%(locals())
 
     
-def build_encoding_4_cpp_h(protocolHeadFile):
-    global g_modulePrefix
-    modulePrefix = g_modulePrefix
-    encode_template = """#ifndef __PROTOCOLENCODE_CPP_H%(modulePrefix)s__
-#define    __PROTOCOLENCODE_CPP_H%(modulePrefix)s__
+def build_encoding_4_cpp_h(protocolHeadFile, target_name):
+    # global g_modulePrefix
+    # modulePrefix = g_modulePrefix
+    encode_template = """#ifndef    __PROTOCOLENCODE_CPP_%(target_name)s_H__
+#define    __PROTOCOLENCODE_CPP_%(target_name)s_H__
 
 #include <string>
 #include <stdio.h>
@@ -417,11 +426,11 @@ using namespace std;
     encodeFunctions = string.join(g_encoding_function_decl, ";\n")
     return encode_template%(locals())
 
-def build_decoding_4_cpp_h(protocolHeadFile):
-    global g_modulePrefix
-    modulePrefix = g_modulePrefix
-    encode_template = """#ifndef __PROTOCOLDECODE_CPP_H%(modulePrefix)s__
-#define    __PROTOCOLDECODE_CPP_H%(modulePrefix)s__
+def build_decoding_4_cpp_h(protocolHeadFile, target_name):
+    # global g_modulePrefix
+    # modulePrefix = g_modulePrefix
+    encode_template = """#ifndef    __PROTOCOLDECODE_CPP_%(target_name)s_H__
+#define    __PROTOCOLDECODE_CPP_%(target_name)s_H__
 
 #include <string>
 #include <stdio.h>
@@ -437,7 +446,7 @@ using namespace std;
     return encode_template%(locals())
 
 
-def parseHFile(filename,target_path,target_name):
+def parseHFile(target_path,headerfilename,target_name):
     global g_enum_dict 
     g_enum_dict = {}
     global g_decoding_function_decl
@@ -449,34 +458,39 @@ def parseHFile(filename,target_path,target_name):
     global g_struct_name_list 
     g_struct_name_list = []
     """
-
-
-    f = open(filename, 'r')
+    print "___________1_______________"
+    headfile = "%(target_path)s/%(headerfilename)s"%(locals())
+    f = open(headfile, 'r')
     filestr = f.read()
     filestr = string.replace(filestr, "\n", " ")
     filestr = string.replace(filestr, "\t", " ")
-    #print [filestr, ]
+    # print [filestr, ]
     parseCppStruct(filestr)
     parseCppEnum(filestr)
     
-    w = open('%(target_path)s/%(target_name)s_enode4cpp.cpp'%(locals()), 'w')
-    w.write(build_encode_4_cpp_cpp("protocolEncode4cpp.h"))
+    # global g_struct_dict
+    # print g_struct_dict
+    w = open('%(target_path)s/%(target_name)s_encode4cpp.cpp'%(locals()), 'w')
+    w.write(build_encode_4_cpp_cpp('%(target_name)s_encode4cpp.h'%(locals())))
     w.close()
     
-    w = open('%(target_path)s/%(target_name)s_enode4cpp.h'%(locals()), 'w')
-    w.write(build_encoding_4_cpp_h("protocols.h"))
+    w = open('%(target_path)s/%(target_name)s_encode4cpp.h'%(locals()), 'w')
+    w.write(build_encoding_4_cpp_h(headerfilename,target_name))
     w.close()
+    print "___________2_______________"
 
     w = open('%(target_path)s/%(target_name)s_decode4cpp.cpp'%(locals()), 'w')
-    w.write(build_decode_4_cpp_cpp("protocolDecode4cpp.h"))
+    w.write(build_decode_4_cpp_cpp('%(target_name)s_decode4cpp.h'%(locals())))
     w.close()
     
-    w = open('%(target_path)s/%(target_name)s_deode4cpp.h'%(locals()), 'w')
-    w.write(build_decoding_4_cpp_h("protocols.h"))
+    w = open('%(target_path)s/%(target_name)s_decode4cpp.h'%(locals()), 'w')
+    w.write(build_decoding_4_cpp_h(headerfilename, target_name))
     w.close()
     print "OK"
 
 def main():
-    parseHFile("../protocol/ptl_login.h", "../protocol", "ptl_login")
+    parseHFile("../protocol", "ptl_login.h",  "ptl_login")
 
 main()
+
+

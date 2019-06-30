@@ -81,7 +81,7 @@ def getNumber(count):
 
 
 #生成lua中的table对象
-g_int_type = ['int', 'unsigned int', 'short', 'unsigned short', 'long', 'unsigned long long', 'unsigned char']
+g_int_type = ['int32_t', 'uint32_t', 'int16_t', 'uint16_t', 'int64_t', 'uint64_t', 'unsigned char']
 g_char_type = ['char', ]
 
 def isMemberNumber(member):

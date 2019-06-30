@@ -20,6 +20,8 @@
 #include "network_listener.h"
 #include "message_center.h"
 #include "ae_timer.h"
+#include "ptl_login.h"
+#include "login_system.h"
 
 using asio::ip::tcp;
 
@@ -54,7 +56,10 @@ int main(int argc, char* argv[])
         //单体创建
         //消息中心,创建timer
         MessageCenter::CreateInstance();
-        AETimer::StartTimer(pio_service, MessageCenter::Instance(), 1000);
+
+        AETimer::StartTimer(pio_service, MessageCenter::Instance(), 100);
+
+        MessageCenter::Instance()->RegisterHandler((uint32_t )EMessage::Msg_Login, new LoginMsgHdl );
 
         //网路
         AsioListener::CreateInstance();

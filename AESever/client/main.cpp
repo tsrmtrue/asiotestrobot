@@ -18,6 +18,8 @@
 #include <thread>
 #include "asio.hpp"
 #include "network_connector.h"
+#include "client_manager.h"
+#include "message_center.h"
 
 using asio::ip::tcp;
 
@@ -50,9 +52,27 @@ int main(int argc, char* argv[])
         sigset.async_wait(asio_signal_handler);
 
         //单体创建
-        AsioConnector::CreateInstance();
-        AsioConnector::Instance()->Init(*pio_service);
-        AsioConnector::Instance()->DoConnector("127.0.0.1", "50000", 3);
+
+        //AsioConnector::CreateInstance();
+        //AsioConnector::Instance()->Init(*pio_service);
+
+        ClientManager::CreateInstance();
+        AETimer::StartTimer(pio_service, ClientManager::Instance(), 100);
+
+        MessageCenter::CreateInstance();
+        AETimer::StartTimer(pio_service, MessageCenter::Instance(), 1000);
+
+        for (size_t i = 0; i < 200; i++)
+        {
+            auto * peer = new AsioPeer(*pio_service, tcp::socket(*pio_service));
+            if (peer)
+            {
+                peer->TryConnect("127.0.0.1", "50000");
+                ClientManager::Instance()->AddClient(peer);
+            }
+
+        }
+        //AsioConnector::Instance()->DoConnector("127.0.0.1", "50000", 3);
 
         while (!main_threawd_exit)
         {
@@ -63,8 +83,8 @@ int main(int argc, char* argv[])
 
 
         //关闭单体
-        AsioConnector::DestroyInstance();
-
+        MessageCenter::DestroyInstance();
+        ClientManager::DestroyInstance();
 
         //asio放在工作者进程--仔细思考一下是否需要
         //std::thread* t = new std::thread([pio_service]()

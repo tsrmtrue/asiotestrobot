@@ -3,12 +3,12 @@
 #else
 #include <arpa/inet.h> 
 #endif
-#include "ptl_login_decode4cpp.h"
+#include "ptl_login_encode4cpp.h"
 #include <string.h>
 
-int decode_SLogin(SLogin& st, unsigned char* pSrc, unsigned int bufLength )
+int encode_SLogin(SLogin& st, unsigned char* pBuf, unsigned int bufLength )
 {
-    if (pSrc == NULL)
+    if (pBuf == NULL)
     {
         return -1;
     }
@@ -17,8 +17,8 @@ int decode_SLogin(SLogin& st, unsigned char* pSrc, unsigned int bufLength )
     
     if (__used__ + sizeof(int32_t) <= bufLength)
     {
-        int32_t* __i__ = (int32_t *)(pSrc + __used__);
-        st.id = ntohl(*__i__);
+        int32_t* __i__ = (int32_t *)(pBuf + __used__);
+        *__i__ = htonl(st.id);
         __used__ += sizeof(int32_t);
     }
     else
