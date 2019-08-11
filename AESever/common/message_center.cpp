@@ -5,7 +5,10 @@ INSTANCE_SINGLETON(MessageCenter);
 
 void MessageCenter::AddMessage(uint64_t id, uint32_t len, unsigned char * b)
 {
-    msg_list_.emplace_back(id, len, b);
+    spin_lock_.Lock();
+    msg_list_back_.emplace_back(id, len, b);
+    spin_lock_.UnLock();
+
 }
 
 
@@ -21,6 +24,11 @@ void MessageCenter::RegisterHandler(uint32_t msgid, MessageHandler* hlder)
 
 void MessageCenter::OnProcess()
 {
+    spin_lock_.Lock();
+    msg_list_back_.swap(msg_list_);
+    spin_lock_.UnLock();
+
+
     static uint32_t total_count = 0;
     static uint32_t frame_count = 0;
     frame_count = 0;

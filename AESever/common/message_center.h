@@ -5,6 +5,7 @@
 #include "singleton.h"
 #include "protocol_head.h"
 #include "ae_timer.h"
+#include "ae_lock.h"
 
 struct SMessageFromClient    
 {
@@ -128,7 +129,9 @@ public:
 
 private:
     MessageList msg_list_;
+    MessageList msg_list_back_;
     MessangerManager msg_handler_;
+    EasySpinLock spin_lock_;
 };
 
 

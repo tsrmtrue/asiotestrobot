@@ -79,16 +79,34 @@ int main(int argc, char* argv[])
                 peer->TryConnect("127.0.0.1", "50000");
                 ClientManager::Instance()->AddClient(peer);
             }
-
         }
+
+        std::thread* client_thread = new std::thread([pio_service]()
+            {
+                try
+                {
+                    while (1)
+                    {
+                        pio_service->run(); 
+                    }
+                }
+                catch (std::exception& e)
+                {
+                    std::printf("Exception: %s\n", e.what());
+                }
+
+            } 
+        );
+
         //AsioConnector::Instance()->DoConnector("127.0.0.1", "50000", 3);
 
         while (!main_threawd_exit)
         {
-            pio_service->run();
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
 
         pio_service->stop();
+		client_thread->join();
 
 
         //ΉΨ±Υµ¥Με
