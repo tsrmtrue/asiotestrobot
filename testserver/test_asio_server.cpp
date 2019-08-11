@@ -211,10 +211,20 @@ private:
 	chat_room room_;
 };
 
+uint32_t CheckReturn()
+{
+	uint32_t i = 0;
+	uint16_t j = 9;
+	auto d = j - i;
+	return d;
+}
+
 //----------------------------------------------------------------------
 
 int main(int argc, char* argv[])
 {
+
+	CheckReturn();
 	try
 	{
 

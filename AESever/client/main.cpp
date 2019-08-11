@@ -40,8 +40,17 @@ void asio_signal_handler(const asio::error_code & err, int sig)
 
 }
 
+uint32_t CheckReturn()
+{
+	uint32_t i = 0;
+	uint16_t j = 9;
+	auto d = j - i;
+	return d;
+}
+
 int main(int argc, char* argv[])
 {
+    CheckReturn();
 	try
 	{
         //Æô¶¯asio
