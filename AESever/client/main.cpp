@@ -20,6 +20,7 @@
 #include "network_connector.h"
 #include "client_manager.h"
 #include "message_center.h"
+#include "ae_log.h"
 
 using asio::ip::tcp;
 
@@ -65,21 +66,26 @@ int main(int argc, char* argv[])
         //AsioConnector::CreateInstance();
         //AsioConnector::Instance()->Init(*pio_service);
 
+        AELogger::CreateInstance();
+        AETimer::StartTimer(pio_service, AELogger::Instance(), 1000);
+        AELogger::Instance()->InitStart();
+
+
         ClientManager::CreateInstance();
         AETimer::StartTimer(pio_service, ClientManager::Instance(), 100);
 
         MessageCenter::CreateInstance();
         AETimer::StartTimer(pio_service, MessageCenter::Instance(), 1000);
 
-        for (size_t i = 0; i < 200; i++)
-        {
-            auto * peer = new AsioPeer(*pio_service, tcp::socket(*pio_service));
-            if (peer)
-            {
-                peer->TryConnect("127.0.0.1", "50000");
-                ClientManager::Instance()->AddClient(peer);
-            }
-        }
+        //for (size_t i = 0; i < 200; i++)
+        //{
+        //    auto * peer = new AsioPeer(*pio_service, tcp::socket(*pio_service));
+        //    if (peer)
+        //    {
+        //        peer->TryConnect("127.0.0.1", "50000");
+        //        ClientManager::Instance()->AddClient(peer);
+        //    }
+        //}
 
         std::thread* client_thread = new std::thread([pio_service]()
             {

@@ -1,6 +1,7 @@
 #include "message_center.h"
 #include <chrono>
 #include <iostream>
+#include "ae_log.h"
 INSTANCE_SINGLETON(MessageCenter);
 
 void MessageCenter::AddMessage(uint64_t id, uint32_t len, unsigned char * b)
@@ -50,6 +51,15 @@ void MessageCenter::OnProcess()
         msg_list_.pop_front();
     }
     std::cout << "handle message total [" << total_count << "] frame [" << frame_count << "]"<<std::endl;
+
+
+    //²âÊÔ·¢ËÍÊý¾Ý
+    static uint32_t log_indx = 0;
+    for(auto i=0; i<50000;++i)
+    {
+        AELogger::Instance()->AddLog("2323233", log_indx++);
+    }
+
 }
 
 
