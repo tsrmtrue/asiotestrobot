@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     HeapProfilerStop();  // 添加函数之二
 
 
-    std::this_thread::sleep_for(10s);
+    std::this_thread::sleep_for(10);
 
 	return 0;
 }
