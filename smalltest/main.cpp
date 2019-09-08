@@ -32,7 +32,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-    HeapProfilerStart("/tmp/test"); // 添加函数之一
+    HeapProfilerStart("./test"); // 添加函数之一
 
     auto * b = new B;
     void  * v = (void *)b;
