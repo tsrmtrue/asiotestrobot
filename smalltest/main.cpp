@@ -5,7 +5,7 @@
 #include <list>
 #include <chrono>         // std::chrono::seconds
 #include <gperftools/heap-profiler.h>
-
+#include <vector>
 
 //测试析构子类析构函数在void * 转换下
 class A
@@ -35,9 +35,10 @@ int main(int argc, char* argv[])
 {
     HeapProfilerStart("heap.profile"); // 添加函数之一
 
+    std::vector<B> v;
     for (size_t i = 0; i < 300000; i++)
     {
-        auto * b = new B;
+        v.emplace_back();
 
     }
     
