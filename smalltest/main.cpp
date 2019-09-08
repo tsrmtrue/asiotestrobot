@@ -34,10 +34,12 @@ int main(int argc, char* argv[])
 {
     HeapProfilerStart("./test"); // 添加函数之一
 
-    auto * b = new B;
-    void  * v = (void *)b;
-    auto * a = static_cast<A*>(v);
-    delete a;
+    for (size_t i = 0; i < 1000000; i++)
+    {
+        auto * b = new B;
+
+    }
+    
     HeapProfilerStop();  // 添加函数之二
 
 	return 0;
