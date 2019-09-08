@@ -32,7 +32,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-    HeapProfilerStart("./test"); // 添加函数之一
+    HeapProfilerStart("heap.profile"); // 添加函数之一
 
     for (size_t i = 0; i < 1000000; i++)
     {
