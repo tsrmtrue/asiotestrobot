@@ -25,7 +25,7 @@ public:
     {
         std::cout << "~ B" << std::endl;
     }
-    char t[1024];
+    char t[1024]{0};
 };
 
 
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 {
     HeapProfilerStart("heap.profile"); // 添加函数之一
 
-    for (size_t i = 0; i < 3000; i++)
+    for (size_t i = 0; i < 300000; i++)
     {
         auto * b = new B;
 
