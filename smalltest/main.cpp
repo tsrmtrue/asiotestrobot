@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     
     HeapProfilerStop();  // 添加函数之二
 
-    std::chrono::seconds sec(10);
+    std::chrono::seconds sec(100);
  
     std::this_thread::sleep_for(sec);
 
