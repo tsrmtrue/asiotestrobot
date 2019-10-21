@@ -195,20 +195,20 @@ void TestOpenid()
 
 int main(int argc, char* argv[])
 {
-    HeapProfilerStart("heap.profile"); // 添加函数之一
+    //HeapProfilerStart("heap.profile"); // 添加函数之一
 
-    std::vector<B> v;
-    for (size_t i = 0; i < 300000; i++)
-    {
-        v.emplace_back();
+    //std::vector<B> v;
+    //for (size_t i = 0; i < 300000; i++)
+    //{
+    //    v.emplace_back();
 
-    }
-    
-    HeapProfilerStop();  // 添加函数之二
+    //}
+    //
+    //HeapProfilerStop();  // 添加函数之二
 
-    std::chrono::seconds sec(100);
+    //std::chrono::seconds sec(100);
  
-    std::this_thread::sleep_for(sec);
+    //std::this_thread::sleep_for(sec);
 
 	return 0;
 }
