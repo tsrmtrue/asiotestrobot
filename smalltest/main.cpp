@@ -194,7 +194,7 @@ void TestOpenid(uint32_t count)
         std::cout << "search result "<<result<<"  "
             << id.id[0] << "," << id.id[1] << "," << id.id[2] << "," << id.id[3] << "," << id.id[4] << "," << id.id[5] << "  time " << diff.count() << std::endl;
     }
-    for (uint32_t i = 0; i<100; i++)
+    for (uint32_t i = 0; i<10; i++)
     {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -222,7 +222,7 @@ int main(int argc, char* argv[])
 		count = atoi(argv[1]);
 	}
 	
-	TestRawOpenid(count);
+	TestOpenid(count);
     //HeapProfilerStart("heap.profile"); // 添加函数之一
 
     //std::vector<B> v;
