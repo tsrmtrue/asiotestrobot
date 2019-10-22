@@ -4,7 +4,7 @@
 #include <thread>
 #include <list>
 #include <chrono>         // std::chrono::seconds
-#include <gperftools/heap-profiler.h>
+//#include <gperftools/heap-profiler.h>
 #include <vector>
 
 #include <string>
@@ -126,9 +126,30 @@ namespace std
 #include <random>
 #include <chrono>
 
-void TestOpenid()
+
+void TestRawOpenid(uint32_t count)
+{
+	auto t = sizeof(Openid);
+	std::cout << "TestRawOpenid count " << count<< std::endl;
+	for (uint32_t i = 0; i < count; i++)
+	{
+		Openid*  id = new Openid(1, 1, 1, 
+			1, 1, 1);
+	}
+
+
+
+	std::chrono::seconds sec(1000);
+
+	std::this_thread::sleep_for(sec);
+
+}
+
+void TestOpenid(uint32_t count)
 {
     //随机初始化数量
+	auto t = sizeof(Openid);
+	std::cout << "TestOpenid count " << count << std::endl;
 
     std::unordered_map<Openid, bool> all_keys;
 
@@ -142,7 +163,7 @@ void TestOpenid()
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        for (uint32_t i = 0; i < 10000000; i++)
+        for (uint32_t i = 0; i < count; i++)
         {
             Openid id(r(), r(), r(), r(), r(), r());
 
@@ -195,6 +216,13 @@ void TestOpenid()
 
 int main(int argc, char* argv[])
 {
+	auto count = 10;
+	if (argc > 1)
+	{
+		count = atoi(argv[1]);
+	}
+	
+	TestRawOpenid(count);
     //HeapProfilerStart("heap.profile"); // 添加函数之一
 
     //std::vector<B> v;
