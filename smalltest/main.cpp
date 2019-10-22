@@ -208,6 +208,9 @@ void TestOpenid(uint32_t count)
             << id.id[0] << "," << id.id[1] << "," << id.id[2] << "," << id.id[3] << "," << id.id[4] << "," << id.id[5] << "  time " << diff.count() << std::endl;
     }
 
+	std::chrono::seconds sec(1000);
+
+	std::this_thread::sleep_for(sec);
 
 
 }
