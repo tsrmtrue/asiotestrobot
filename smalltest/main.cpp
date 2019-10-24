@@ -211,21 +211,83 @@ void TestOpenid(uint32_t count)
 	std::chrono::seconds sec(1000);
 
 	std::this_thread::sleep_for(sec);
+}
+
+void TestStdString()
+{
+	std::string  s;
+	//s.reserve(256);
+	{
+		auto start = std::chrono::high_resolution_clock::now();
 
 
+		for (auto i = 0; i < 1000000; i++)
+		{
+			s="";
+			s.append("12121");
+			s.append("dsdsd");
+			s.append("jkjkjk");
+			s.append("kkjhk");
+			s.append("oooo");
+			s.append("nmnm");
+			s.append("nmnk");
+			s.append("nnnn");
+			s.append("uuuu");
+			s.append("dsddsxdsd");
+			s.append("sdsdffgvxfgvxs");
+			s.append("sdsdffgvxfgvxs");
+			s.append("sdsdffgvxfgvxs");
+			s.append("sdsdffgvxfgvxs");
+		}
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << s.size() << " append cost " << "  time " << diff.count() << std::endl;
+
+	}
+
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+
+		for (auto i = 0; i < 1000000; i++)
+		{
+			s.clear();
+			s+="12121";
+			s+="dsdsd";
+			s += "jkjkjk";
+			s += "kkjhk";
+			s += "oooo";
+			s += "nmnm";
+			s += "nmnk";
+			s += "nnnn";
+			s += "uuuu";
+			s += "dsddsxdsd";
+			s += "sdsdffgvxfgvxs";
+			s += "sdsdffgvxfgvxs";
+			s += "sdsdffgvxfgvxs";
+			s += "sdsdffgvxfgvxs";
+		}
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << s.size() << " += cost " << "  time " << diff.count() << std::endl;
+
+	}
 }
 
 
 
 int main(int argc, char* argv[])
 {
-	auto count = 10;
-	if (argc > 1)
-	{
-		count = atoi(argv[1]);
-	}
+	TestStdString();
+	//auto count = 10;
+	//if (argc > 1)
+	//{
+	//	count = atoi(argv[1]);
+	//}
 	
-	TestOpenid(count);
+	/*TestOpenid(count);*/
     //HeapProfilerStart("heap.profile"); // 添加函数之一
 
     //std::vector<B> v;
