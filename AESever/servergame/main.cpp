@@ -71,7 +71,9 @@ int main(int argc, char* argv[])
                 {
                     while (1)
                     {
-                        pio_network_service->run(); 
+                        pio_network_service->run();
+						auto i = 0;
+						auto j = i + 1;
                     }
                 }
                 catch (std::exception& e)
@@ -112,8 +114,6 @@ int main(int argc, char* argv[])
 
         //¹Ø±Õµ¥Ìå
         AsioListener::DestroyInstance();
-
-
 	}
 	catch (std::exception& e)
 	{
