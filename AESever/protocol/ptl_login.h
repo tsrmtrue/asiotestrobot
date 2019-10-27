@@ -3,15 +3,22 @@
 #include "stdint.h"
 enum class EMessage
 {
-    Msg_Login,
+	MSG_LOGIN,
+	MSG_LOGIN_RSP,
 };
 
 
 
 struct SLogin
 {
-    int32_t id;
+	int32_t id;
+	int32_t password;
 };
 
+struct SLoginRsp
+{
+	int32_t id;
+	int32_t result;
+};
 
 #endif

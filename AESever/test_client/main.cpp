@@ -63,29 +63,29 @@ int main(int argc, char* argv[])
 
         //单体创建
 
-        //AsioConnector::CreateInstance();
-        //AsioConnector::Instance()->Init(*pio_service);
+        AsioConnector::CreateInstance();
+        AsioConnector::Instance()->Init(*pio_service);
 
         AELogger::CreateInstance();
         AETimer::StartTimer(pio_service, AELogger::Instance(), 1000);
         AELogger::Instance()->InitStart();
 
 
-        ClientManager::CreateInstance();
-        AETimer::StartTimer(pio_service, ClientManager::Instance(), 100);
+        PeerManager::CreateInstance();
+        AETimer::StartTimer(pio_service, PeerManager::Instance(), 100);
 
         MessageCenter::CreateInstance();
         AETimer::StartTimer(pio_service, MessageCenter::Instance(), 1000);
 
         //for (size_t i = 0; i < 200; i++)
-        //{
-        //    auto * peer = new AsioPeer(*pio_service, tcp::socket(*pio_service));
-        //    if (peer)
-        //    {
-        //        peer->TryConnect("127.0.0.1", "50000");
-        //        ClientManager::Instance()->AddClient(peer);
-        //    }
-        //}
+		{
+			auto * peer = new AsioPeer(*pio_service, tcp::socket(*pio_service));
+			if (peer)
+			{
+				peer->TryConnect("127.0.0.1", "50000");
+				//PeerManager::Instance()->AddClient(peer);
+			}
+		}
 
         std::thread* client_thread = new std::thread([pio_service]()
             {
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 
         //关闭单体
         MessageCenter::DestroyInstance();
-        ClientManager::DestroyInstance();
+        PeerManager::DestroyInstance();
 
         //asio放在工作者进程--仔细思考一下是否需要
         //std::thread* t = new std::thread([pio_service]()

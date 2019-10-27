@@ -10,15 +10,15 @@
 #include "network_peer.h"
 
 
-class ClientManager:public AETimer
+class PeerManager:public AETimer
 {
 public:
-    ClientManager(){};
-    ~ClientManager()
+    PeerManager(){};
+    ~PeerManager()
     {
         Release();
     };
-    DECLARE_SINGLETON(ClientManager);
+    DECLARE_SINGLETON(PeerManager);
 
 public:
     //Ìí¼Ómsg
@@ -36,16 +36,26 @@ public:
 
     void Release()
     {
-        for(auto & iter : peer_list_)
+        for(auto & iter : map_all_peer_)
         {
-            delete iter;
+            delete iter.second;
         }
-        peer_list_.clear();
+        map_all_peer_.clear();
     }
+	AsioPeer* GetPeer(uint64_t session_id)
+	{
+		auto iter = map_all_peer_.find(session_id);
+		if (iter != map_all_peer_.end())
+		{
+			return iter->second;
+		}
+		return nullptr;
+	}
+
 
 private:
-    using ClientList = std::list<AsioPeer*>;
-    ClientList peer_list_;
+    using AllPeer = std::unordered_map< uint64_t, AsioPeer*>;
+    AllPeer map_all_peer_;
 };
 
 

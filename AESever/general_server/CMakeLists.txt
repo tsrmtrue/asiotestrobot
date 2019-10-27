@@ -32,7 +32,7 @@ function(my_add_executable)
 endfunction(my_add_executable)
 
 #
-PROJECT(gameserver)
+PROJECT(generalserver)
 
 
 
@@ -118,5 +118,5 @@ ENDIF()
 SET(EXECUTABLE_OUTPUT_PATH ../exe)
 
 #ADD_EXECUTABLE(robotclient ${SRC_LIST})
-my_add_executable(gameserver ${SRC_LIST})
+my_add_executable(generalserver ${SRC_LIST})
 

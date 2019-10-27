@@ -2,29 +2,31 @@
 #define __MESSAGE_H__
 #include <list>
 #include <unordered_map>
+#include <functional>
 #include "singleton.h"
 #include "protocol_head.h"
 #include "ae_timer.h"
 #include "ae_lock.h"
+#include "network_peer.h"
 
-struct SMessageFromClient    
+struct SMessageFromProtocol    
 {
     uint64_t session{ 0 };
     uint32_t length{ 0 };
     unsigned char * bytes{ nullptr };
 
-    SMessageFromClient()=delete;
-    SMessageFromClient(SMessageFromClient& other) = delete;
+    SMessageFromProtocol()=delete;
+    SMessageFromProtocol(SMessageFromProtocol& other) = delete;
 
 
-    SMessageFromClient(uint64_t id, uint32_t len, unsigned char * b)
+    SMessageFromProtocol(uint64_t id, uint32_t len, unsigned char * b)
     {
         session = id;
         bytes = b;
         length = len;
     }
 
-    ~SMessageFromClient()
+    ~SMessageFromProtocol()
     {
         Release();
     }
@@ -38,7 +40,7 @@ struct SMessageFromClient
         }
     }
 
-    SMessageFromClient(SMessageFromClient&& other)
+    SMessageFromProtocol(SMessageFromProtocol&& other)
     {
         session = other.session;
         Release();
@@ -61,7 +63,19 @@ struct SMessageFromClient
         }
         return AE_INVALID_MESSAGE_ID;
     }
-    unsigned char* GetBody() const
+	uint32_t GetRpcId() const
+	{
+		if (length >= sizeof(ClientProtocolHead))
+		{
+			auto * head = (ClientProtocolHead*)bytes;
+			if (head->GetLen() == length)
+			{
+				return head->GetRpcid();
+			}
+		}
+		return AE_INVALID_MESSAGE_ID;
+	}
+	unsigned char* GetBody() const
     {
         if (bytes && GetBodyLen() > 0)
         {
@@ -78,18 +92,18 @@ struct SMessageFromClient
 class MessageHandler
 {
     public:
-    virtual bool Handle(const SMessageFromClient & msg) = 0;
+    virtual bool Handle(const SMessageFromProtocol & msg) = 0;
 };
 
 class MessagePacker
 {
     public:
-    virtual int32_t Pack(unsigned char * buf, uint32_t buflen) = 0;
+    virtual int32_t Pack(SWriteMessage* ) = 0;
 };
 
 
 
-using MessageList = std::list< SMessageFromClient>;
+using MessageList = std::list< SMessageFromProtocol>;
 using MessangerManager = std::unordered_map<uint32_t , MessageHandler*>;//消息id-》处理者指针
 
 class MessageCenter:public AETimer
@@ -126,12 +140,41 @@ public:
         }
         msg_handler_.clear();
     }
+	
+	inline uint64_t GenerateRpcId()
+	{
+		return ++rpc_id_generator_;
+	}
+
+	//rpc机制
+	void AddRpcCallback(uint64_t rpcid, std::function<void (const SMessageFromProtocol&)> cb)
+	{
+		rpc_backcall[rpcid] = cb;
+	}
+
+	bool RunRpcCb(const SMessageFromProtocol& mp)
+	{
+		auto rpcid = mp.GetRpcId();
+		auto iter = rpc_backcall.find(rpcid);
+		if (iter != rpc_backcall.end())
+		{
+			iter->second(mp);
+			//动态回调,用完就删掉.
+			rpc_backcall.erase(rpcid);
+			return true;
+		}
+		return false;
+	}
 
 private:
     MessageList msg_list_;
     MessageList msg_list_back_;
     MessangerManager msg_handler_;
     EasySpinLock spin_lock_;
+
+	//rpc机制
+	std::unordered_map<uint64_t, std::function<void (const SMessageFromProtocol&)> > rpc_backcall;
+	uint64_t rpc_id_generator_{ 0 };
 };
 
 

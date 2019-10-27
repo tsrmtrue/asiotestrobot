@@ -1,6 +1,8 @@
 #include "network_peer.h"
 #include "message_center.h"
+#include "client_manager.h"
 #include <iostream>
+#include "login_system.h"
 uint64_t AsioPeer::global_idx_ = 0;
 
 AsioPeer::~AsioPeer()
@@ -24,6 +26,12 @@ void AsioPeer::TryConnect(const tcp::resolver::iterator & endpoint_iterator)
     {
         if (!ec)
         {
+			PeerManager::Instance()->AddClient(this);
+
+			//·¢ËÍµÇÂ½ÇëÇó
+			DoLogin(this, 0xee, 0xff);
+
+
             //Í¶µÝ¼àÌý
             TryRead();
         }

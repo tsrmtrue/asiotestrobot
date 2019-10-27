@@ -48,11 +48,12 @@ struct SWriteMessage
     {
         return MAX_SEND_BUFF_SIZE - sizeof(ClientProtocolHead);
     }
-    void SetPacket(uint32_t len, uint32_t msgid)
+    void SetPacket(uint32_t len, uint32_t msgid, uint64_t rpcid)
     {
         ClientProtocolHead* head = (ClientProtocolHead*)buff_;
         head->SetLen(len + sizeof(ClientProtocolHead));
-        head->SetMsgid(msgid);
+		head->SetMsgid(msgid);
+		head->SetRpcid(rpcid);
         count_ = len + sizeof(ClientProtocolHead);
     }
 };

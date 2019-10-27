@@ -2,7 +2,7 @@
 #include <iostream>
 #include <utility>
 #include "network_peer.h"
-
+#include "client_manager.h"
 INSTANCE_SINGLETON(AsioListener);
 
 
@@ -32,7 +32,11 @@ void AsioListener::DoAccept()
 			if (!ec)
 			{
                 auto * peer = new AsioPeer(*ioservice_, std::move(*socket_));
+
+				PeerManager::Instance()->AddClient(peer);
+
                 peer->OnConnected();
+
                 std::cout<<" accept success "<<std::endl;
 			}
             DoAccept();

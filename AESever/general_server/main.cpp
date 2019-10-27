@@ -21,8 +21,10 @@
 #include "network_listener.h"
 #include "message_center.h"
 #include "ae_timer.h"
+#include "ae_log.h"
 #include "ptl_login.h"
 #include "login_system.h"
+#include "client_manager.h"
 
 using asio::ip::tcp;
 
@@ -53,12 +55,20 @@ int main(int argc, char* argv[])
         sigset.async_wait(asio_signal_handler);
 
         //单体创建
+		AELogger::CreateInstance();
+		AETimer::StartTimer(pio_main_service, AELogger::Instance(), 1000);
+		AELogger::Instance()->InitStart();
+
+
+		PeerManager::CreateInstance();
+		AETimer::StartTimer(pio_main_service, PeerManager::Instance(), 100);
+
         //消息中心,创建timer
         MessageCenter::CreateInstance();
 
         AETimer::StartTimer(pio_main_service, MessageCenter::Instance(), 100);
 
-        MessageCenter::Instance()->RegisterHandler((uint32_t )EMessage::Msg_Login, new LoginMsgHdl );
+        MessageCenter::Instance()->RegisterHandler((uint32_t )EMessage::MSG_LOGIN, new LoginMsgHdl );
 
         //网路
         AsioListener::CreateInstance();

@@ -40,13 +40,22 @@ void MessageCenter::OnProcess()
         auto msgid = msg.GetMsgId();
         if (msgid != AE_INVALID_MESSAGE_ID)
         {
-            auto * hlder = msg_handler_[msgid];
-            if (hlder)
-            {
-                hlder->Handle(msg);
-                total_count++;
-                frame_count++;
-            }
+			//先查看是否有rpc回调
+			if (RunRpcCb(msg))
+			{
+
+			}
+			//如果没有rpc就查看通常的回调
+			else
+			{
+				auto * hlder = msg_handler_[msgid];
+				if (hlder)
+				{
+					hlder->Handle(msg);
+					total_count++;
+					frame_count++;
+				}
+			}
         }
         msg_list_.pop_front();
     }

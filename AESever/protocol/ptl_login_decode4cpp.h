@@ -6,6 +6,7 @@
 #include "ptl_login.h"
 using namespace std;
 
+int decode_SLoginRsp(SLoginRsp& st, unsigned char* pSrc, unsigned int bufLength );
 int decode_SLogin(SLogin& st, unsigned char* pSrc, unsigned int bufLength );
 
 #endif    //__PROTOCOLDECODE_CPP_H__
