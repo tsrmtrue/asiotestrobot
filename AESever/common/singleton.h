@@ -31,11 +31,20 @@ public:									\
 
 #define INSTANCE_SINGLETON(type)	type* type::sm_poSingleton = NULL;
 	
-#define SINGLETON_CREATE_INIT(Klass)    Klass::CreateInstance(); LogDebug("Start Init <"#Klass">"); if (Klass::Instance()->Init() == false) { LogError("Init <"#Klass"> failed!"); return false; } LogDebug("End Init <"#Klass">");
-#define SINGLETON_CREATE_INIT_ARG1(Klass, arg1)    Klass::CreateInstance(); LogDebug("Start Init <"#Klass">"); if (Klass::Instance()->Init(arg1) == false) { LogError("Init <"#Klass"> failed!"); return false; };
-#define SINGLETON_CREATE_INIT_ARG2(Klass, arg1, arg2)    Klass::CreateInstance(); LogDebug("Start Init <"#Klass">"); if (Klass::Instance()->Init(arg1, arg2) == false) { LogError("Init <"#Klass"> failed!"); return false; };
+#define SINGLETON_CREATE_INIT(Klass) \
+	Klass::CreateInstance(); \
+	std::cout<<"Start Init <"<<#Klass<<">";\
+	if (Klass::Instance()->Init() == false)\
+	{\
+		std::cout<<"Init <"<<#Klass<<"> failed!";\
+		return false; \
+	}\
+	std::cout<<"End Init <"<<#Klass<<">";
 
-#define SINGLETON_DESTORY_UNINIT(Klass) Klass::Instance()->Uninit(); Klass::DestroyInstance(); LogDebug("Destory Class <"#Klass">");
+#define SINGLETON_CREATE_INIT_ARG1(Klass, arg1)    Klass::CreateInstance(); std::cout<"Start Init <"#Klass">"; if (Klass::Instance()->Init(arg1) == false) { std::cout<<"Init <"#Klass"> failed!"; return false; };
+#define SINGLETON_CREATE_INIT_ARG2(Klass, arg1, arg2)    Klass::CreateInstance(); std::cout<<"Start Init <"#Klass">"; if (Klass::Instance()->Init(arg1, arg2) == false) { std::cout<<"Init <"#Klass"> failed!"; return false; };
+
+#define SINGLETON_DESTORY_UNINIT(Klass) Klass::Instance()->Uninit(); Klass::DestroyInstance(); std::cout<<"Destory Class <"#Klass">";
 
 
 

@@ -276,11 +276,38 @@ void TestStdString()
 	}
 }
 
+//∂‘œÛ≥ÿ
+//
+#include "singleton.h"
+#include "object_pool.h"
+#include "object_pool_manager.h"
+
+bool TestObjectPool()
+{
+	SINGLETON_CREATE_INIT(ObjectPool::ObjectPoolManager);
+	std::vector<TransInfo*> v;
+	for (auto i=0;i<100;++i)
+	{
+		v.emplace_back( NEW_MEMORY(TransInfo));
+	}
+	std::cout << ObjectPool::ObjectPoolManager::Instance()->Dump();
+	for (auto & i : v)
+	{
+		DELETE_MEMORY(i);
+	}
+	v.clear();
+	std::cout << ObjectPool::ObjectPoolManager::Instance()->Dump();
+
+
+	SINGLETON_DESTORY_UNINIT(ObjectPool::ObjectPoolManager);
+	return true;
+}
 
 
 int main(int argc, char* argv[])
 {
-	TestStdString();
+	TestObjectPool();
+	//TestStdString();
 	//auto count = 10;
 	//if (argc > 1)
 	//{
