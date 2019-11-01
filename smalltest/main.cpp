@@ -9,6 +9,7 @@
 
 #include <string>
 #include <sstream>
+#include <map>
 //测试析构子类析构函数在void * 转换下
 class A
 {
@@ -102,6 +103,16 @@ struct Openid
         id[4] = id4;
         id[5] = id5;
     }
+	bool operator <(const Openid& r) const
+	{
+		auto b =  id[0] < r.id[0]
+			&& id[1] < r.id[1]
+			&& id[2] < r.id[2]
+			&& id[3] < r.id[3]
+			&& id[4] < r.id[4]
+			&& id[5] < r.id[5];
+		return b;
+	}
 };
 namespace std
 {
@@ -150,8 +161,9 @@ void TestOpenid(uint32_t count)
     //随机初始化数量
 	auto t = sizeof(Openid);
 	std::cout << "TestOpenid count " << count << std::endl;
+	std::cout << "sizeof Openid is " << sizeof(Openid) << std::endl;
 
-    std::unordered_map<Openid, bool> all_keys;
+    std::map<Openid, bool> all_keys;
 
     // Seed with a real random value, if available
     std::random_device r;
@@ -167,7 +179,8 @@ void TestOpenid(uint32_t count)
         {
             Openid id(r(), r(), r(), r(), r(), r());
 
-            all_keys[id] = true;
+			all_keys.emplace(id, true);
+            //all_keys[id] = true;
         }
         {
             Openid id(1, 2, 3, 4, 5, 6);
@@ -306,15 +319,21 @@ bool TestObjectPool()
 
 int main(int argc, char* argv[])
 {
-	TestObjectPool();
+	//TestObjectPool();
 	//TestStdString();
-	//auto count = 10;
-	//if (argc > 1)
-	//{
-	//	count = atoi(argv[1]);
-	//}
-	
-	/*TestOpenid(count);*/
+
+	//测试
+	auto count = 10;
+	if (argc > 1)
+	{
+		count = atoi(argv[1]);
+	}
+
+	TestOpenid(count);
+
+
+
+
     //HeapProfilerStart("heap.profile"); // 添加函数之一
 
     //std::vector<B> v;
