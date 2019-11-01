@@ -163,7 +163,7 @@ void TestOpenid(uint32_t count)
 	std::cout << "TestOpenid count " << count << std::endl;
 	std::cout << "sizeof Openid is " << sizeof(Openid) << std::endl;
 
-    std::map<Openid, bool> all_keys;
+    std::map<uint32_t, bool> all_keys;
 
     // Seed with a real random value, if available
     std::random_device r;
@@ -179,13 +179,13 @@ void TestOpenid(uint32_t count)
         {
             Openid id(r(), r(), r(), r(), r(), r());
 
-			all_keys.emplace(id, true);
+			all_keys.emplace(r(), true);
             //all_keys[id] = true;
         }
         {
             Openid id(1, 2, 3, 4, 5, 6);
 
-            all_keys[id] = true;
+            all_keys[1] = true;
 
 
         }
@@ -199,7 +199,7 @@ void TestOpenid(uint32_t count)
         auto start = std::chrono::high_resolution_clock::now();
 
         Openid id(1, 2, 3, 4, 5, 6);
-        auto result = all_keys[id];
+        auto result = all_keys[1];
 
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -212,7 +212,7 @@ void TestOpenid(uint32_t count)
         auto start = std::chrono::high_resolution_clock::now();
 
         Openid id(r(), r(), r(), r(), r(), r());
-         all_keys[id] = true;
+         all_keys[r()] = true;
 
         auto end = std::chrono::high_resolution_clock::now();
 
