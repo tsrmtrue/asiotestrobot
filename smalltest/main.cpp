@@ -6,7 +6,7 @@
 #include <chrono>         // std::chrono::seconds
 //#include <gperftools/heap-profiler.h>
 #include <vector>
-
+#include <thread>
 #include <string>
 #include <sstream>
 #include <map>
@@ -273,7 +273,7 @@ void TestOpenid(uint32_t count)
 	std::this_thread::sleep_for(sec);
 }
 
-void TestStdString()
+void TestStdString(uint32_t count)
 {
 	std::string  s;
 	//s.reserve(256);
@@ -281,7 +281,7 @@ void TestStdString()
 		auto start = std::chrono::high_resolution_clock::now();
 
 
-		for (auto i = 0; i < 1000000; i++)
+		for (auto i = 0; i < count; i++)
 		{
 			s="";
 			s.append("12121");
@@ -302,7 +302,7 @@ void TestStdString()
 		auto end = std::chrono::high_resolution_clock::now();
 
 		std::chrono::duration<double> diff = end - start;
-		std::cout << s.size() << " append cost " << "  time " << diff.count() << std::endl;
+		std::cout <<"["<< std::this_thread::get_id() <<"]"<< s.size() << " append cost " << "  time " << diff.count() << std::endl;
 
 	}
 
@@ -310,7 +310,7 @@ void TestStdString()
 		auto start = std::chrono::high_resolution_clock::now();
 
 
-		for (auto i = 0; i < 1000000; i++)
+		for (auto i = 0; i < count; i++)
 		{
 			s.clear();
 			s+="12121";
@@ -475,6 +475,53 @@ bool TestObjectPool()
 	return true;
 }
 
+void TestThread(uint32_t count)
+{
+	std::thread* thread_1 = new std::thread([count]()
+	{
+		try
+		{
+			TestStdString(count);
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+
+	}
+	);
+
+	std::thread* thread_2 = new std::thread([count]()
+	{
+		try
+		{
+			TestStdString(count);
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+
+	}
+	);
+	std::thread* thread_3 = new std::thread([count]()
+	{
+		try
+		{
+			TestStdString(count);
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+
+	}
+	);
+	thread_1->join();
+	thread_2->join();
+	thread_3->join();
+
+}
 
 int main(int argc, char* argv[])
 {
@@ -488,8 +535,8 @@ int main(int argc, char* argv[])
 		count = atoi(argv[1]);
 	}
 
-	TestWriteOpenid(count);
-
+	//TestWriteOpenid(count);
+	TestThread(count);
 
 
 
