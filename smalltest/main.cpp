@@ -10,6 +10,8 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include "ae_lock.h"
+
 //测试析构子类析构函数在void * 转换下
 class A
 {
@@ -477,46 +479,62 @@ bool TestObjectPool()
 
 void TestThread(uint32_t count)
 {
-	std::thread* thread_1 = new std::thread([count]()
+	EasySpinLock lock;
+	uint32_t index=0;
+	std::thread* thread_1 = new std::thread([&lock, &index, count]()
 	{
 		try
 		{
-			TestStdString(count);
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				lock.Lock();
+				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				lock.UnLock();
+			}
 		}
 		catch (std::exception& e)
 		{
 			std::printf("Exception: %s\n", e.what());
 		}
-
 	}
 	);
-
-	std::thread* thread_2 = new std::thread([count]()
+	std::thread* thread_2 = new std::thread([&lock, &index, count]()
 	{
 		try
 		{
-			TestStdString(count);
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				lock.Lock();
+				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				lock.UnLock();
+			}
 		}
 		catch (std::exception& e)
 		{
 			std::printf("Exception: %s\n", e.what());
 		}
-
 	}
 	);
-	std::thread* thread_3 = new std::thread([count]()
+	std::thread* thread_3 = new std::thread([&lock, &index, count]()
 	{
 		try
 		{
-			TestStdString(count);
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				lock.Lock();
+				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				lock.UnLock();
+			}
 		}
 		catch (std::exception& e)
 		{
 			std::printf("Exception: %s\n", e.what());
 		}
-
 	}
 	);
+
+
+
 	thread_1->join();
 	thread_2->join();
 	thread_3->join();
