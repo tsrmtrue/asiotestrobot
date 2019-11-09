@@ -94,6 +94,7 @@ struct Openid
             && this->id[4] == t.id[4]
             && this->id[5] == t.id[5];
     };
+	Openid() {};
     Openid(uint32_t id0, uint32_t id1, uint32_t id2, uint32_t id3, uint32_t id4, uint32_t id5 )
     {
         id[0] = id0;
@@ -105,13 +106,48 @@ struct Openid
     }
 	bool operator <(const Openid& r) const
 	{
-		auto b =  id[0] < r.id[0]
-			&& id[1] < r.id[1]
-			&& id[2] < r.id[2]
-			&& id[3] < r.id[3]
-			&& id[4] < r.id[4]
-			&& id[5] < r.id[5];
-		return b;
+		if (id[0] < r.id[0])
+		{
+			return true;
+		}
+		else if (id[0] == r.id[0])
+		{
+			if (id[1] < r.id[1])
+			{
+				return true;
+			}
+			else if (id[1] == r.id[1])
+			{
+				if (id[2] < r.id[2])
+				{
+					return true;
+				}
+				else if (id[2] == r.id[2])
+				{
+					if (id[3] < r.id[3])
+					{
+						return true;
+					}
+					else if (id[3] == r.id[3])
+					{
+						if (id[4] < r.id[4])
+						{
+							return true;
+						}
+						else if (id[4] == r.id[4])
+						{
+							if (id[5] < r.id[5])
+							{
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+		return false;
 	}
 };
 namespace std
@@ -163,15 +199,13 @@ void TestOpenid(uint32_t count)
 	std::cout << "TestOpenid count " << count << std::endl;
 	std::cout << "sizeof Openid is " << sizeof(Openid) << std::endl;
 
-    std::map<uint32_t, bool> all_keys;
+    std::unordered_map<Openid, bool> all_keys;
 
-    // Seed with a real random value, if available
+	//随机数生成器
     std::random_device r;
-
-    // Choose a random mean between 1 and 6
     std::default_random_engine e1(r());
     std::uniform_int_distribution<int> uniform_dist(1, 0xfffffff);
-
+	//生成指定数量的数据
     {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -179,13 +213,13 @@ void TestOpenid(uint32_t count)
         {
             Openid id(r(), r(), r(), r(), r(), r());
 
-			all_keys.emplace(r(), true);
-            //all_keys[id] = true;
+			//all_keys.emplace(r(), true);
+            all_keys[id] = true;
         }
         {
             Openid id(1, 2, 3, 4, 5, 6);
 
-            all_keys[1] = true;
+            all_keys[id] = true;
 
 
         }
@@ -194,12 +228,11 @@ void TestOpenid(uint32_t count)
         std::chrono::duration<double> diff = end - start;
         std::cout << "create time " << diff.count() << std::endl;
     }
-    //查询计时
     {
         auto start = std::chrono::high_resolution_clock::now();
 
         Openid id(1, 2, 3, 4, 5, 6);
-        auto result = all_keys[1];
+        auto result = all_keys[id];
 
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -207,19 +240,33 @@ void TestOpenid(uint32_t count)
         std::cout << "search result "<<result<<"  "
             << id.id[0] << "," << id.id[1] << "," << id.id[2] << "," << id.id[3] << "," << id.id[4] << "," << id.id[5] << "  time " << diff.count() << std::endl;
     }
+
+	//查询计时
     for (uint32_t i = 0; i<10; i++)
     {
         auto start = std::chrono::high_resolution_clock::now();
 
         Openid id(r(), r(), r(), r(), r(), r());
-         all_keys[r()] = true;
+        bool r = all_keys.find(id) != all_keys.end();
 
         auto end = std::chrono::high_resolution_clock::now();
 
         std::chrono::duration<double> diff = end - start;
-        std::cout << "add  result " << true << "  "
+        std::cout << "search  result " << r << "  "
             << id.id[0] << "," << id.id[1] << "," << id.id[2] << "," << id.id[3] << "," << id.id[4] << "," << id.id[5] << "  time " << diff.count() << std::endl;
     }
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		Openid id(1,2,3,4,5,6);
+		bool r = all_keys.find(id) != all_keys.end();
+
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << "search  result " << r << "  "
+			<< id.id[0] << "," << id.id[1] << "," << id.id[2] << "," << id.id[3] << "," << id.id[4] << "," << id.id[5] << "  time " << diff.count() << std::endl;
+	}
 
 	std::chrono::seconds sec(1000);
 
@@ -288,6 +335,118 @@ void TestStdString()
 
 	}
 }
+#include <iostream>
+#include <fstream>
+
+void TestWriteOpenid(uint32_t count)
+{
+	//随机数生成器
+	std::random_device r;
+	std::default_random_engine e1(r());
+	std::uniform_int_distribution<int> uniform_dist(1, 0xfffffff);
+	//单个写入
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		std::string filename = "openid_singlg_w";
+		std::ofstream ostrm(filename, std::ios::binary);
+		for (uint32_t i = 0; i < count; i++)
+		{
+			Openid id(r(), r(), r(), r(), r(), r());
+			ostrm.write(reinterpret_cast<char*>(&id), sizeof( Openid)); // 
+
+		}
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << "write single time " << diff.count() << std::endl;
+	}
+	//多个写入
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		std::string filename = "openid_100_w";
+		std::ofstream ostrm(filename, std::ios::binary);
+		for (uint32_t i = 0; i < count/100; i++)
+		{
+			Openid id[100];
+			ostrm.write(reinterpret_cast<char*>(id), sizeof(Openid) *100); // 
+
+		}
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << "write blcok  time " << diff.count() << std::endl;
+	}
+}
+
+void TestReadOpenid(uint32_t count)
+{
+	//单个读取
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		std::string filename = "openid_singlg_w";
+		std::ifstream istrm{ filename, std::ios::binary || std::ios::ate };
+		auto i = 0; 
+		uint64_t size = 0;
+		if (!istrm.is_open()) {
+			std::cout << "failed to open " << filename << '\n';
+		}
+		else
+		{
+			istrm.seekg(0, std::ios::end); // rewind
+
+			size = istrm.tellg();
+
+			istrm.seekg(0); // rewind
+
+			Openid id;
+
+			for (; i<size/sizeof(Openid); ++i)
+			{
+				istrm.read(reinterpret_cast<char*>(&id), sizeof(Openid));
+			}
+		}
+
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << "read single time " << diff.count() <<"read size "<<size<<" readcount "<< i<< std::endl;
+	}
+	//多个读取
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		std::string filename = "openid_100_w";
+		std::ifstream istrm{ filename, std::ios::binary || std::ios::ate };
+		auto i = 0;
+		uint64_t size = 0;
+
+		if (!istrm.is_open()) {
+			std::cout << "failed to open " << filename << '\n';
+		}
+		else
+		{
+			istrm.seekg(0, std::ios::end); // rewind
+
+			size = istrm.tellg();
+
+			istrm.seekg(0); // rewind
+
+			Openid id[100];
+			for (; i < size / sizeof(Openid)/100; ++i)
+			{
+				istrm.read(reinterpret_cast<char*>(&id), 100*sizeof(Openid));
+			}
+		}
+		auto end = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> diff = end - start;
+		std::cout << "read block time " << diff.count() << "read size " << size << " readcount " << i << std::endl;
+	}
+
+}
 
 //对象池
 //
@@ -329,7 +488,7 @@ int main(int argc, char* argv[])
 		count = atoi(argv[1]);
 	}
 
-	TestOpenid(count);
+	TestWriteOpenid(count);
 
 
 
