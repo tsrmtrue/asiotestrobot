@@ -387,8 +387,8 @@ void TestReadOpenid(uint32_t count)
 		auto start = std::chrono::high_resolution_clock::now();
 
 		std::string filename = "openid_singlg_w";
-		std::ifstream istrm{ filename, std::ios::binary || std::ios::ate };
-		auto i = 0; 
+		std::ifstream istrm( filename, std::ios::binary || std::ios::ate );
+		size_t i = 0; 
 		uint64_t size = 0;
 		if (!istrm.is_open()) {
 			std::cout << "failed to open " << filename << '\n';
@@ -419,8 +419,8 @@ void TestReadOpenid(uint32_t count)
 		auto start = std::chrono::high_resolution_clock::now();
 
 		std::string filename = "openid_100_w";
-		std::ifstream istrm{ filename, std::ios::binary || std::ios::ate };
-		auto i = 0;
+		std::ifstream istrm(filename, std::ios::binary || std::ios::ate );
+		size_t i = 0;
 		uint64_t size = 0;
 
 		if (!istrm.is_open()) {
