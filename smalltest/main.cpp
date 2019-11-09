@@ -487,9 +487,12 @@ void TestThread(uint32_t count)
 		{
 			for (uint32_t i = 0; i < count; ++i)
 			{
-				lock.Lock();
-				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
-				lock.UnLock();
+				if (lock.TryLock())
+				{
+					std::cout << "index [" << index++ << "]" << "[" <<   std::this_thread::get_id() << "]" << std::endl;
+					lock.UnLock();
+				}
+				
 			}
 		}
 		catch (std::exception& e)
@@ -504,9 +507,11 @@ void TestThread(uint32_t count)
 		{
 			for (uint32_t i = 0; i < count; ++i)
 			{
-				lock.Lock();
-				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
-				lock.UnLock();
+				if (lock.TryLock())
+				{
+					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+					lock.UnLock();
+				}
 			}
 		}
 		catch (std::exception& e)
@@ -521,9 +526,11 @@ void TestThread(uint32_t count)
 		{
 			for (uint32_t i = 0; i < count; ++i)
 			{
-				lock.Lock();
-				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
-				lock.UnLock();
+				if (lock.TryLock())
+				{
+					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+					lock.UnLock();
+				}
 			}
 		}
 		catch (std::exception& e)
