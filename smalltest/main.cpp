@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <mutex>
 #include "ae_lock.h"
 
 //测试析构子类析构函数在void * 转换下
@@ -477,7 +478,77 @@ bool TestObjectPool()
 	return true;
 }
 
-void TestThread(uint32_t count)
+void TestThreadMutex(uint32_t count)
+{
+	//定义变量
+	std::mutex g_i_mutex;
+	uint32_t index = 0;
+
+	std::thread* thread_1 = new std::thread([&g_i_mutex, &index, count]()
+	{
+		try
+		{
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				std::lock_guard<std::mutex> lock(g_i_mutex);
+				//以下逻辑为互斥访问
+				{
+					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				}
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+	std::thread* thread_2 = new std::thread([&g_i_mutex, &index, count]()
+	{
+		try
+		{
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				std::lock_guard<std::mutex> lock(g_i_mutex);
+				//以下逻辑为互斥访问
+				{
+					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				}
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+	std::thread* thread_3 = new std::thread([&g_i_mutex, &index, count]()
+	{
+		try
+		{
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				std::lock_guard<std::mutex> lock(g_i_mutex);
+				//以下逻辑为互斥访问
+				{
+					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				}
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+	thread_1->join();
+	thread_2->join();
+	thread_3->join();
+
+
+}
+
+void TestThreadLockFree(uint32_t count)
 {
 	EasySpinLock lock;
 	uint32_t index=0;
@@ -492,7 +563,6 @@ void TestThread(uint32_t count)
 					std::cout << "index [" << index++ << "]" << "[" <<   std::this_thread::get_id() << "]" << std::endl;
 					lock.UnLock();
 				}
-				
 			}
 		}
 		catch (std::exception& e)
@@ -561,7 +631,7 @@ int main(int argc, char* argv[])
 	}
 
 	//TestWriteOpenid(count);
-	TestThread(count);
+	TestThreadMutex(count);
 
 
 
@@ -579,6 +649,26 @@ int main(int argc, char* argv[])
     //std::chrono::seconds sec(100);
  
     //std::this_thread::sleep_for(sec);
+
+
+	bool switch_ = false;
+
+	//生产者
+	if (switch_)
+	{
+		//业务逻辑
+		switch_ = false;
+	}
+
+	//消费者
+	if (!switch_)
+	{
+		//业务逻辑
+		switch_ = true;
+	}
+
+
+
 
 	return 0;
 }
