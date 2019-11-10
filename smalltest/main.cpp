@@ -624,6 +624,71 @@ void TestThreadNoLock(uint32_t count)
 void TestThreadLockFree(uint32_t count)
 {
 	EasySpinLock lock;
+	uint32_t index = 0;
+	std::thread* thread_1 = new std::thread([&lock, &index, count]()
+	{
+		try
+		{
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				lock.Lock();
+				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				lock.UnLock();
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+	std::thread* thread_2 = new std::thread([&lock, &index, count]()
+	{
+		try
+		{
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				lock.Lock();
+				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				lock.UnLock();
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+	std::thread* thread_3 = new std::thread([&lock, &index, count]()
+	{
+		try
+		{
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				lock.Lock();
+				std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
+				lock.UnLock();
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+
+
+
+	thread_1->join();
+	thread_2->join();
+	thread_3->join();
+
+}
+
+
+void TestThreadLockFreeTry(uint32_t count)
+{
+	EasySpinLock lock;
 	uint32_t index=0;
 	std::thread* thread_1 = new std::thread([&lock, &index, count]()
 	{
@@ -740,6 +805,36 @@ int main(int argc, char* argv[])
 		switch_ = true;
 	}
 
+	EasySpinLock lock;
+
+
+	lock.Lock();
+	//生产者逻辑
+	lock.UnLock();
+
+	lock.Lock();
+	//消费者逻辑
+	lock.UnLock();
+
+	if (lock.TryLock())
+	{
+		//生产者逻辑
+		lock.UnLock();
+	}
+	//线程处理其他事务
+
+	for (; ;)
+	{
+		if (lock.TryLock())
+		{
+			//消费者逻辑
+			//占用比较多的cpu
+			lock.UnLock();
+		}
+		//线程适当放开对锁的占有,让生产者有机会
+		std::chrono::microseconds sec(500);
+		std::this_thread::sleep_for(sec);
+	}
 
 
 
