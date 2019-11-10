@@ -184,7 +184,7 @@ void TestRawOpenid(uint32_t count)
 	{
 		Openid*  id = new Openid(1, 1, 1, 
 			1, 1, 1);
-		(void*)id;
+		id->id[2] = 3;
 	}
 
 
