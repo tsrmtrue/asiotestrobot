@@ -548,6 +548,80 @@ void TestThreadMutex(uint32_t count)
 
 }
 
+void TestThreadNoLock(uint32_t count)
+{
+	bool lock=true;
+	uint32_t index = 0;
+	std::thread* thread_2 = new std::thread([&lock, &index, count]()
+	{
+		uint32_t local = index;
+		try
+		{
+			uint32_t i = 0;
+			for (; i < count; ++i)
+			{
+				if (!lock)
+				{
+					std::map<size_t, size_t> m_;
+					for (size_t j = 0; j < 100; j++)
+					{
+						m_[j] = j;
+					}
+
+					if (local + 1 != index)
+					{
+						std::cout << "local + 1 != index  index [" << index << "]" <<"local["<<local <<"]"<< "[" << std::this_thread::get_id() << "]" << std::endl;
+
+					}
+					local = index;
+
+
+					lock = true;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			std::cout << "thread 2 finish ;[" << i << "]" << std::endl;
+
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);	std::thread* thread_1 = new std::thread([&lock, &index, count]()
+	{
+		try
+		{
+			uint32_t i = 0;
+			for (; i < count; ++i)
+			{
+				if (lock)
+				{
+					index++;
+					lock = false;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			std::cout << "thread 1 finish ;[" << i<<"]" << std::endl;
+		}
+		catch (std::exception& e)
+		{
+			std::printf("Exception: %s\n", e.what());
+		}
+	}
+	);
+
+	thread_1->join();
+	thread_2->join();
+
+}
+
 void TestThreadLockFree(uint32_t count)
 {
 	EasySpinLock lock;
@@ -631,7 +705,7 @@ int main(int argc, char* argv[])
 	}
 
 	//TestWriteOpenid(count);
-	TestThreadMutex(count);
+	TestThreadNoLock(count);
 
 
 
