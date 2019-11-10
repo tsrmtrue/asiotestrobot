@@ -179,12 +179,12 @@ namespace std
 
 void TestRawOpenid(uint32_t count)
 {
-	auto t = sizeof(Openid);
-	std::cout << "TestRawOpenid count " << count<< std::endl;
+	std::cout << "TestRawOpenid count [" << count<<"]"<<"sizeof ["<< sizeof(Openid) <<"]"<< std::endl;
 	for (uint32_t i = 0; i < count; i++)
 	{
 		Openid*  id = new Openid(1, 1, 1, 
 			1, 1, 1);
+		(void*)id;
 	}
 
 
@@ -198,7 +198,6 @@ void TestRawOpenid(uint32_t count)
 void TestOpenid(uint32_t count)
 {
     //随机初始化数量
-	auto t = sizeof(Openid);
 	std::cout << "TestOpenid count " << count << std::endl;
 	std::cout << "sizeof Openid is " << sizeof(Openid) << std::endl;
 
@@ -284,7 +283,7 @@ void TestStdString(uint32_t count)
 		auto start = std::chrono::high_resolution_clock::now();
 
 
-		for (auto i = 0; i < count; i++)
+		for (uint32_t i = 0; i < count; i++)
 		{
 			s="";
 			s.append("12121");
@@ -313,7 +312,7 @@ void TestStdString(uint32_t count)
 		auto start = std::chrono::high_resolution_clock::now();
 
 
-		for (auto i = 0; i < count; i++)
+		for (uint32_t i = 0; i < count; i++)
 		{
 			s.clear();
 			s+="12121";
