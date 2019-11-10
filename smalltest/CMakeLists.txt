@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 PROJECT(smalltest)
 
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE "Release")
 
 
 IF (WIN32)  
@@ -11,7 +11,7 @@ ELSE()
 
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS}  -O0 -g ")
 
-	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O1 -g -Werror ")
+	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -g -Werror ")
 ENDIF()
 INCLUDE_DIRECTORIES( .  )
 INCLUDE_DIRECTORIES( ../AESever/common  )
