@@ -13,6 +13,7 @@
 #include <mutex>
 #include "ae_lock.h"
 
+
 //测试析构子类析构函数在void * 转换下
 class A
 {
@@ -753,7 +754,14 @@ void TestThreadLockFreeTry(uint32_t count)
 	thread_1->join();
 	thread_2->join();
 	thread_3->join();
+}
 
+
+#include "timer_wheel_manager.h"
+void TestTimerWheel()
+{
+    TimerWheelManager::CreateInstance();
+    TimerWheelManager::Instance()->Init();
 }
 
 int main(int argc, char* argv[])
@@ -769,8 +777,8 @@ int main(int argc, char* argv[])
 	}
 
 	//TestWriteOpenid(count);
-	TestThreadNoLock(count);
-
+	//TestThreadNoLock(count);
+    TestTimerWheel();
 
 
     //HeapProfilerStart("heap.profile"); // 添加函数之一
@@ -787,54 +795,6 @@ int main(int argc, char* argv[])
     //std::chrono::seconds sec(100);
  
     //std::this_thread::sleep_for(sec);
-
-
-	bool switch_ = false;
-
-	//生产者
-	if (switch_)
-	{
-		//业务逻辑
-		switch_ = false;
-	}
-
-	//消费者
-	if (!switch_)
-	{
-		//业务逻辑
-		switch_ = true;
-	}
-
-	EasySpinLock lock;
-
-
-	lock.Lock();
-	//生产者逻辑
-	lock.UnLock();
-
-	lock.Lock();
-	//消费者逻辑
-	lock.UnLock();
-
-	if (lock.TryLock())
-	{
-		//生产者逻辑
-		lock.UnLock();
-	}
-	//线程处理其他事务
-
-	for (; ;)
-	{
-		if (lock.TryLock())
-		{
-			//消费者逻辑
-			//占用比较多的cpu
-			lock.UnLock();
-		}
-		//线程适当放开对锁的占有,让生产者有机会
-		std::chrono::microseconds sec(500);
-		std::this_thread::sleep_for(sec);
-	}
 
 
 

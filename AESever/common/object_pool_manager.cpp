@@ -28,6 +28,7 @@ namespace ObjectPool
 
     void ObjectPoolManager::Uninit()
     {
+
     }
 
     void ObjectPoolManager::Recycle(const char* object_name, void* data, const char* src_file, int32_t line_no, uint64_t hash_code)
