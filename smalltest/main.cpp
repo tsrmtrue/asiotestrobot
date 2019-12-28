@@ -764,6 +764,29 @@ void TestTimerWheel()
     TimerWheelManager::Instance()->Init();
 }
 
+void TestNewTcmalloc()
+{
+    uint64_t count = 0;
+    for (size_t i = 0; i < 0xfffff; i++)
+    {
+        uint64_t* pter[0x1ff];
+        for (size_t j = 0; j < 0x1ff; ++j)
+        {
+            count++;
+            std::cout << "this new count "<<count<<std::endl;
+            pter[j] = new uint64_t;
+        }
+        for (size_t j = 0; j < 0x1ff; ++j)
+        {
+            delete pter[j] ;
+        }
+        std::chrono::seconds sec(1);
+
+        std::this_thread::sleep_for(sec);
+    }
+}
+
+
 int main(int argc, char* argv[])
 {
 	//TestObjectPool();
@@ -778,7 +801,7 @@ int main(int argc, char* argv[])
 
 	//TestWriteOpenid(count);
 	//TestThreadNoLock(count);
-    TestTimerWheel();
+    TestNewTcmalloc();
 
 
     //HeapProfilerStart("heap.profile"); // 添加函数之一
