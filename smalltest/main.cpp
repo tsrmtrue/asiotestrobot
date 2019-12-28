@@ -764,7 +764,7 @@ void TestTimerWheel()
     TimerWheelManager::Instance()->Init();
 }
 
-void TestNewTcmalloc()
+void TestNewTcmalloc(uint32_t count)
 {
     uint64_t count = 0;
     for (size_t i = 0; i < 0xfffff; i++)
@@ -801,7 +801,7 @@ int main(int argc, char* argv[])
 
 	//TestWriteOpenid(count);
 	//TestThreadNoLock(count);
-    TestNewTcmalloc();
+    TestNewTcmalloc(count);
 
 
     //HeapProfilerStart("heap.profile"); // 添加函数之一
