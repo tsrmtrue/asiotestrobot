@@ -764,7 +764,7 @@ void TestTimerWheel()
     TimerWheelManager::Instance()->Init();
 }
 
-void TestNewTcmalloc(uint32_t count)
+void TestNewTcmalloc(uint32_t c)
 {
     uint64_t count = 0;
     for (size_t i = 0; i < 0xfffff; i++)
