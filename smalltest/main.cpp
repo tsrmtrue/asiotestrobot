@@ -767,7 +767,7 @@ void TestTimerWheel()
 void TestNewTcmalloc(uint32_t c)
 {
     uint64_t count = 0;
-    for (size_t i = 0; i < 0xfffff; i++)
+    //for (size_t i = 0; i < 0xfffff; i++)
     {
         //std::vector<B> v;
         //for (size_t i = 0; i < 300000; i++)
@@ -777,18 +777,18 @@ void TestNewTcmalloc(uint32_t c)
         //}
 
 
-        Openid* pter[0x10000];
-        for (size_t j = 0; j < 0x10000; ++j)
+        //Openid* pter[0x10000];
+        for (size_t j = 0; j < 1500; ++j)
         {
             count++;
             std::cout << "this new count "<<count<<std::endl;
-            pter[j] = new Openid;
+            char * t  = new char[0x100000];
         }
         //for (size_t j = 0; j < 0x1ff; ++j)
         //{
         //    delete pter[j] ;
         //}
-        std::chrono::microseconds sec(1);
+        std::chrono::seconds sec(10000);
 
         std::this_thread::sleep_for(sec);
     }
