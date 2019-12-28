@@ -769,12 +769,12 @@ void TestNewTcmalloc(uint32_t c)
     uint64_t count = 0;
     for (size_t i = 0; i < 0xfffff; i++)
     {
-        std::vector<B> v;
-        for (size_t i = 0; i < 300000; i++)
-        {
-            v.emplace_back();
+        //std::vector<B> v;
+        //for (size_t i = 0; i < 300000; i++)
+        //{
+        //    v.emplace_back();
 
-        }
+        //}
 
 
         Openid* pter[0x10000];
@@ -784,10 +784,10 @@ void TestNewTcmalloc(uint32_t c)
             std::cout << "this new count "<<count<<std::endl;
             pter[j] = new Openid;
         }
-        for (size_t j = 0; j < 0x1ff; ++j)
-        {
-            delete pter[j] ;
-        }
+        //for (size_t j = 0; j < 0x1ff; ++j)
+        //{
+        //    delete pter[j] ;
+        //}
         std::chrono::microseconds sec(1);
 
         std::this_thread::sleep_for(sec);
