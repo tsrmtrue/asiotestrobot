@@ -769,12 +769,12 @@ void TestNewTcmalloc(uint32_t c)
     uint64_t count = 0;
     for (size_t i = 0; i < 0xfffff; i++)
     {
-        uint64_t* pter[0x1ff];
-        for (size_t j = 0; j < 0x1ff; ++j)
+        Openid* pter[0x10000];
+        for (size_t j = 0; j < 0x10000; ++j)
         {
             count++;
             std::cout << "this new count "<<count<<std::endl;
-            pter[j] = new uint64_t;
+            pter[j] = new Openid;
         }
         for (size_t j = 0; j < 0x1ff; ++j)
         {
