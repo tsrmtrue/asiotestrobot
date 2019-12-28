@@ -79,7 +79,7 @@ private:
 private:
     uint64_t now_time_{ 0 };
     TotalTimer total_timer_;
-    TimerIndex timer_index_{0};
+    TimerIndex timer_index_;
     TimerObjList outer_list_;//超长时间的timer，当所有timer队列都遍历过一遍，则这里刷新一次。
    
 
