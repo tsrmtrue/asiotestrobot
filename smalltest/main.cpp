@@ -778,7 +778,7 @@ void TestNewTcmalloc(uint32_t c)
 
 
         //Openid* pter[0x10000];
-        for (size_t j = 0; j < 1500; ++j)
+        for (size_t j = 0; j < 15000; ++j)
         {
             count++;
             std::cout << "this new count "<<count<<std::endl;
