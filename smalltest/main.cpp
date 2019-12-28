@@ -769,6 +769,14 @@ void TestNewTcmalloc(uint32_t c)
     uint64_t count = 0;
     for (size_t i = 0; i < 0xfffff; i++)
     {
+        std::vector<B> v;
+        for (size_t i = 0; i < 300000; i++)
+        {
+            v.emplace_back();
+
+        }
+
+
         Openid* pter[0x10000];
         for (size_t j = 0; j < 0x10000; ++j)
         {
@@ -780,7 +788,7 @@ void TestNewTcmalloc(uint32_t c)
         {
             delete pter[j] ;
         }
-        std::chrono::seconds sec(1);
+        std::chrono::microseconds sec(1);
 
         std::this_thread::sleep_for(sec);
     }
@@ -808,13 +816,6 @@ int main(int argc, char* argv[])
 
 
 
-    //std::vector<B> v;
-    //for (size_t i = 0; i < 300000; i++)
-    //{
-    //    v.emplace_back();
-
-    //}
-    //
 
     //std::chrono::seconds sec(100);
  
