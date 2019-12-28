@@ -4,7 +4,7 @@
 #include <thread>
 #include <list>
 #include <chrono>         // std::chrono::seconds
-//#include <gperftools/heap-profiler.h>
+#include <gperftools/heap-profiler.h>
 #include <vector>
 #include <thread>
 #include <string>
@@ -801,10 +801,12 @@ int main(int argc, char* argv[])
 
 	//TestWriteOpenid(count);
 	//TestThreadNoLock(count);
+
+    HeapProfilerStart("heap.profile"); // 添加函数之一
     TestNewTcmalloc(count);
+    HeapProfilerStop();  // 添加函数之二
 
 
-    //HeapProfilerStart("heap.profile"); // 添加函数之一
 
     //std::vector<B> v;
     //for (size_t i = 0; i < 300000; i++)
@@ -813,7 +815,6 @@ int main(int argc, char* argv[])
 
     //}
     //
-    //HeapProfilerStop();  // 添加函数之二
 
     //std::chrono::seconds sec(100);
  
