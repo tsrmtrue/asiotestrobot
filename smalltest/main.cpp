@@ -793,7 +793,7 @@ int main(int argc, char* argv[])
 	//TestStdString();
 
 	//²âÊÔ
-	auto count = 10;
+	uint32_t count = 10;
 	if (argc > 1)
 	{
 		count = atoi(argv[1]);
