@@ -783,6 +783,7 @@ void TestNewTcmalloc(uint32_t c)
             count++;
             std::cout << "this new count "<<count<<std::endl;
             char * t  = new char[0x100000];
+            t[1] = 1;
         }
         //for (size_t j = 0; j < 0x1ff; ++j)
         //{
