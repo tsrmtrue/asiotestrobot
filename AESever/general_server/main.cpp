@@ -54,23 +54,22 @@ int main(int argc, char* argv[])
         asio::signal_set sigset(*pio_main_service, SIGINT, SIGTERM);
         sigset.async_wait(asio_signal_handler);
 
-        //单体创建
+        //首先创建日志系统，timer是1秒
 		AELogger::CreateInstance();
 		AETimer::StartTimer(pio_main_service, AELogger::Instance(), 1000);
 		AELogger::Instance()->InitStart();
 
-
+        //链接管理，100毫秒timer
 		PeerManager::CreateInstance();
 		AETimer::StartTimer(pio_main_service, PeerManager::Instance(), 100);
 
-        //消息中心,创建timer
+        //消息管理,创建timer
         MessageCenter::CreateInstance();
-
         AETimer::StartTimer(pio_main_service, MessageCenter::Instance(), 100);
-
+        //注册消息反馈
         MessageCenter::Instance()->RegisterHandler((uint32_t )EMessage::MSG_LOGIN, new LoginMsgHdl );
 
-        //网路
+        //服务器监听
         AsioListener::CreateInstance();
         AsioListener::Instance()->Init(*pio_network_service,"127.0.0.1", 50000);
 
@@ -82,15 +81,12 @@ int main(int argc, char* argv[])
                     while (1)
                     {
                         pio_network_service->run();
-						auto i = 0;
-						auto j = i + 1;
                     }
                 }
                 catch (std::exception& e)
                 {
                     std::printf("Exception: %s\n", e.what());
                 }
-
             } 
         );
         //逻辑线程
@@ -115,15 +111,18 @@ int main(int argc, char* argv[])
         {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
-
+        //等待网络线程退出
         pio_network_service->stop();
 		network_thread->join();
-
+        //等待逻辑线程退出
         pio_main_service->stop();
 		main_thread->join();
 
-        //关闭单体
+        //关闭单体，初始化的反顺序
         AsioListener::DestroyInstance();
+        MessageCenter::DestroyInstance();
+        PeerManager::DestroyInstance();
+        AELogger::DestroyInstance();
 	}
 	catch (std::exception& e)
 	{
