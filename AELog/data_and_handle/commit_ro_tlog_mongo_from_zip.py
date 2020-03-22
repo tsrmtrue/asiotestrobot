@@ -77,7 +77,7 @@ def insert_mongo(value):
     #     start = end
     #单个插入
     while start < total:
-        mycol = mydb[value['_eventname']]
+        mycol = mydb[value[start]['_eventname']]
         g_count += 1
         mycol.insert(value[start])
         start += 1 
