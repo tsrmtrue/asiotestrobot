@@ -107,7 +107,6 @@ def main():
         os.system("rm -f %(file)s"%(locals()))
         #记录成处理文件
         all_finished.append(file)
-        break
     
     #保存已经处理名单
     all_filename_str = "\n".join(all_finished)
