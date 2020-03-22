@@ -1,0 +1,1701 @@
+<metalib tagsetversion="1" name="Log" version="1">
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="BattleTimeFlow" filter="1"  version="1.0" desc="玩家战斗时间流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="记录类型 0=每日自动更新 1=上线记录 2=下线记录"/>
+        <entry  name="UsedBlessedTime"          type="int"            defaultvalue="0"     desc="当前已花费祝福时间/分钟"/>
+        <entry  name="RemainBlessedTime"          type="int"            defaultvalue="0"     desc="当前剩余祝福时间/分钟"/>
+        <entry  name="UsedHealthyTime"          type="int"            defaultvalue="0"     desc="当前已花费健康时间/分钟"/>
+        <entry  name="RemainHealthyTime"          type="int"            defaultvalue="0"     desc="当前剩余健康时间/分钟"/>
+        <entry  name="UsedVanTime"          type="int"            defaultvalue="0"     desc="当前已花费疲惫战斗时间"/>
+        <entry  name="BlessedBaseExp"          type="int"            defaultvalue="0"     desc="当前祈福Base经验"/>
+        <entry  name="BlessedJobExp"          type="int"            defaultvalue="0"     desc="当前祈福Job经验"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="DungeonType" desc="副本类型  0=单人副本  1=多人副本  ">
+        <macro name="SINGLE"      value="0" desc=""/>
+        <macro name="MULTI"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="MemberType" desc="玩家队伍职位  0=队长  1=队员">
+        <macro name="TEAM_LEADER"      value="0" desc=""/>
+        <macro name="TEAM_MATE"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Result" desc="战斗结果  0=胜利   1=失败">
+        <macro name="VICTORY"      value="0" desc=""/>
+        <macro name="FAILED"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="BossFightFlow" filter="1"  version="1.0" desc="boss战流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="DungeonType"          type="int"            defaultvalue="0"     desc="副本类型  0=单人副本  1=多人副本  "/>
+        <entry  name="DungeonID"          type="int"            defaultvalue="0"     desc="副本ID"/>
+        <entry  name="DungeonName"          type="string"        size="768"     defaultvalue="NULL"     desc="副本名称"/>
+        <entry  name="TeamID"          type="int"            defaultvalue="0"     desc="队伍唯一ID"/>
+        <entry  name="MemberType"          type="int"            defaultvalue="0"     desc="玩家队伍职位  0=队长  1=队员"/>
+        <entry  name="Roles"          type="int"            defaultvalue="0"     desc="队伍真实玩家数"/>
+        <entry  name="Ais"          type="int"            defaultvalue="0"     desc="队伍雇佣AI数"/>
+        <entry  name="MemberNum"          type="string"        size="768"     defaultvalue="NULL"     desc="队伍内玩家等级【等级1，等级2，等级3，等级4……】"/>
+        <entry  name="DeadTimes"          type="int"            defaultvalue="0"     desc="战斗死亡人数"/>
+        <entry  name="Result"          type="int"            defaultvalue="0"     desc="战斗结果  0=胜利   1=失败"/>
+        <entry  name="Time"          type="int"            defaultvalue="0"     desc="战斗花费时长/s"/>
+        <entry  name="BossId"          type="int"            defaultvalue="0"     desc="脱战的BossID"/>
+        <entry  name="BossHpPer"          type="int"            defaultvalue="0"     desc="脱战的Boss血量百分比"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="ChatRoomMemberFlow" filter="1"  version="1.0" desc="聊天室成员流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型 0=加入 1=主动退出  2=被动踢出  3=离线退出"/>
+        <entry  name="MemberType"          type="int"            defaultvalue="0"     desc="成员类型 0=房主  1=成员"/>
+        <entry  name="RoomID"          type="bigint"                desc="聊天室ID"/>
+        <entry  name="RoomName"          type="string"        size="768"     defaultvalue="NULL"     desc="聊天室名称"/>
+        <entry  name="NowNumbers"          type="int"            defaultvalue="0"     desc="操作后聊天室人数"/>
+        <entry  name="PassNumber"          type="int"            defaultvalue="0"     desc="是否有密码  0=有密码  1=无密码"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   0=巫师 1=……">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Reason" desc="行为（资源操作行为定义）">
+        <macro name="ITEM_REASON_PICK_UP"      value="1" desc=""/>
+        <macro name="ITEM_REASON_USE"      value="3" desc=""/>
+        <macro name="ITEM_REASON_TASK_REMOVE"      value="6" desc=""/>
+        <macro name="ITEM_REASON_TASK_TAKE"      value="7" desc=""/>
+        <macro name="ITEM_REASON_TASK_REWARD"      value="8" desc=""/>
+        <macro name="ITEM_REASON_SKILL_STEAL"      value="9" desc=""/>
+        <macro name="ITEM_REASON_MVP_FINAL_KILL_REWARD"      value="10" desc=""/>
+        <macro name="ITEM_REASON_MVP_TEAM_REWARD"      value="11" desc=""/>
+        <macro name="ITEM_REASON_CHANGE_HAIR"      value="12" desc=""/>
+        <macro name="ITEM_REASON_APPRAISE_EQUIP"      value="13" desc=""/>
+        <macro name="ITEM_REASON_CHANGE_EYE"      value="14" desc=""/>
+        <macro name="ITEM_REASON_BUY_ITEM"      value="15" desc=""/>
+        <macro name="ITEM_REASON_COOKING"      value="16" desc=""/>
+        <macro name="ITEM_REASON_DUNGEONS_RESULT"      value="17" desc=""/>
+        <macro name="ITEM_REASON_REVIVE"      value="18" desc=""/>
+        <macro name="ITEM_REASON_FORGE"      value="19" desc=""/>
+        <macro name="ITEM_REASON_TASK_EDEN"      value="20" desc=""/>
+        <macro name="ITEM_REASON_JOB_LEVEL_UPGRADE"      value="21" desc=""/>
+        <macro name="ITEM_REASON_TRANSFER_PROFESSION"      value="22" desc=""/>
+        <macro name="ITEM_REASON_GM_CMD"      value="23" desc=""/>
+        <macro name="ITEM_REASON_AWARD_PACK"      value="24" desc=""/>
+        <macro name="ITEM_REASON_OPEN_SYSTEM_REWARD"      value="25" desc=""/>
+        <macro name="ITEM_REASON_USE_BUTTERFLY"      value="26" desc=""/>
+        <macro name="ITEM_REASON_TRADE_BUY"      value="27" desc=""/>
+        <macro name="ITEM_REASON_TRADE_SELL"      value="28" desc=""/>
+        <macro name="ITEM_REASON_REFINE"      value="29" desc=""/>
+        <macro name="ITEM_REASON_COLLECT"      value="30" desc=""/>
+        <macro name="ITEM_REASON_GUILD_CREATE"      value="31" desc=""/>
+        <macro name="ITEM_REASON_ENCHANT"      value="32" desc=""/>
+        <macro name="ITEM_REASON_EDEN_LUCK"      value="5010" desc=""/>
+        <macro name="ITEM_REASON_EDEN_PROFESSION"      value="5010" desc=""/>
+        <macro name="ITEM_REASON_MAIL"      value="33" desc=""/>
+        <macro name="ITEM_REASON_STALL_DRAW_MONEY"      value="35" desc=""/>
+        <macro name="ITEM_REASON_STALL_BUY"      value="36" desc=""/>
+        <macro name="ITEM_REASON_STALL_BUY_NUM"      value="37" desc=""/>
+        <macro name="ITEM_REASON_STALL_SELL_ITEM_DROP_DOWN"      value="38" desc=""/>
+        <macro name="ITEM_REASON_SELL_ITEM"      value="39" desc=""/>
+        <macro name="ITEM_REASON_SKILL_COST"      value="40" desc=""/>
+        <macro name="ITEM_REASON_INSERTCARD"      value="41" desc=""/>
+        <macro name="ITEM_REASON_REMOVECARD"      value="42" desc=""/>
+        <macro name="ITEM_REASON_MAKEHOLE"      value="43" desc=""/>
+        <macro name="ITEM_REASON_MAKEREFORM"      value="44" desc=""/>
+        <macro name="ITEM_REASON_TASK_REWARD_MAIN"      value="45" desc=""/>
+        <macro name="ITEM_REASON_TASK_REWARD_BRANCH"      value="46" desc=""/>
+        <macro name="ITEM_REASON_TASK_REWARD_AISHEN"      value="47" desc=""/>
+        <macro name="ITEM_REASON_TASK_REWARD_EDEN"      value="48" desc=""/>
+        <macro name="ITEM_REASON_TASK_REWARD_PROFESSION"      value="49" desc=""/>
+        <macro name="ITEM_REASON_DAILY_ACTIVITY"      value="50" desc=""/>
+        <macro name="ITEM_REASON_TURNTABLE_TICKTY"      value="51" desc=""/>
+        <macro name="ITEM_REASON_TURNTABLE_WABAO"      value="52" desc=""/>
+        <macro name="ITEM_REASON_GIFT_SEND"      value="53" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_GARDEN"      value="54" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_MINING"      value="55" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_FOOD"      value="56" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_MEDICINE"      value="57" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_DESSERT"      value="58" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_SMELT"      value="59" desc=""/>
+        <macro name="ITEM_REASON_COLLECT_FISHING"      value="60" desc=""/>
+        <macro name="ITEM_REASON_ENDLESS_TOWER"      value="61" desc=""/>
+        <macro name="ITEM_REASON_BATTLEGROUND"      value="62" desc=""/>
+        <macro name="ITEM_REASON_TRIAL"      value="63" desc=""/>
+        <macro name="ITEM_REASON_TRAIN_ELITE"      value="64" desc=""/>
+        <macro name="ITEM_REASON_TRAIN_TREASURE"      value="65" desc=""/>
+        <macro name="ITEM_REASON_MINI"      value="66" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="SubReason" desc="流向（资源流向定义）">
+        <macro name="TO_PLAYER"      value="0" desc=""/>
+        <macro name="TO_SYSTEM"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="iGoodsType" desc="道具类型">
+        <macro name="ITEM_CONSUMABLE"      value="200" desc=""/>
+        <macro name="ITEM_EQUIP"      value="100" desc=""/>
+        <macro name="ITEM_CARD"      value="400" desc=""/>
+        <macro name="ITEM_FASHION"      value="600" desc=""/>
+        <macro name="ITEM_MATERIAL"      value="300" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="SubGoodsType" desc="道具二级类型">
+        <macro name="RECOVERY"      value="201" desc=""/>
+        <macro name="STATUS"      value="202" desc=""/>
+        <macro name="FUNCTION"      value="206" desc=""/>
+        <macro name="CHEST"      value="209" desc=""/>
+        <macro name="WEAPON"      value="101" desc=""/>
+        <macro name="SHIELD"      value="102" desc=""/>
+        <macro name="CORSELET"      value="103" desc=""/>
+        <macro name="CLOAK"      value="104" desc=""/>
+        <macro name="SHOSE"      value="105" desc=""/>
+        <macro name="DECORATION"      value="106" desc=""/>
+        <macro name="HEADWEAR_UP"      value="107" desc=""/>
+        <macro name="HEADWEAR_MID"      value="108" desc=""/>
+        <macro name="HEADWEAR_DOWM"      value="109" desc=""/>
+        <macro name="HEADWEAR_BACK"      value="110" desc=""/>
+        <macro name="RIDING"      value="111" desc=""/>
+        <macro name="EUQIP_MATERIAL"      value="302" desc=""/>
+        <macro name="LIFT_MATERIAL"      value="305" desc=""/>
+        <macro name="LIFT_TOOL"      value="311" desc=""/>
+        <macro name="HEADWEAR_DRA"      value="312" desc=""/>
+        <macro name="HEADWEAR_DRA_HIGH"      value="313" desc=""/>
+        <macro name="HEADWEAR_DRA_LOW"      value="314" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="AddOrReduce" desc="增加或减少: 0是增加; 1是减少">
+        <macro name="ADD"      value="0" desc=""/>
+        <macro name="REDUCE"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="ItemFlow" filter="1"  version="1.0" desc="道具流水表">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   0=巫师 1=……"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="账号创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="Sequence"          type="int"            defaultvalue="0"     desc="用于关联一次动作产生多条不同类型的道具流动日志"/>
+        <entry  name="Reason"          type="int"            defaultvalue="0"     desc="行为（资源操作行为定义）"/>
+        <entry  name="SubReason"          type="int"            defaultvalue="0"     desc="流向（资源流向定义）"/>
+        <entry  name="iGoodsType"          type="int"            defaultvalue="0"     desc="道具类型"/>
+        <entry  name="SubGoodsType"          type="int"            defaultvalue="0"     desc="道具二级类型"/>
+        <entry  name="iGoodsID"          type="int"            defaultvalue="0"     desc="道具ID"/>
+        <entry  name="GoodsName"          type="string"        size="768"     defaultvalue="NULL"     desc="道具名称"/>
+        <entry  name="Count"          type="int"            defaultvalue="0"     desc="动作变更数量"/>
+        <entry  name="AfterCount"          type="int"            defaultvalue="0"     desc="动作后的道具存量数"/>
+        <entry  name="AddOrReduce"          type="int"            defaultvalue="0"     desc="增加或减少: 0是增加; 1是减少"/>
+        <entry  name="iMoneyType"          type="int"            defaultvalue="0"     desc="花费的钱的类型"/>
+        <entry  name="iMoney"          type="int"            defaultvalue="0"     desc="花费代币或金币购买道具情况下输出消耗的钱数量，否则为0"/>
+        <entry  name="serialnum"          type="string"        size="768"     defaultvalue="NULL"     desc="流水号"/>
+        <entry  name="sourceID"          type="int"            defaultvalue="0"     desc="渠道号"/>
+        <entry  name="Cmd"          type="string"        size="768"     defaultvalue="NULL"     desc="命令字"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="MoneyType" desc="出售商品货币类型">
+        <macro name="ZENY"      value="1" desc=""/>
+        <macro name="ROMONRY"      value="2" desc=""/>
+        <macro name="DIAMOND"      value="3" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="OperateType" desc="操作玩家类型 0=买家   1=卖家">
+        <macro name="BUYER"      value="0" desc=""/>
+        <macro name="SELLER"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="PitchTakeFlow" filter="1"  version="1.0" desc="摆摊领取流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="GoodsType"          type="int"            defaultvalue="0"     desc="出售商品类型"/>
+        <entry  name="SubGoodsType"          type="int"            defaultvalue="0"     desc="出售商品二级类型"/>
+        <entry  name="GoodsID"          type="int"            defaultvalue="0"     desc="出售商品ID"/>
+        <entry  name="GoodsName"          type="string"        size="768"     defaultvalue="NULL"     desc="出售商品名称"/>
+        <entry  name="MoneyType"          type="int"            defaultvalue="0"     desc="出售商品货币类型"/>
+        <entry  name="Price"          type="int"            defaultvalue="0"     desc="出售商品单价"/>
+        <entry  name="ProPrice"          type="int"            defaultvalue="0"     desc="当前系统推荐价格"/>
+        <entry  name="GoodsCount"          type="int"            defaultvalue="0"     desc="出售数量"/>
+        <entry  name="SellTime"          type="int"            defaultvalue="0"     desc="商品出售花费时间/s"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作玩家类型 0=买家   1=卖家"/>
+        <entry  name="TradeID"          type="bigint"                desc="本次交易唯一订单ID"/>
+        <entry  name="iopenidID"          type="string"        size="768"     defaultvalue="NULL"     desc="卖/买方vopenid"/>
+        <entry  name="iRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="卖/买方角色ID"/>
+        <entry  name="iRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="卖/买方角色姓名"/>
+        <entry  name="iLevel"          type="int"            defaultvalue="0"     desc="卖/买方角色基础等级"/>
+        <entry  name="vJobLevel"          type="int"            defaultvalue="0"     desc="卖/买方角色职业等级"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="PlayerMedalFlow" filter="1"  version="1.0" desc="玩家勋章养成流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="勋章操作类型  1=激活  2=升级  3=重置"/>
+        <entry  name="MedalType"          type="int"            defaultvalue="0"     desc="勋章类型  1=光辉勋章    2=神圣勋章"/>
+        <entry  name="MedalID"          type="int"            defaultvalue="0"     desc="勋章ID"/>
+        <entry  name="MedalName"          type="string"        size="768"     defaultvalue="NULL"     desc="勋章名称"/>
+        <entry  name="PreLevel"          type="int"            defaultvalue="0"     desc="操作前勋章等级"/>
+        <entry  name="AfterLevel"          type="int"            defaultvalue="0"     desc="操作后勋章等级"/>
+        <entry  name="PreStage"          type="int"            defaultvalue="0"     desc="操作前阶数"/>
+        <entry  name="AfterStage"          type="int"            defaultvalue="0"     desc="操作后阶数"/>
+        <entry  name="CostFame"          type="int"            defaultvalue="0"     desc="消耗声望值"/>
+        <entry  name="CostItem"          type="string"        size="768"     defaultvalue="NULL"     desc="[ItemNam，数量；ItemName，数量；……]"/>
+        <entry  name="CostItemName"          type="string"        size="768"     defaultvalue="NULL"     desc="消耗道具名称"/>
+        <entry  name="CostCount"          type="int"            defaultvalue="0"     desc="消耗道具数量"/>
+        <entry  name="PrestigeNum"          type="int"            defaultvalue="0"     desc="当前拥有声望值"/>
+        <entry  name="AllMedalLv"          type="string"        size="768"     defaultvalue="NULL"     desc="当前全体光辉/神圣勋章的等级[ID为1的等级，ID为2的等级...]，MedalType为0记录光辉勋章，为1记录神圣勋章"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="OperateType" desc="操作类型  0=进入副本  1=完成副本  2=中途退出">
+        <macro name="RNTER"      value="0" desc=""/>
+        <macro name="FINISH"      value="1" desc=""/>
+        <macro name="MIDOUT"      value="2" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="DungeonType" desc="副本类型  0=单人副本  1=多人副本  ">
+        <macro name="SINGLE"      value="0" desc=""/>
+        <macro name="MULTI"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="MemberType" desc="玩家队伍职位  0=队长  1=队员">
+        <macro name="TEAM_LEADER"      value="0" desc=""/>
+        <macro name="TEAM_MATE"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Result" desc="副本结果  0=胜利   1=失败">
+        <macro name="VICTORY"      value="0" desc=""/>
+        <macro name="FAILED"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="DungeonFlow" filter="1"  version="1.0" desc="副本流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型  0=进入副本  1=完成副本  2=中途退出"/>
+        <entry  name="DungeonType"          type="int"            defaultvalue="0"     desc="副本类型  0=单人副本  1=多人副本  "/>
+        <entry  name="DungeonID"          type="int"            defaultvalue="0"     desc="副本ID"/>
+        <entry  name="DungeonName"          type="string"        size="768"     defaultvalue="NULL"     desc="副本名称"/>
+        <entry  name="TeamID"          type="int"            defaultvalue="0"     desc="队伍唯一ID"/>
+        <entry  name="MemberType"          type="int"            defaultvalue="0"     desc="玩家队伍职位  0=队长  1=队员"/>
+        <entry  name="Roles"          type="int"            defaultvalue="0"     desc="队伍真实玩家数"/>
+        <entry  name="Ais"          type="int"            defaultvalue="0"     desc="队伍雇佣AI数"/>
+        <entry  name="DeadTimes"          type="int"            defaultvalue="0"     desc="死亡次数"/>
+        <entry  name="Count"          type="int"            defaultvalue="0"     desc="当前副本完成次数"/>
+        <entry  name="Result"          type="int"            defaultvalue="0"     desc="副本结果  0=胜利   1=失败"/>
+        <entry  name="Time"          type="int"            defaultvalue="0"     desc="副本花费时长/s"/>
+        <entry  name="TeamEloBefore"          type="int"            defaultvalue="0"     desc="队伍Elo积分（战前）"/>
+        <entry  name="PlayerEloBefore"          type="int"            defaultvalue="0"     desc="玩家Elo积分（战前）"/>
+        <entry  name="TeamEloAfter"          type="int"            defaultvalue="0"     desc="队伍Elo积分（战后）"/>
+        <entry  name="PlayerEloAfter"          type="int"            defaultvalue="0"     desc="玩家Elo积分（战后）"/>
+        <entry  name="PvpKills"          type="int"            defaultvalue="0"     desc="PVP副本中击杀玩家的次数"/>
+        <entry  name="IfHelper"          type="int"            defaultvalue="0"     desc="是否为助战  0=助战   1=非助战"/>
+        <entry  name="Stages"          type="int"            defaultvalue="0"     desc="完成的阶段数"/>
+        <entry  name="Score"          type="int"            defaultvalue="0"     desc="副本评分"/>
+        <entry  name="ElementID"          type="string"        size="768"     defaultvalue="NULL"     desc="当前副本词缀【词缀id1；词缀id2；……】"/>
+    </struct>
+
+    
+    <struct  name="SecTalkFlow" filter="1"  version="1.0" desc="聊天信息发送日志">
+        <entry  name="GameSvrId"          type="string"        size="25"     defaultvalue="NULL"     desc="登录的游戏服务端编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="GameAppID"          type="string"        size="32"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="OpenID"          type="string"        size="64"     defaultvalue="NULL"     desc="发送方用户OPENID号"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="AreaID"          type="int"            defaultvalue="0"     desc="微信 1 /手Q 2 /游客 3"/>
+        <entry  name="ZoneID"          type="int"            defaultvalue="0"     desc="小区号id"/>
+        <entry  name="ClientVersion"          type="string"        size="64"     defaultvalue="NULL"     desc="客户端版本号"/>
+        <entry  name="RoleName"          type="string"        size="64"     defaultvalue="NULL"     desc="发送方角色昵称只保留中文字符、英文和数字。如果昵称中带有特殊字符（比如|，	，
+  以及空格，文本复制的回车），则记录时去掉，比如 张|三 记为 张三"/>
+        <entry  name="RoleId"          type="biguint"                desc="发送方角色唯一ID"/>
+        <entry  name="RoleType"          type="int"            defaultvalue="0"     desc="发送方角色职业编号"/>
+        <entry  name="RoleLevel"          type="int"            defaultvalue="0"     desc="发送方角色等级"/>
+        <entry  name="RoleBattlePoint"          type="int"            defaultvalue="0"     desc="发送方角色战斗力"/>
+        <entry  name="UserIP"          type="string"        size="25"     defaultvalue="NULL"     desc="发送信息玩家ip地址"/>
+        <entry  name="GroupID"          type="string"        size="25"     defaultvalue="NULL"     desc="发送信息玩家公会ID,没有公会则上报0"/>
+        <entry  name="GroupName"          type="string"        size="25"     defaultvalue="NULL"     desc="发送信息玩家公会名,没有公会则上报0"/>
+        <entry  name="PicUrl"          type="string"        size="256"     defaultvalue="NULL"     desc="玩家头像URL，手Q默认上报后缀为/100的URL , 微信默认上报后缀为/96的URL "/>
+        <entry  name="ReceiverOpenID"          type="string"        size="64"     defaultvalue="NULL"     desc="接收方角色OPENID号（不在线无法取到，会填空串）"/>
+        <entry  name="ReceiverRoleID"          type="biguint"                desc="接收方角色唯一ID"/>
+        <entry  name="ReceiverRoleName"          type="string"        size="64"     defaultvalue="NULL"     desc="接收方角色昵称只保留中文字符、英文和数字。如果昵称中带有特殊字符（比如|，	，
+，  以及空格，文本复制的回车），则记录时去掉，比如 张|三 记为 张三"/>
+        <entry  name="ReceiverRoleType"          type="int"            defaultvalue="0"     desc="接收方角色职业编号）"/>
+        <entry  name="ReceiverRoleLevel"          type="int"            defaultvalue="0"     desc="接收方角色等级"/>
+        <entry  name="ChatType"          type="int"            defaultvalue="0"     desc="信息类型，0 为邮件，1 为世界频道，2为附近频道，3 为公会频道，4 为队伍频道，5 为私聊频道 99 系统默认格式消息"/>
+        <entry  name="ChatContents"          type="string"        size="530"     defaultvalue="NULL"     desc="信息内容，目前最多能发送单条512字节的信息内容只保留中文字符、英文和数字。如果内容中带有特殊字符（比如|，	，
+，  以及空格，文本复制的回车），则记录时去掉，比如 张|三 记为 张三"/>
+        <entry  name="MsgType"          type="int"            defaultvalue="0"     desc="聊天信息类型，0 为文字信息，1 为语音信息 "/>
+        <entry  name="MsgCharType"          type="int"            defaultvalue="0"     desc="聊天角色类型，0非好友，1好友"/>
+    </struct>
+
+    
+    <struct  name="PoringClubFlow" filter="1"  version="1.0" desc="波利团流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="PoringID"          type="int"            defaultvalue="0"     desc="波利ID"/>
+        <entry  name="PoringName"          type="string"        size="768"     defaultvalue="NULL"     desc="波利名称"/>
+        <entry  name="FindType"          type="int"            defaultvalue="0"     desc="发现方式，0=钓鱼、1=踩脚印、2=巡逻、3=采集、4=撞泡泡、5=拍照"/>
+        <entry  name="MoneyType"          type="int"            defaultvalue="0"     desc="奖励货币类型 0=钻石 1=zeny（原RO币）  2=铜币（原zeny）"/>
+        <entry  name="MoneyAmount"          type="int"            defaultvalue="0"     desc="奖励货币数量"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="UnionAuctionFlow" filter="1"  version="1.0" desc="公会拍卖竞价流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="DutyType"          type="int"            defaultvalue="0"     desc="公会职位类型  0=成员  1=执事 2=……"/>
+        <entry  name="UnionDonate"          type="int"            defaultvalue="0"     desc="当前公会总贡献"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型  0=竞价    1=竞拍成功    2=取消竞拍   3=竞拍领奖"/>
+        <entry  name="ItemID"          type="int"            defaultvalue="0"     desc="道具ID"/>
+        <entry  name="ItemName"          type="string"        size="768"     defaultvalue="NULL"     desc="道具名称"/>
+        <entry  name="iMoneyType"          type="int"            defaultvalue="0"     desc="拍卖商品货币类型"/>
+        <entry  name="Price"          type="int"            defaultvalue="0"     desc="竞价价格/物品竞得价格/返还物品价格"/>
+        <entry  name="AuctionType"          type="int"            defaultvalue="0"     desc="拍卖主体 0=系统 1=玩家"/>
+        <entry  name="Reason"          type="int"            defaultvalue="0"     desc="物品来源（资源操作行为定义）"/>
+        <entry  name="SubReason"          type="int"            defaultvalue="0"     desc="物品二级来源（资源流向定义）"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="OperateType" desc="操作类型 0=直接购买  1=预购  ">
+        <macro name="BUY"      value="0" desc=""/>
+        <macro name="ORDER"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="ShopTradeFlow" filter="1"  version="1.0" desc="商会购买流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型 0=直接购买  1=预购  "/>
+        <entry  name="GoodsType"          type="int"            defaultvalue="0"     desc="商品类型"/>
+        <entry  name="SubGoodsType"          type="int"            defaultvalue="0"     desc="商品二级类型"/>
+        <entry  name="GoodsID"          type="int"            defaultvalue="0"     desc="商品ID"/>
+        <entry  name="GoodsName"          type="string"        size="768"     defaultvalue="NULL"     desc="商品名称"/>
+        <entry  name="MoneyType"          type="int"            defaultvalue="0"     desc="商品货币类型"/>
+        <entry  name="Price"          type="int"            defaultvalue="0"     desc="商品单价"/>
+        <entry  name="GoodsCount"          type="int"            defaultvalue="0"     desc="购买数量"/>
+        <entry  name="TradeID"          type="bigint"                desc="本次交易唯一账单ID"/>
+        <entry  name="Cost"          type="int"            defaultvalue="0"     desc="购买花费货币数量"/>
+        <entry  name="GoodsLeave"          type="int"            defaultvalue="0"     desc="购买后系统剩余商品数量"/>
+        <entry  name="GoodsBuyLimitLeave"          type="int"            defaultvalue="0"     desc="购买后剩余当日限购数量"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="PVPApplyFlow" filter="1"  version="1.0" desc="PVP擂台报名流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="ApplyType"          type="int"            defaultvalue="0"     desc="报名类型 0=单人报名  1=组队报名"/>
+        <entry  name="InterValue"          type="int"            defaultvalue="0"     desc="队伍等级区间0=[xx,xx] 1=[xx,xx]"/>
+    </struct>
+
+    
+    <struct  name="AuctionOperateFlow" filter="1"  version="1.0" desc="玩家拍卖行操作流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型 0=预留，1=关注，2=取消关注，3=自动出价，4=手动出价，5=取消自动出价，6=出价被超过，7=系统自动出价，8=结算成功获得道具"/>
+        <entry  name="AuctionID"          type="int"            defaultvalue="0"     desc="拍卖ID，对应AuctionTable表里的AuctionID"/>
+        <entry  name="ItemID"          type="int"            defaultvalue="0"     desc="道具ItemID"/>
+        <entry  name="ItemUID"          type="string"        size="768"     defaultvalue="NULL"     desc="道具唯一ID，用来区分同ItemID的订单"/>
+        <entry  name="AuctionState"          type="int"            defaultvalue="0"     desc="操作前订单的状态，0无效，1未被出价，2他人自动出价中，3他人手动出价中，4本人自动出价中，5本人手动出价中"/>
+        <entry  name="CurrentPrice"          type="int"            defaultvalue="0"     desc="操作前订单价格"/>
+        <entry  name="CurrentUpperlimit"          type="int"            defaultvalue="0"     desc="操作前订单自动出价上限"/>
+        <entry  name="RaisePrice"          type="int"            defaultvalue="0"     desc="本次选择的出价金额"/>
+        <entry  name="RealDeduction"          type="int"            defaultvalue="0"     desc="实际扣款"/>
+    </struct>
+
+    
+    <struct  name="SecAuctionFlow" filter="1"  version="1.0" desc="拍卖行上架日志(挂单日志)">
+        <entry  name="GameSvrId"          type="string"        size="25"     defaultvalue="NULL"     desc="登录的游戏服务端编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="GameAppID"          type="string"        size="32"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="AreaID"          type="int"            defaultvalue="0"     desc="微信 1 /手Q 2 /游客 3"/>
+        <entry  name="ZoneID"          type="int"            defaultvalue="0"     desc="小区号id"/>
+        <entry  name="OpenID"          type="string"        size="64"     defaultvalue="NULL"     desc="我方用户OPENID号"/>
+        <entry  name="RoleID"          type="uint64"                desc="玩家角色的唯一ID"/>
+        <entry  name="RoleName"          type="string"        size="64"     defaultvalue="NULL"     desc="玩家昵称，只保留中文字符、英文和数字。如果昵称中带有特殊字符（比如|或者/t），则记录时去掉，比如 张|三 记为 张三"/>
+        <entry  name="RoleProf"          type="int"            defaultvalue="0"     desc="角色职业编号"/>
+        <entry  name="RoleLevel"          type="int"            defaultvalue="0"     desc="角色等级"/>
+        <entry  name="UserIP"          type="string"        size="25"     defaultvalue="NULL"     desc="卖方玩家ip地址"/>
+        <entry  name="GroupID"          type="string"        size="25"     defaultvalue="NULL"     desc="玩家公会ID,没有公会则上报0"/>
+        <entry  name="AuctionID"          type="string"        size="64"     defaultvalue="NULL"     desc="挂单编号,物品挂单时产生"/>
+        <entry  name="AuctionPriceType"          type="int"            defaultvalue="0"     desc="价格类型，1钻石 2Ro币 3Zeny"/>
+        <entry  name="AuctionPrice"          type="int"            defaultvalue="0"     desc="拍品总价"/>
+        <entry  name="AuctionUnitPrice"          type="int"            defaultvalue="0"     desc="拍品单价"/>
+        <entry  name="AuctionCount"          type="int"            defaultvalue="0"     desc="拍品数量"/>
+        <entry  name="AuctionItemID"          type="int"            defaultvalue="0"     desc="拍品道具编号"/>
+        <entry  name="AuctionUUID"          type="string"        size="64"     defaultvalue="NULL"     desc="拍品UUID（唯一ID）"/>
+        <entry  name="AuctionLevel"          type="int"            defaultvalue="0"     desc="拍品等级"/>
+        <entry  name="AuctionQlty"          type="int"            defaultvalue="0"     desc="拍品品质等级"/>
+        <entry  name="DealMainType"          type="int"            defaultvalue="0"     desc="拍品主类型，（视游戏侧划分而定） 99其他"/>
+        <entry  name="AuctionTime"          type="string"        size="25"     defaultvalue="NULL"     desc="拍卖挂单时间,1=上架24小时，2=上架48小时"/>
+        <entry  name="SellerMoney1Count"          type="int64"                desc="当前卖方身上钻石数量"/>
+        <entry  name="SellerMoney2Count"          type="int64"                desc="当前卖方身上Ro币数量"/>
+        <entry  name="SellerMoney3Count"          type="int64"                desc="当前卖方身上Zeny数量"/>
+        <entry  name="ServiceCharge"          type="int"            defaultvalue="0"     desc="手续费"/>
+        <entry  name="LevelLimit"          type="int"            defaultvalue="0"     desc="当前服务器等级开放上限 "/>
+    </struct>
+
+    
+    <struct  name="UnionCrystalFlow" filter="1"  version="1.0" desc="公会华丽水晶流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="ActionType"          type="int"            defaultvalue="0"     desc="操作类型，0=祈福，1=充能，2=研究"/>
+        <entry  name="CrystalType1"          type="int"            defaultvalue="0"     desc="水晶1类型，0=物攻，1=魔攻，2=生命值，3=魔法值，4=物伤，5=魔伤"/>
+        <entry  name="CrystalType2"          type="int"            defaultvalue="0"     desc="水晶2类型，0=物攻，1=魔攻，2=生命值，3=魔法值，4=物伤，5=魔伤"/>
+        <entry  name="CrystalType3"          type="int"            defaultvalue="0"     desc="水晶3类型，0=物攻，1=魔攻，2=生命值，3=魔法值，4=物伤，5=魔伤"/>
+        <entry  name="BlessType"          type="int"            defaultvalue="0"     desc="祈福类型，0=随机祈福，1=指定祈福"/>
+        <entry  name="BlessBuff"          type="string"        size="768"     defaultvalue="NULL"     desc="Buff内容，按照如下规则记录：[Buff_ID1, Buff_ID1加成数值; Buff_ID2, Buff_ID2加成数值; …]"/>
+        <entry  name="ResearchType"          type="int"            defaultvalue="0"     desc="研究类型，0=设置研究，1=加速升级"/>
+        <entry  name="BeforeProgress"          type="int"            defaultvalue="0"     desc="升级前研究进度"/>
+        <entry  name="ProgressDelta"          type="int"            defaultvalue="0"     desc="研究进度变化量"/>
+        <entry  name="AfterProgress"          type="int"            defaultvalue="0"     desc="升级后研究进度"/>
+        <entry  name="BeforeLevel"          type="int"            defaultvalue="0"     desc="升级前研究等级"/>
+        <entry  name="LevelDelta"          type="int"            defaultvalue="0"     desc="研究等级变化量"/>
+        <entry  name="AfterLevel"          type="int"            defaultvalue="0"     desc="升级后研究等级"/>
+        <entry  name="MoneyType"          type="int"            defaultvalue="0"     desc="消耗的货币类型 0=钻石 1=zeny（原RO币）  2=铜币（原zeny）"/>
+        <entry  name="MoneyCost"          type="int"            defaultvalue="0"     desc="消耗金钱数"/>
+        <entry  name="AfterMoney"          type="int"            defaultvalue="0"     desc="消耗后的金钱余量"/>
+        <entry  name="IfContriUse"          type="int"            defaultvalue="0"     desc="是否使用贡献，0=否，1=是"/>
+        <entry  name="ContriCost"          type="int"            defaultvalue="0"     desc="消耗贡献数"/>
+        <entry  name="AfterContri"          type="int"            defaultvalue="0"     desc="消耗后的贡献余量"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   0=战士  1=法师  2=道士">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="MemberType" desc="玩家队伍职位  0=队长  1=队员">
+        <macro name="TEAM_LEADER"      value="0" desc=""/>
+        <macro name="TEAM_MENBER"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="FarmFightFlow" filter="1"  version="1.0" desc="开火车流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   0=战士  1=法师  2=道士"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="MapID"          type="int"            defaultvalue="0"     desc="所处地图ID"/>
+        <entry  name="MapName"          type="string"        size="768"     defaultvalue="NULL"     desc="所处地图名称"/>
+        <entry  name="TeamID"          type="int"            defaultvalue="0"     desc="队伍唯一ID"/>
+        <entry  name="MemberType"          type="int"            defaultvalue="0"     desc="玩家队伍职位  0=队长  1=队员"/>
+        <entry  name="MemberNum"          type="int"            defaultvalue="0"     desc="队伍真实玩家数"/>
+        <entry  name="MemberInfo"          type="string"        size="768"     defaultvalue="NULL"     desc="队伍每个玩家对应职业，[玩家1职业; 玩家2职业; 玩家3职业;…]"/>
+        <entry  name="MemberLv"          type="string"        size="768"     defaultvalue="NULL"     desc="队伍每个玩家对应等级，[玩家1BaseLv, 玩家1JobLv; 玩家2BaseLv , 玩家2JobLv;…]"/>
+        <entry  name="DeadTimes"          type="int"            defaultvalue="0"     desc="死亡次数"/>
+        <entry  name="Time"          type="int"            defaultvalue="0"     desc="战斗时长"/>
+        <entry  name="EntityNum"          type="int"            defaultvalue="0"     desc="击杀怪物数量"/>
+        <entry  name="AlmaEntityNum"          type="int"            defaultvalue="0"     desc="击杀精英怪数量"/>
+        <entry  name="Pox"          type="int"            defaultvalue="0"     desc="玩家当前所处位置x坐标"/>
+        <entry  name="Poy"          type="int"            defaultvalue="0"     desc="玩家当前所处位置y坐标"/>
+        <entry  name="Poz"          type="int"            defaultvalue="0"     desc="玩家当前所处位置z坐标"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="OperateType" desc="操作类型 0=创建  1=解散">
+        <macro name="CREATE"      value="0" desc=""/>
+        <macro name="DISSOLVED"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="UnionFlow" filter="1"  version="1.0" desc="公会创建解散流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会唯一ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="UnionLevel"          type="int"            defaultvalue="0"     desc="公会等级"/>
+        <entry  name="UnionMessage"          type="string"        size="768"     defaultvalue="NULL"     desc="公会招募信息"/>
+        <entry  name="UnionMembers"          type="int"            defaultvalue="0"     desc="公会人数"/>
+        <entry  name="UnionMoney"          type="int"            defaultvalue="0"     desc="公会资金"/>
+        <entry  name="UnionActive"          type="int"            defaultvalue="0"     desc="公会活跃度"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型 0=创建  1=解散"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="UIType" desc="交互类型0=普通场景物件,1=开关,2=锅（单人烹饪）,3=双人烹饪,4=无法点击仅高亮,6=惊喜礼盒,7=攀爬,8=攀爬跳下,9=试管（制药）,10=烤箱（甜品）,11=熔炉（冶炼）">
+        <macro name="CHAIR"      value="0" desc=""/>
+        <macro name="LADDER"      value="1" desc=""/>
+        <macro name="KETTLE"      value="2" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="ActType" desc="交互方式 0=默认 1=破坏 2=打开 3=踩踏 …">
+        <macro name="DEFAULT"      value="0" desc=""/>
+        <macro name="BREAK"      value="1" desc=""/>
+        <macro name="OPEN"      value="2" desc=""/>
+        <macro name="TREAD"      value="3" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="PrizeType" desc="奖励类型 0=道具 1=Buff/Debuff 2=动作 3=任务开关 4=呀哈哈 …">
+        <macro name="ITEM"      value="0" desc=""/>
+        <macro name="BUFF"      value="1" desc=""/>
+        <macro name="ACTION"      value="2" desc=""/>
+        <macro name="TASKSWITCH"      value="3" desc=""/>
+        <macro name="YAHAHA"      value="4" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="SceneUIFlow" filter="1"  version="1.0" desc="场景交互流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="MapID"          type="int"            defaultvalue="0"     desc="地图ID"/>
+        <entry  name="UIType"          type="int"            defaultvalue="0"     desc="交互类型0=普通场景物件,1=开关,2=锅（单人烹饪）,3=双人烹饪,4=无法点击仅高亮,6=惊喜礼盒,7=攀爬,8=攀爬跳下,9=试管（制药）,10=烤箱（甜品）,11=熔炉（冶炼）"/>
+        <entry  name="ItemID"          type="int"            defaultvalue="0"     desc="交互道具唯一ID"/>
+        <entry  name="Pox"          type="int"            defaultvalue="0"     desc="坐标x"/>
+        <entry  name="Poy"          type="int"            defaultvalue="0"     desc="坐标Y"/>
+        <entry  name="Poz"          type="int"            defaultvalue="0"     desc="坐标Z"/>
+        <entry  name="ActType"          type="int"            defaultvalue="0"     desc="交互方式 0=默认 1=破坏 2=打开 3=踩踏 …"/>
+        <entry  name="PrizeType"          type="int"            defaultvalue="0"     desc="奖励类型 0=道具 1=Buff/Debuff 2=动作 3=任务开关 4=呀哈哈 …"/>
+        <entry  name="PrizeID"          type="int"            defaultvalue="0"     desc="奖励ID（其中道具通用道具ID，任务开关通用任务ID，其余需策划配表）"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="FollowType" desc="关注类型  0=关注  1=取消关注">
+        <macro name="SET_ATTENTION"      value="0" desc=""/>
+        <macro name="CANCLE_ATTENTION"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="ShopFollowFlow" filter="1"  version="1.0" desc="商会商品关注流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="TradeID"          type="bigint"                desc="唯一交易id"/>
+        <entry  name="FollowType"          type="int"            defaultvalue="0"     desc="关注类型  0=关注  1=取消关注"/>
+        <entry  name="SubGoodsType"          type="int"            defaultvalue="0"     desc="关注商品二级类型"/>
+        <entry  name="GoodsID"          type="int"            defaultvalue="0"     desc="关注商品ID"/>
+        <entry  name="GoodsName"          type="string"        size="768"     defaultvalue="NULL"     desc="关注商品名称"/>
+        <entry  name="GoodsLevel"          type="int"            defaultvalue="0"     desc="关注商品等级"/>
+        <entry  name="GoodsMoneyType"          type="int"            defaultvalue="0"     desc="关注商品售价货币类型"/>
+        <entry  name="GoodsPrice"          type="int"            defaultvalue="0"     desc="关注商品单价"/>
+        <entry  name="GoodsCount"          type="int"            defaultvalue="0"     desc="关注商品数量"/>
+        <entry  name="FollowCount"          type="int"            defaultvalue="0"     desc="商品关注人数(含本次增减)"/>
+        <entry  name="MaxPrice"          type="int"            defaultvalue="0"     desc="当前商品最高价格"/>
+        <entry  name="MinPrice"          type="int"            defaultvalue="0"     desc="当前商品最低价格"/>
+        <entry  name="GoodsQuantum"          type="int"            defaultvalue="0"     desc="当前本用户已关注商品总数量（含本次商品）"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="CardSlotFlow" filter="1"  version="1.0" desc="装备插卡/重铸流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型  0=插卡  1=重铸"/>
+        <entry  name="EquipType"          type="int"            defaultvalue="0"     desc="装备类型  "/>
+        <entry  name="EquipID"          type="int"            defaultvalue="0"     desc="装备ID"/>
+        <entry  name="EquipName"          type="string"        size="768"     defaultvalue="NULL"     desc="装备名称"/>
+        <entry  name="EquipLevel"          type="int"            defaultvalue="0"     desc="装备等级"/>
+        <entry  name="PartID"          type="int"            defaultvalue="0"     desc="部位ID  "/>
+        <entry  name="Slot"          type="int"            defaultvalue="0"     desc="卡槽总数量(包含开的未开的槽)"/>
+        <entry  name="OpenSlots"          type="int"            defaultvalue="0"     desc="已开孔数"/>
+        <entry  name="CardID"          type="int"            defaultvalue="0"     desc="插入卡片ID"/>
+        <entry  name="CardName"          type="string"        size="768"     defaultvalue="NULL"     desc="插入卡片名称"/>
+        <entry  name="SkillID"          type="int"            defaultvalue="0"     desc="卡片技能ID"/>
+        <entry  name="SkillName"          type="string"        size="768"     defaultvalue="NULL"     desc="卡片技能名称"/>
+        <entry  name="CardsCount"          type="int"            defaultvalue="0"     desc="操作后装备上所有卡片数量"/>
+        <entry  name="CardSameCount"          type="int"            defaultvalue="0"     desc="操作后本张卡片插卡数量"/>
+        <entry  name="CardAll"          type="string"        size="768"     defaultvalue="NULL"     desc="操作后装备卡片序列[卡片ID，卡片名称，数量；卡片ID，卡片名称，数量；……]"/>
+        <entry  name="ReforgeTimes"          type="int"            defaultvalue="0"     desc="操作后该装备总重置次数"/>
+        <entry  name="PreReforgeAttr"          type="string"        size="768"     defaultvalue="NULL"     desc="操作前该装备重置属性"/>
+        <entry  name="AftReforgeAttr"          type="string"        size="768"     defaultvalue="NULL"     desc="操作后该装备重置属性"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="rJobId" desc="接收方角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="rGender" desc="接收方角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="FriendJudge" desc="两者好友关系判断  0=非好友  1=单向好友  2=双向好友 ">
+        <macro name="NOT_FRIEND"      value="0" desc=""/>
+        <macro name="SINGLE_FRIEND"      value="1" desc=""/>
+        <macro name="DOU_FRIEND"      value="2" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="UnionJudge" desc="两者公会关系判断  0=非同公会  1=同公会">
+        <macro name="SAME_GULID"      value="0" desc=""/>
+        <macro name="DIFFERENT_GUILD"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="PresentedFlow" filter="1"  version="1.0" desc="赠送流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="rRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="接收方角色ID"/>
+        <entry  name="rRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="接收方角色姓名"/>
+        <entry  name="rJobId"          type="int"            defaultvalue="0"     desc="接收方角色职业   按实际职业来分"/>
+        <entry  name="rGender"          type="int"            defaultvalue="0"     desc="接收方角色性别 0=男  1=女"/>
+        <entry  name="rLevel"          type="int"            defaultvalue="0"     desc="接收方角色基础等级"/>
+        <entry  name="rJobLevel"          type="int"            defaultvalue="0"     desc="接收方角色职业等级"/>
+        <entry  name="FriendJudge"          type="int"            defaultvalue="0"     desc="两者好友关系判断  0=非好友  1=单向好友  2=双向好友 "/>
+        <entry  name="UnionJudge"          type="int"            defaultvalue="0"     desc="两者公会关系判断  0=非同公会  1=同公会"/>
+        <entry  name="Items"          type="string"        size="768"     defaultvalue="NULL"     desc="道具序列[道具名称，数量；道具名称，数量；……]"/>
+        <entry  name="FriendPoints"          type="int"            defaultvalue="0"     desc="双方友好度"/>
+    </struct>
+
+    
+    <struct  name="RidingQualityBreakFlow" filter="1"  version="1.0" desc="坐骑素质突破流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   0=巫师 1=……"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="账号创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="BreakType"          type="int"            defaultvalue="0"     desc="突破操作类型：1=使用超级卷轴1,2=使用超级卷轴2，…5=使用超级卷轴5"/>
+        <entry  name="BeforeBreakPoint"          type="string"        size="768"     defaultvalue="NULL"     desc="操作前素质点[素质1,数值;素质2,数值;…素质5,数值]"/>
+        <entry  name="AftBreakPoint"          type="string"        size="768"     defaultvalue="NULL"     desc="操作后素质点[素质1,数值;素质2,数值;…素质5,数值]"/>
+        <entry  name="RemainingTimes"          type="int"            defaultvalue="0"     desc="当前剩余可使用超级卷轴数量"/>
+    </struct>
+
+    
+    <struct  name="ASMIadInfo" filter="1"  version="1.0" desc="苹果用户AppStore搜索下载信息(用户登录时记录)">
+        <entry  name="GameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)登录的游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="(必填)游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="(必填)ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="(必填)针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)用户OPENID号"/>
+        <entry  name="attribution"          type="int"            defaultvalue="0"     desc="(必填)是否从AppStore搜索下载 0-false/1-true(对应API的iad-attribution)"/>
+        <entry  name="OrgName"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)(对应API的iad-org-name)"/>
+        <entry  name="CampaignId"          type="int"            defaultvalue="0"     desc="(必填)(对应API的iad-campaign-id)"/>
+        <entry  name="CampaignName"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)(对应API的iad-campaign-name)"/>
+        <entry  name="ConversionDate"          type="datetime"                desc="(必填)(对应API的iad-conversion-date)"/>
+        <entry  name="ClickDate"          type="datetime"                desc="(必填)(对应API的iad-click-date)"/>
+        <entry  name="AdgroupId"          type="int"            defaultvalue="0"     desc="(必填)(对应API的iad-adgroup-id)"/>
+        <entry  name="AdgroupName"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)(对应API的iad-adgroup-name)"/>
+        <entry  name="KeyWord"          type="string"        size="768"     defaultvalue="NULL"     desc="(必填)(对应API的iad-keyword)"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="MallType" desc="商城类型，1=金币 2=万事屋 3=神秘商店">
+        <macro name="GOLDEN"      value="0" desc=""/>
+        <macro name="WANSHIWU"      value="1" desc=""/>
+        <macro name="SHENMI"      value="2" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="MallSubType" desc="商城子类型，10=金币热销，11=金币礼包，20=万事屋Zeny，21=万事屋铜币…">
+        <macro name="GOLDEN_HOT"      value="10" desc=""/>
+        <macro name="GOLDEN_PACKAGE"      value="11" desc=""/>
+        <macro name="WANSHIWU_ZENY"      value="20" desc=""/>
+        <macro name="WANSHIWU_COIN"      value="21" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="ifDiscount" desc="是否打折，0=否，1=是">
+        <macro name="NO"      value="0" desc=""/>
+        <macro name="YES"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="MallTradeFlow" filter="1"  version="1.0" desc="商城购买流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="MallType"          type="int"            defaultvalue="0"     desc="商城类型，1=金币 2=万事屋 3=神秘商店"/>
+        <entry  name="MallSubType"          type="int"            defaultvalue="0"     desc="商城子类型，10=金币热销，11=金币礼包，20=万事屋Zeny，21=万事屋铜币…"/>
+        <entry  name="GoodsID"          type="int"            defaultvalue="0"     desc="商品ID"/>
+        <entry  name="GoodsName"          type="string"        size="768"     defaultvalue="NULL"     desc="商品名称"/>
+        <entry  name="MoneyType"          type="int"            defaultvalue="0"     desc="商品货币类型"/>
+        <entry  name="Price"          type="int"            defaultvalue="0"     desc="商品单价"/>
+        <entry  name="ifDiscount"          type="int"            defaultvalue="0"     desc="是否打折，0=否，1=是"/>
+        <entry  name="DiscountRate"          type="int"            defaultvalue="0"     desc="打折百分比，例如五折就记录50，八折就记录80"/>
+        <entry  name="GoodsCount"          type="int"            defaultvalue="0"     desc="购买数量"/>
+        <entry  name="BeforeMoney"          type="int"            defaultvalue="0"     desc="购买前角色持有金钱数量"/>
+        <entry  name="AfterMoney"          type="int"            defaultvalue="0"     desc="购买后角色持有金钱数量"/>
+        <entry  name="TradeID"          type="bigint"                desc="本次交易唯一ID"/>
+    </struct>
+
+    
+    <struct  name="CapraFAQFlow" filter="1"  version="1.0" desc="卡普拉咨询问答流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="CapraFAQ"          type="string"        size="768"     defaultvalue="NULL"     desc="卡普拉咨询玩家输入并搜索的字符串"/>
+        <entry  name="CapraFAQAnswer"          type="string"        size="768"     defaultvalue="NULL"     desc="系统反馈的字符串"/>
+    </struct>
+
+    
+    <struct  name="UnionCarveFlow" filter="1"  version="1.0" desc="公会雕琢流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="tRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="原石所有者角色名"/>
+        <entry  name="tJobId"          type="int"            defaultvalue="0"     desc="原石所有者角色职业"/>
+        <entry  name="tGender"          type="int"            defaultvalue="0"     desc="原石所有者角色性别"/>
+        <entry  name="tLevel"          type="int"            defaultvalue="0"     desc="原石所有者角色等级"/>
+        <entry  name="tJobLevel"          type="int"            defaultvalue="0"     desc="原石所有者角色职业等级"/>
+        <entry  name="FriendJudge"          type="int"            defaultvalue="0"     desc="好友关系判断  0=单项好友  1=双向好友  2=非好友"/>
+        <entry  name="FriendPoints"          type="int"            defaultvalue="0"     desc="友好度"/>
+        <entry  name="CarvePointGet"          type="int"            defaultvalue="0"     desc="贡献的雕琢进度"/>
+        <entry  name="BeforeCarvePoint"          type="int"            defaultvalue="0"     desc="雕琢前雕琢进度"/>
+        <entry  name="AfterCarvePoint"          type="int"            defaultvalue="0"     desc="雕琢后雕琢进度"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Operate" desc="操作类型  0=上架  1=下架  2=快速上架 3=快速下架">
+        <macro name="UP"      value="0" desc=""/>
+        <macro name="DOWM"      value="1" desc=""/>
+        <macro name="RAPID_UP"      value="2" desc=""/>
+        <macro name="RAPID_DOWN"      value="3" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="PitchFlow" filter="1"  version="1.0" desc="摆摊流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="Operate"          type="int"            defaultvalue="0"     desc="操作类型  0=上架  1=下架  2=快速上架 3=快速下架"/>
+        <entry  name="GoodsType"          type="int"            defaultvalue="0"     desc="商品类型"/>
+        <entry  name="SubGoodsType"          type="int"            defaultvalue="0"     desc="商品二级类型"/>
+        <entry  name="GoodsID"          type="int"            defaultvalue="0"     desc="商品ID"/>
+        <entry  name="GoodsName"          type="string"        size="768"     defaultvalue="NULL"     desc="商品名称"/>
+        <entry  name="MoneyType"          type="int"            defaultvalue="0"     desc="商品货币类型"/>
+        <entry  name="Price"          type="int"            defaultvalue="0"     desc="商品单价"/>
+        <entry  name="ProPrice"          type="int"            defaultvalue="0"     desc="当前系统推荐价格"/>
+        <entry  name="GoodsCount"          type="int"            defaultvalue="0"     desc="上架/下架数量"/>
+        <entry  name="GoodsLeave"          type="int"            defaultvalue="0"     desc="当前服务器上架商品余量"/>
+        <entry  name="Fee"          type="int"            defaultvalue="0"     desc="本次收取税费数额"/>
+    </struct>
+
+    <macrosgroup name="PlatID" desc="ios 0 /android 1">
+        <macro name="IOS"      value="0" desc=""/>
+        <macro name="ANDROID"      value="1" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="JobId" desc="角色职业   按实际职业来分">
+        <macro name="ROLE_NONE"      value="0" desc=""/>
+        <macro name="ROLE_NOVICE"      value="1000" desc=""/>
+        <macro name="ROLE_SWORDMAN"      value="2000" desc=""/>
+        <macro name="ROLE_ACOLYTE"      value="3000" desc=""/>
+        <macro name="ROLE_MAGICIAN"      value="4000" desc=""/>
+        <macro name="ROLE_THIEF"      value="5000" desc=""/>
+        <macro name="ROLE_ARCHER"      value="7000" desc=""/>
+        <macro name="ROLE_PRIEST"      value="3101" desc=""/>
+        <macro name="ROLE_KNIGHT"      value="2101" desc=""/>
+        <macro name="ROLE_WIZARD"      value="4101" desc=""/>
+        <macro name="ROLE_ASSASSIN"      value="5101" desc=""/>
+        <macro name="ROLE_HUNTER"      value="7101" desc=""/>
+    </macrosgroup>  
+    <macrosgroup name="Gender" desc="角色性别 0=男  1=女">
+        <macro name="MAN"      value="0" desc=""/>
+        <macro name="WOMAN"      value="1" desc=""/>
+    </macrosgroup>  
+    
+    <struct  name="CatBoatFlow" filter="1"  version="1.0" desc="猫手货单流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="货单操作类型   0=接取货单   1=提交货单"/>
+        <entry  name="ShipOrderID"          type="int"            defaultvalue="0"     desc="货单ID"/>
+        <entry  name="ItemID"          type="int"            defaultvalue="0"     desc="需求货物的道具ID"/>
+        <entry  name="ItemName"          type="string"        size="768"     defaultvalue="NULL"     desc="需求货物名称"/>
+        <entry  name="ItemCount"          type="int"            defaultvalue="0"     desc="需求货物数量"/>
+        <entry  name="OrderCount"          type="int"            defaultvalue="0"     desc="完成此次货单后当前累计完成货单数量"/>
+        <entry  name="BoatCount"          type="int"            defaultvalue="0"     desc="完成此次货单后当前累计发船数量"/>
+        <entry  name="Fame"          type="int"            defaultvalue="0"     desc="获得声望数量"/>
+        <entry  name="RewardItem"          type="string"        size="768"     defaultvalue="NULL"     desc="特别嘉奖道具名称"/>
+        <entry  name="RewardCount"          type="int"            defaultvalue="0"     desc="特别嘉奖道具数量"/>
+    </struct>
+
+    
+    <struct  name="tbRealSceneOnline" filter="1"  version="1.0" desc="实时地图在线表">
+        <entry  name="dtEventTime"          type="datetime"                desc="在线人数上报时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="itimekey"          type="int"            defaultvalue="0"     desc="当前时间除以秒，下取整做为key"/>
+        <entry  name="zoneId"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vGameSvrId"          type="int"            defaultvalue="0"     desc="登录的服务器编号"/>
+        <entry  name="iUserNum"          type="int"            defaultvalue="0"     desc="在线人数"/>
+        <entry  name="iMaxCapacity"          type="int"            defaultvalue="0"     desc="服务器最大容量"/>
+        <entry  name="MapID"          type="int"            defaultvalue="0"     desc="地图ID"/>
+    </struct>
+
+    
+    <struct  name="WatchPlayFlow" filter="1"  version="1.0" desc="观战流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   0=巫师 1=……"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="账号创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="WatchPlayAct"          type="int"            defaultvalue="0"     desc="观战操作类型 0=进入房间 1=退出房间 2=点赞"/>
+        <entry  name="RoomID"          type="bigint"                desc="观战房间ID"/>
+        <entry  name="RoomCreateTime"          type="datetime"                desc="房间创建时间"/>
+        <entry  name="RoomLifeTime"          type="int"            defaultvalue="0"     desc="房间总生命时长（秒）"/>
+        <entry  name="RoomTimeLeft"          type="int"            defaultvalue="0"     desc="操作时房间剩余生命时长（秒）"/>
+        <entry  name="WatchPlayType"          type="int"            defaultvalue="0"     desc="观战类型  0=PVE  1=10人以下PVP  2=10人以上PVP"/>
+        <entry  name="WatchPlayID"          type="int"            defaultvalue="0"     desc="观战玩法ID，与副本ID通用"/>
+        <entry  name="WatchPlayName"          type="string"        size="768"     defaultvalue="NULL"     desc="观战玩法名称"/>
+        <entry  name="StageID"          type="int"            defaultvalue="0"     desc="阶段ID，与副本阶段流水通用"/>
+        <entry  name="AudienceNum"          type="int"            defaultvalue="0"     desc="操作后观众数量"/>
+        <entry  name="LikesNum"          type="int"            defaultvalue="0"     desc="操作后房间点赞数量"/>
+        <entry  name="PlayTimesNum"          type="int"            defaultvalue="0"     desc="操作后观看次数"/>
+        <entry  name="RecommendIndex"          type="int"            defaultvalue="0"     desc="操作后推荐指数"/>
+        <entry  name="FriendJudge"          type="int"            defaultvalue="0"     desc="观战好友关系判断  0=非好友  1=单向好友  2=双向好友 "/>
+        <entry  name="UnionJudge"          type="int"            defaultvalue="0"     desc="观战公会关系判断  0=非同公会  1=同公会"/>
+    </struct>
+
+    
+    <struct  name="MinigameFlow" filter="1"  version="1.0" desc="小游戏流水">
+        <entry  name="vGameSvrId"          type="string"        size="768"     defaultvalue="NULL"     desc="登录游戏服务器编号"/>
+        <entry  name="dtEventTime"          type="datetime"                desc="游戏事件的时间, 格式 YYYY-MM-DD HH:MM:SS"/>
+        <entry  name="vGameAppid"          type="string"        size="768"     defaultvalue="NULL"     desc="游戏APPID"/>
+        <entry  name="PlatID"          type="int"            defaultvalue="0"     desc="ios 0 /android 1"/>
+        <entry  name="iZoneAreaID"          type="int"            defaultvalue="0"     desc="针对分区分服的游戏填写分区id，用来唯一标示一个区；非分区分服游戏请填写0"/>
+        <entry  name="vopenid"          type="string"        size="768"     defaultvalue="NULL"     desc="用户OPENID号"/>
+        <entry  name="vRoleId"          type="string"        size="768"     defaultvalue="NULL"     desc="角色ID"/>
+        <entry  name="vRoleName"          type="string"        size="768"     defaultvalue="NULL"     desc="角色姓名"/>
+        <entry  name="JobId"          type="int"            defaultvalue="0"     desc="角色职业   按实际职业来分"/>
+        <entry  name="Gender"          type="int"            defaultvalue="0"     desc="角色性别 0=男  1=女"/>
+        <entry  name="Level"          type="int"            defaultvalue="0"     desc="角色基础等级"/>
+        <entry  name="iJobLevel"          type="int"            defaultvalue="0"     desc="角色职业等级"/>
+        <entry  name="PlayerFriendsNum"          type="int"            defaultvalue="0"     desc="玩家好友数量"/>
+        <entry  name="ChargeGold"          type="int"            defaultvalue="0"     desc="角色充值经历（累计充值）"/>
+        <entry  name="RoleVip"          type="int"            defaultvalue="0"     desc="角色VIP等级"/>
+        <entry  name="CreateTime"          type="datetime"                desc="角色创建时间"/>
+        <entry  name="Power"          type="int"            defaultvalue="0"     desc="战力/评分"/>
+        <entry  name="UnionID"          type="bigint"                desc="公会ID"/>
+        <entry  name="UnionName"          type="string"        size="768"     defaultvalue="NULL"     desc="公会名称"/>
+        <entry  name="RegChannel"          type="int"            defaultvalue="0"     desc="注册渠道"/>
+        <entry  name="LoginChannel"          type="int"            defaultvalue="0"     desc="登录渠道"/>
+        <entry  name="OperateType"          type="int"            defaultvalue="0"     desc="操作类型 0=开始小游戏  1=完成小游戏"/>
+        <entry  name="MinigameID"          type="int"            defaultvalue="0"     desc="小游戏类型 0=躲避球，1=黑暗迷宫，……"/>
+        <entry  name="MinigameName"          type="string"        size="768"     defaultvalue="NULL"     desc="小游戏名称"/>
+        <entry  name="MaxHP"          type="int"            defaultvalue="0"     desc="当前小游戏最大血量"/>
+        <entry  name="FinalHP"          type="int"            defaultvalue="0"     desc="完成时所剩血量"/>
+        <entry  name="Time"          type="int"            defaultvalue="0"     desc="本次小游戏消耗时间/秒"/>
+    </struct>
