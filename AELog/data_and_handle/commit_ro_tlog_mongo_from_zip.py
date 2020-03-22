@@ -68,14 +68,23 @@ def insert_mongo(value):
     start = 0
     total = len(value)
     print(total)
+    #集体插入
+    # while start < total:
+    #     end = start + 100000
+    #     if end > total:
+    #         end = total
+    #     g_count += end - start
+    #     mycol.insert_many(value[start:end])
+    #     start = end
+    #单个插入
     while start < total:
-        end = start + 100000
-        if end > total:
-            end = total
-        g_count += end - start
-        mycol.insert_many(value[start:end])
-        start = end
-        print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+        mycol = mydb[value['_eventname']]
+        g_count += 1
+        mycol.insert(value[start])
+        start += 1 
+    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+
+
 
 g_log_path= "/home/root/tlog-0312-0319"
 
@@ -109,6 +118,8 @@ def main():
         os.system("rm -f %(file)s"%(locals()))
         #记录成处理文件
         all_finished.append(file)
+
+        break
     
     #保存已经处理名单
     all_filename_str = "\n".join(all_finished)
