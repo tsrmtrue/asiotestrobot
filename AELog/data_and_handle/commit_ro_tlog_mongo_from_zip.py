@@ -118,7 +118,7 @@ def main():
         #记录成处理文件
         all_finished.append(file)
 
-        break
+        # break
     
     #保存已经处理名单
     all_filename_str = "\n".join(all_finished)
@@ -131,5 +131,5 @@ print(datetime.now().isoformat())
 
 if __name__ == '__main__':
     main()
-print("total send" + str(g_count))
+print("total send " + str(g_count))
 print(datetime.now().isoformat())
