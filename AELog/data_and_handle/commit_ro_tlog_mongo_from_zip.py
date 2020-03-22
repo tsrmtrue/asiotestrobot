@@ -3,7 +3,6 @@
 #!/usr/bin/python3
 import os
 import time
-import datetime
 import pymongo
 from ro_tlog_define import g_all_tlog_define
 
@@ -61,13 +60,13 @@ g_count = 0
 def insert_mongo(value):
     global g_count
     # print("do send")
-    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+    # print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
     myclient = pymongo.MongoClient("mongodb://192.168.0.102:27017/")
     mydb = myclient["ro_tlog_tx_test"]
     mycol = mydb['ro_tlog']
     start = 0
     total = len(value)
-    print(total)
+    # print(total)
     #集体插入
     # while start < total:
     #     end = start + 100000
@@ -82,7 +81,7 @@ def insert_mongo(value):
         g_count += 1
         mycol.insert(value[start])
         start += 1 
-    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+    # print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
 
 
 
