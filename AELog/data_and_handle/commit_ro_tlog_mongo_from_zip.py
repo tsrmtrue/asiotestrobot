@@ -61,7 +61,7 @@ def get_tlog_contents(file_name):
 def insert_mongo(value):
     print("do send")
     print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
-    myclient = pymongo.MongoClient("mongodb://10.1.4.5:27017/")
+    myclient = pymongo.MongoClient("mongodb://192.168.0.102:27017/")
     mydb = myclient["ro_tlog_tx_test"]
     mycol = mydb['ro_tlog']
     start = 0
@@ -75,8 +75,10 @@ def insert_mongo(value):
         start = end
         print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
 
+g_log_path= "/home/root/tlog-0312-0319"
 
 def main():
+    global g_log_path
     #读取已经处理名单
     finished_file_name = "finished_file"
     os.system("touch %(finished_file_name)s"%(locals()))
@@ -91,19 +93,20 @@ def main():
     all_finished = l
 
     # print(all_finished)
-    file_names = os.listdir('./tlog_backup_zip')
+    file_names = os.listdir(g_log_path)
     for file in file_names:
         if file in all_finished:
             continue
         #解压缩临时文件
         print(file)
-        os.system("tar -xzf  ./tlog_backup_zip/%(file)s"%(locals()))
+        os.system("tar -xzf  %(g_log_path)/%(file)s"%(locals()))
         #提交到mongodb
         get_tlog_contents(file)
         #删除解压缩临时文件
         os.system("rm -f %(file)s"%(locals()))
         #记录成处理文件
         all_finished.append(file)
+        break
     
     #保存已经处理名单
     all_filename_str = "\n".join(all_finished)
