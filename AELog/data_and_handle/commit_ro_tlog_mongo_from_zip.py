@@ -56,10 +56,11 @@ def get_tlog_contents(file_name):
 
     insert_mongo(lists)
 
-
+g_count = 0
 #批量插入mongodb
 def insert_mongo(value):
-    print("do send")
+    global g_count
+    # print("do send")
     print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
     myclient = pymongo.MongoClient("mongodb://192.168.0.102:27017/")
     mydb = myclient["ro_tlog_tx_test"]
@@ -71,6 +72,7 @@ def insert_mongo(value):
         end = start + 100000
         if end > total:
             end = total
+        g_count += end - start
         mycol.insert_many(value[start:end])
         start = end
         print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
@@ -114,5 +116,10 @@ def main():
     finished_wfd.write(all_filename_str)
     finished_wfd.close()
 
+from datetime import datetime
+print(datetime.now().isoformat())
+
 if __name__ == '__main__':
     main()
+print("total send" + str(g_count))
+print(datetime.now().isoformat())
