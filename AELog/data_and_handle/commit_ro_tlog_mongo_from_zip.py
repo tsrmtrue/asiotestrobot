@@ -99,7 +99,7 @@ def main():
             continue
         #解压缩临时文件
         print(file)
-        os.system("tar -xzf  %(g_log_path)/%(file)s"%(locals()))
+        os.system("tar -xzf  %(g_log_path)s/%(file)s"%(locals()))
         #提交到mongodb
         get_tlog_contents(file)
         #删除解压缩临时文件
