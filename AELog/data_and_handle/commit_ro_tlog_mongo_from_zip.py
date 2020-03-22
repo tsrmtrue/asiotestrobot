@@ -79,6 +79,7 @@ g_log_path= "/home/root/tlog-0312-0319"
 
 def main():
     global g_log_path
+    log_path = g_log_path
     #读取已经处理名单
     finished_file_name = "finished_file"
     os.system("touch %(finished_file_name)s"%(locals()))
@@ -93,13 +94,13 @@ def main():
     all_finished = l
 
     # print(all_finished)
-    file_names = os.listdir(g_log_path)
+    file_names = os.listdir(log_path)
     for file in file_names:
         if file in all_finished:
             continue
         #解压缩临时文件
         print(file)
-        os.system("tar -xzf  %(g_log_path)s/%(file)s"%(locals()))
+        os.system("tar -xzf  %(log_path)s/%(file)s"%(locals()))
         #提交到mongodb
         get_tlog_contents(file)
         #删除解压缩临时文件
