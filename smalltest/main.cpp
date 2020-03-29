@@ -3,8 +3,8 @@
 #include <iostream>
 #include <thread>
 #include <list>
-#include <chrono>         // std::chrono::seconds
-#include <gperftools/heap-profiler.h>
+#include <chrono>         
+//#include <gperftools/heap-profiler.h>  todo 加入lib库，以及tcmalloc
 #include <vector>
 #include <thread>
 #include <string>
@@ -758,10 +758,37 @@ void TestThreadLockFreeTry(uint32_t count)
 
 
 #include "timer_wheel_manager.h"
-void TestTimerWheel()
+bool TestTimerWheel()
 {
+	SINGLETON_CREATE_INIT(ObjectPool::ObjectPoolManager);
+
     TimerWheelManager::CreateInstance();
     TimerWheelManager::Instance()->Init();
+
+	//插入
+
+	for (size_t i = 0; i < 100; i++)
+	{
+		auto cb = [i]()
+		{
+			//std::cout << "timer run i is [" << i << "]" << std::endl;
+		};
+		TimerWheelManager::Instance()->AddTimer(i, 3, cb);
+	}
+	TimerWheelManager::Instance()->DebugDump();
+
+	for (size_t i = 0; i < 100*100; i++)
+	{
+		TimerWheelManager::Instance()->Update(0);
+		TimerWheelManager::Instance()->DebugDump();
+	}
+
+
+	TimerWheelManager::Instance()->Uninit();
+	TimerWheelManager::DestroyInstance();
+	SINGLETON_DESTORY_UNINIT(ObjectPool::ObjectPoolManager);
+	return  true;
+
 }
 
 void TestNewTcmalloc(uint32_t c)
@@ -811,11 +838,11 @@ int main(int argc, char* argv[])
 	//TestWriteOpenid(count);
 	//TestThreadNoLock(count);
 
-    HeapProfilerStart("heap.profile"); // 添加函数之一
-    TestNewTcmalloc(count);
-    HeapProfilerStop();  // 添加函数之二
+    //HeapProfilerStart("heap.profile"); // 添加函数之一
+    //TestNewTcmalloc(count);
+    //HeapProfilerStop();  // 添加函数之二
 
-
+	TestTimerWheel();
 
 
     //std::chrono::seconds sec(100);
