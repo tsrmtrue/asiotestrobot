@@ -78,6 +78,8 @@ void TimerWheelManager::DebugDump()
 {
 
     std::cout << std::endl;
+    std::cout << "当前时钟 " << "[" << timer_index_[WHEEL_INDEX_1] << "]" << "[" << timer_index_[WHEEL_INDEX_2] << "]" << "[" << timer_index_[WHEEL_INDEX_3] << "]" << "[" << timer_index_[WHEEL_INDEX_4] << "]"  << std::endl;
+
     std::cout << "第一层" << std::endl;
     size_t i = 0;
     for (auto & timerlist : all_timer_wheel_[WHEEL_INDEX_1])
@@ -211,30 +213,30 @@ void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
     auto& timerwheel = all_timer_wheel_[from_timer];
 
     //先转动
-    index_wheel = (index_wheel + 1) ;//
+    index_wheel = (index_wheel + 1) % (WHEEL_LENGTH);//
     bool cross_clock = ((index_wheel+1) % (WHEEL_LENGTH) == 0);
 
     auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
 
     //转动本层
+    //得到临时对象 
+    TimerObjList temp = timerlist;
+    //先清理
+    timerlist.clear();
+    //再执行
+    if (from_timer == WHEEL_INDEX_1)
     {
-        //得到临时对象 
-        TimerObjList temp = timerlist;
-        //先清理
-        timerlist.clear();
-        //再执行
-        if (from_timer == WHEEL_INDEX_1)
-        {
-            //第一层需要执行
-            RunTimerList(temp);
-        }
-        else
-        {
-            //其他高级层需要重新发布到低级层
-            ReDispatchTimerList(temp, from_timer);
-        }
-
+        //第一层需要执行
+        //这个操作，如果需要重新投递，需要看当前时间
+        RunTimerList(temp);
     }
+    else
+    {
+        //其他高级层需要重新发布到低级层
+        //这个操作不用看当前时间
+        ReDispatchTimerList(temp, from_timer);
+    }
+
     //if (from_timer == WHEEL_INDEX_1 && index_wheel != 0)
     //{
     //    //可以返回了
@@ -248,6 +250,11 @@ void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
     //}
     if (cross_clock)
     {
+        //除了第一个指针，其他的都没有0刻度
+        //if (from_timer > WHEEL_INDEX_1 )
+        //{
+        //    index_wheel = 0;
+        //}
         UpdateWheel(from_timer + 1);
     }
 
@@ -294,26 +301,21 @@ bool TimerWheelManager::MoveOnTimer(TimerObj* to, uint32_t from_timer)
     {
         wheel_idx = WHEEL_INDEX_3;
         cdms %= MAX_VALID_CD_3;
+        cdms /= MAX_VALID_CD_2;
     }
     else if (from_timer == WHEEL_INDEX_3)
     {
-        cdms %= MAX_VALID_CD_2;
         wheel_idx = WHEEL_INDEX_2;
+        cdms %= MAX_VALID_CD_2;
+        cdms /= MAX_VALID_CD_1;
     }
     else if (from_timer == WHEEL_INDEX_2)
     {
-        cdms %= MAX_VALID_CD_1;
         wheel_idx = WHEEL_INDEX_1;
+        cdms %= MAX_VALID_CD_1;
     }
 
     uint32_t idx = cdms; //
-
-    for (auto i = 0; i < wheel_idx; ++i)
-    {
-        idx = idx >> (WHEEL_BITS);
-    }
-
-    // - left_shift+  WHEEL_LENGTH 
     idx = (idx ) % WHEEL_LENGTH;
     all_timer_wheel_[wheel_idx][idx].emplace_back(to);
 
@@ -323,51 +325,38 @@ bool TimerWheelManager::MoveOnTimer(TimerObj* to, uint32_t from_timer)
 bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
 {
     //不管是调用以后重新执行，还是高层轮降级，都是在临时列表里执行，不会影响原本队列
-    if (!to)
+    if (!to || to->cd_ms >= MAX_VALID_CD_4)
     {
         return false;
     }
-    //auto cdms = to->next_cd - refresh_1_count * WHEEL_LENGTH;
-    //统一算法，算出时间点是几点几分。然后按照当前的时间点来做处理，
+
+    //递进指针
+    auto cdms = to->cd_ms;
     uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
     uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];
     uint32_t wheel_time_3 = timer_index_[WHEEL_INDEX_3];
     uint32_t wheel_time_4 = timer_index_[WHEEL_INDEX_4];
-    auto cdms = to->cd_ms + wheel_time_1%(WHEEL_LENGTH);
+    uint32_t wheel_idx = WHEEL_INDEX_1;
 
-    uint32_t cd_time1 = cdms & WHEEL_MASK;
-    uint32_t cd_time2 = (cdms>> WHEEL_BITS) & WHEEL_MASK;
-    uint32_t cd_time3 = ((cdms >> WHEEL_BITS)>> WHEEL_BITS) & WHEEL_MASK;
-    uint32_t cd_time4 = (((cdms >> WHEEL_BITS) >> WHEEL_BITS)>> WHEEL_BITS) & WHEEL_MASK;
-
-    uint32_t wheel_idx = 0;
-    uint32_t idx = 0;
-
-    if (cd_time4 > 0)
+    if (cdms + wheel_time_1 >= WHEEL_LENGTH)
     {
-        wheel_idx = WHEEL_INDEX_4;
-        idx = cd_time4 % WHEEL_LENGTH;
-    }
-    else if (cd_time3 > 0)
-    {
-        wheel_idx = WHEEL_INDEX_3;
-        idx = cd_time3 % WHEEL_LENGTH;
-    }
-    else if (cd_time2 > 0)
-    {
+        cdms /= WHEEL_LENGTH;
         wheel_idx = WHEEL_INDEX_2;
-        idx = cd_time2 % WHEEL_LENGTH;
-    }
-    else 
-    {
-        wheel_idx = WHEEL_INDEX_1;
-        idx = cd_time1 % WHEEL_LENGTH;
+        if (cdms + wheel_time_2 >= WHEEL_LENGTH)
+        {
+            cdms /= WHEEL_LENGTH;
+            wheel_idx = WHEEL_INDEX_3;
+            if (cdms + wheel_time_3 >= WHEEL_LENGTH)
+            {
+                cdms /= WHEEL_LENGTH;
+                wheel_idx = WHEEL_INDEX_4;
+            }
+        }
     }
     //+ timer_index_[wheel_idx]
-    idx = (idx ) % WHEEL_LENGTH;
+    uint32_t idx = (cdms + timer_index_[wheel_idx]) % WHEEL_LENGTH;
 
     all_timer_wheel_[wheel_idx][idx].emplace_back(to);
-
     return true;
 }
 
