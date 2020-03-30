@@ -171,7 +171,7 @@ void TimerWheelManager::ReDispatchTimerList(TimerObjList list, uint32_t from_tim
 {
     for (auto& timerobj : list)
     {
-        InsertTimer(timerobj, from_timer);
+        MoveOnTimer(timerobj, from_timer);
     }
 }
 
@@ -217,7 +217,6 @@ void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
     auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
 
     //转动本层
-
     {
         //得到临时对象 
         TimerObjList temp = timerlist;
@@ -279,6 +278,48 @@ void TimerWheelManager::DeleteTimerObj(TimerObj* to)
     DELETE_MEMORY(to);
 }
 
+//当拨动时间轮，这里的时间片降级
+bool TimerWheelManager::MoveOnTimer(TimerObj* to, uint32_t from_timer)
+{
+    if (!to)
+    {
+        return false;
+    }
+    //先根据from_timer裁剪 
+    //重新插入的时候要考虑来源，如果是从上一层重新指派下来的，那么需要忽略上一层的时间，因为已经消耗掉了。
+    auto cdms = to->next_cd;
+
+    uint32_t wheel_idx = 0;
+    if (from_timer == WHEEL_INDEX_4)
+    {
+        wheel_idx = WHEEL_INDEX_3;
+        cdms %= MAX_VALID_CD_3;
+    }
+    else if (from_timer == WHEEL_INDEX_3)
+    {
+        cdms %= MAX_VALID_CD_2;
+        wheel_idx = WHEEL_INDEX_2;
+    }
+    else if (from_timer == WHEEL_INDEX_2)
+    {
+        cdms %= MAX_VALID_CD_1;
+        wheel_idx = WHEEL_INDEX_1;
+    }
+
+    uint32_t idx = cdms; //
+
+    for (auto i = 0; i < wheel_idx; ++i)
+    {
+        idx = idx >> (WHEEL_BITS);
+    }
+
+    // - left_shift+  WHEEL_LENGTH 
+    idx = (idx ) % WHEEL_LENGTH;
+    all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+
+
+}
+
 bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
 {
     //不管是调用以后重新执行，还是高层轮降级，都是在临时列表里执行，不会影响原本队列
@@ -287,63 +328,45 @@ bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
         return false;
     }
     //auto cdms = to->next_cd - refresh_1_count * WHEEL_LENGTH;
-    auto cdms = to->next_cd;
-    //先根据from_timer裁剪 
-    //重新插入的时候要考虑来源，如果是从上一层重新指派下来的，那么需要忽略上一层的时间，因为已经消耗掉了。
+    //统一算法，算出时间点是几点几分。然后按照当前的时间点来做处理，
+    uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
+    uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];
+    uint32_t wheel_time_3 = timer_index_[WHEEL_INDEX_3];
+    uint32_t wheel_time_4 = timer_index_[WHEEL_INDEX_4];
+    auto cdms = to->cd_ms + wheel_time_1%(WHEEL_LENGTH);
 
-    if (from_timer == WHEEL_INDEX_4)
-    {
-        cdms = to->next_cd;
-        cdms %= MAX_VALID_CD_3;
-    }
-    else if (from_timer == WHEEL_INDEX_3)
-    {
-        cdms = to->next_cd;
-        cdms %= MAX_VALID_CD_2;
-    }
-    else if (from_timer == WHEEL_INDEX_2)
-    {
-        cdms = to->next_cd;
-        cdms %= MAX_VALID_CD_1;
-    }
-
-    uint32_t idx = cdms; //
+    uint32_t cd_time1 = cdms & WHEEL_MASK;
+    uint32_t cd_time2 = (cdms>> WHEEL_BITS) & WHEEL_MASK;
+    uint32_t cd_time3 = ((cdms >> WHEEL_BITS)>> WHEEL_BITS) & WHEEL_MASK;
+    uint32_t cd_time4 = (((cdms >> WHEEL_BITS) >> WHEEL_BITS)>> WHEEL_BITS) & WHEEL_MASK;
 
     uint32_t wheel_idx = 0;
-    uint32_t left_shift = 0;
-    if (cdms < MAX_VALID_CD_1)
-    {
-        wheel_idx = WHEEL_INDEX_1;
-    }
-    else if (cdms < MAX_VALID_CD_2)
-    {
-        left_shift =  1;
-        wheel_idx = WHEEL_INDEX_2;
-    }
-    else if (cdms < MAX_VALID_CD_3)
-    {
-        wheel_idx = WHEEL_INDEX_3;
-        left_shift = 1;
-    }
-    else if (cdms < MAX_VALID_CD_4)
+    uint32_t idx = 0;
+
+    if (cd_time4 > 0)
     {
         wheel_idx = WHEEL_INDEX_4;
-        left_shift = 1;
+        idx = cd_time4 % WHEEL_LENGTH;
     }
-    if (from_timer == WHEEL_COUNT_MAX)
+    else if (cd_time3 > 0)
     {
-        //原生插入 
-        for (auto i =0; i< wheel_idx; ++i)
-        {
-            idx = idx >> (WHEEL_BITS);
-        }
-        idx += timer_index_[wheel_idx];
+        wheel_idx = WHEEL_INDEX_3;
+        idx = cd_time3 % WHEEL_LENGTH;
     }
-
-    // - left_shift+  WHEEL_LENGTH 
+    else if (cd_time2 > 0)
+    {
+        wheel_idx = WHEEL_INDEX_2;
+        idx = cd_time2 % WHEEL_LENGTH;
+    }
+    else 
+    {
+        wheel_idx = WHEEL_INDEX_1;
+        idx = cd_time1 % WHEEL_LENGTH;
+    }
+    //+ timer_index_[wheel_idx]
     idx = (idx ) % WHEEL_LENGTH;
-    all_timer_wheel_[wheel_idx][idx].emplace_back(to);
 
+    all_timer_wheel_[wheel_idx][idx].emplace_back(to);
 
     return true;
 }

@@ -23,6 +23,7 @@
 
 #define WHEEL_BITS 2
 #define WHEEL_LENGTH (1<<WHEEL_BITS)
+#define WHEEL_MASK (WHEEL_LENGTH - 1)
 #define WHEEL_INDEX_1 0
 #define WHEEL_INDEX_2 (WHEEL_INDEX_1 + 1)
 #define WHEEL_INDEX_3 (WHEEL_INDEX_2 + 1)
@@ -128,6 +129,9 @@ private:
      */
     void UpdateWheel(uint32_t from_timer);//这里会递归调用
     bool InsertTimer(TimerObj*, uint32_t from_timer = WHEEL_COUNT_MAX);
+
+    //当拨动时间轮，这里的时间片降级
+    bool MoveOnTimer(TimerObj*, uint32_t from_timer);
     void DeleteTimerObj(TimerObj*);
     //依次执行timer对象
     void RunTimerList(TimerObjList list);//传一份拷贝过去，这个必然全部删掉，会重新插入
