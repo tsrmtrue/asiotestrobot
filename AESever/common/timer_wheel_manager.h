@@ -53,11 +53,12 @@ enum class TimerState
 struct TimerObj
 {
     TimerObj(uint32_t cdms, int32_t c, TimerCB cb):
-        cd_ms(cdms)
+        set_cd_ms(cdms)
         , count(c)
-        , next_cd(cd_ms)
+        , total_cd(set_cd_ms)
         , callback(cb)
     {
+        next_cd = set_cd_ms;
         ////每60位循环 
         //static uint64_t idx = 0;
         //idx = (idx + 1) % MAX_TIMER_ID_RANGE;
@@ -82,17 +83,19 @@ struct TimerObj
     //下一次触发时间，仅仅作为准确性参考值。不作为排序依据。
     std::chrono::steady_clock::time_point debug_next_triggle_time{ std::chrono::steady_clock::now() };
     //，单位毫秒。冷却间隔，根据cd来做排序参考值。
-    uint32_t cd_ms{0};
+    uint32_t set_cd_ms{0};
     //需要触发次数  -1 表示无数次 
     int32_t count{ 0 };
-    //被执行次数
+    //从计时起总的
+    int32_t total_cd{ 0 };
+    //下次cd
     int32_t next_cd{ 0 };
     //回调
     TimerCB callback{nullptr};
     bool RunAndCalcTriggerNextTime();
     std::string DebugDump()
     {
-        std::string s = "call count is [" + std::to_string(next_cd) + "]" + "cd is [" + std::to_string(cd_ms) + "]" ;
+        std::string s = "call count is [" + std::to_string(total_cd) + "]" + "cd is [" + std::to_string(set_cd_ms) + "]" ;
         return s;
     }
 };
@@ -128,7 +131,7 @@ private:
      *问题2，删除的时候需要快速定位。
      */
     void UpdateWheel(uint32_t from_timer);//这里会递归调用
-    bool InsertTimer(TimerObj*, uint32_t from_timer = WHEEL_COUNT_MAX);
+    bool InsertTimer(TimerObj*);
 
     //当拨动时间轮，这里的时间片降级
     bool MoveOnTimer(TimerObj*, uint32_t from_timer);

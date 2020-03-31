@@ -9,7 +9,7 @@ bool TimerObj::RunAndCalcTriggerNextTime()
     {
         return true;
     }
-    if (count == 0 || cd_ms == 0)
+    if (count == 0 || set_cd_ms == 0)
     {
         return false;
     }
@@ -21,16 +21,17 @@ bool TimerObj::RunAndCalcTriggerNextTime()
 
     if (check_count == 0)
     {
-        check_count = next_cd;
+        check_count = total_cd;
     }
 
-    if (check_count > next_cd)
+    if (check_count > total_cd)
     {
     }
-    std::cout <<"error !！！！！！！！！！！！！！！！！！!!timer acculate elapse  ["<< next_cd << "]" <<std::endl;
+    std::cout <<"error !！！！！！！！！！！！！！！！！！!!timer acculate elapse  ["<< total_cd << "]" <<std::endl;
 
-    check_count = next_cd;
-    next_cd += cd_ms;
+    check_count = total_cd;
+    total_cd += set_cd_ms;
+    next_cd = total_cd;
 
     //debug 
     auto now = std::chrono::steady_clock::now();
@@ -53,7 +54,7 @@ bool TimerObj::RunAndCalcTriggerNextTime()
         return false;
     }
     //处理cd
-    debug_next_triggle_time += std::chrono::milliseconds(cd_ms);
+    debug_next_triggle_time += std::chrono::milliseconds(set_cd_ms);
     return true;
 }
 
@@ -212,13 +213,8 @@ void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
     auto& index_wheel = timer_index_[from_timer];
     auto& timerwheel = all_timer_wheel_[from_timer];
 
-    //先转动
-    index_wheel = (index_wheel + 1) % (WHEEL_LENGTH);//
-    bool cross_clock = ((index_wheel+1) % (WHEEL_LENGTH) == 0);
-
     auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
 
-    //转动本层
     //得到临时对象 
     TimerObjList temp = timerlist;
     //先清理
@@ -236,6 +232,9 @@ void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
         //这个操作不用看当前时间
         ReDispatchTimerList(temp, from_timer);
     }
+    //后转动
+    index_wheel = (index_wheel + 1) % (WHEEL_LENGTH);//
+    bool cross_clock = (index_wheel  == 0);
 
     //if (from_timer == WHEEL_INDEX_1 && index_wheel != 0)
     //{
@@ -294,44 +293,47 @@ bool TimerWheelManager::MoveOnTimer(TimerObj* to, uint32_t from_timer)
     }
     //先根据from_timer裁剪 
     //重新插入的时候要考虑来源，如果是从上一层重新指派下来的，那么需要忽略上一层的时间，因为已经消耗掉了。
-    auto cdms = to->next_cd;
 
+    //[0-9, 10-99, 100-999, 1000-9999]
+    //[10   100    1000     10000]
+    // 假设有  1566，第四级  1  实际-1 0  
+    // 降级     566  第三级  5  实际-1 4
+    // 降级      66  第二级  6  实际-1 5
+    // 降级       6  第一级  6  实际 6
     uint32_t wheel_idx = 0;
+    uint32_t idx = 0; //
+
     if (from_timer == WHEEL_INDEX_4)
     {
-        wheel_idx = WHEEL_INDEX_3;
-        cdms %= MAX_VALID_CD_3;
-        cdms /= MAX_VALID_CD_2;
+        to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_4])*MAX_VALID_CD_3;
+        InsertTimer(to);
     }
     else if (from_timer == WHEEL_INDEX_3)
     {
-        wheel_idx = WHEEL_INDEX_2;
-        cdms %= MAX_VALID_CD_2;
-        cdms /= MAX_VALID_CD_1;
+        to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_3])* MAX_VALID_CD_2;
+        InsertTimer(to);
     }
     else if (from_timer == WHEEL_INDEX_2)
     {
-        wheel_idx = WHEEL_INDEX_1;
-        cdms %= MAX_VALID_CD_1;
+        to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_3])* MAX_VALID_CD_2;
+        to->next_cd = to->total_cd % MAX_VALID_CD_1;
+        InsertTimer(to);
     }
-
-    uint32_t idx = cdms; //
-    idx = (idx ) % WHEEL_LENGTH;
-    all_timer_wheel_[wheel_idx][idx].emplace_back(to);
 
 
 }
 
-bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
+bool TimerWheelManager::InsertTimer(TimerObj* to)
 {
     //不管是调用以后重新执行，还是高层轮降级，都是在临时列表里执行，不会影响原本队列
-    if (!to || to->cd_ms >= MAX_VALID_CD_4)
+    if (!to || to->set_cd_ms >= MAX_VALID_CD_4)
     {
         return false;
     }
 
     //递进指针
-    auto cdms = to->cd_ms;
+    auto cdms = to->set_cd_ms;
+    uint32_t idx = 0;
     uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
     uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];
     uint32_t wheel_time_3 = timer_index_[WHEEL_INDEX_3];
@@ -340,21 +342,28 @@ bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
 
     if (cdms + wheel_time_1 >= WHEEL_LENGTH)
     {
-        cdms /= WHEEL_LENGTH;
+        //扣掉本轮
+        cdms -= (WHEEL_LENGTH - wheel_time_1);
+        //更高阶，需要取对应的位数
+        cdms >>= WHEEL_BITS;
         wheel_idx = WHEEL_INDEX_2;
         if (cdms + wheel_time_2 >= WHEEL_LENGTH)
         {
-            cdms /= WHEEL_LENGTH;
+            cdms -= (WHEEL_LENGTH - wheel_time_2);
+            cdms >>= WHEEL_BITS;
+
             wheel_idx = WHEEL_INDEX_3;
             if (cdms + wheel_time_3 >= WHEEL_LENGTH)
             {
+                cdms -= (WHEEL_LENGTH - wheel_time_3);
                 cdms /= WHEEL_LENGTH;
                 wheel_idx = WHEEL_INDEX_4;
             }
         }
     }
+    idx = cdms% WHEEL_LENGTH;
     //+ timer_index_[wheel_idx]
-    uint32_t idx = (cdms + timer_index_[wheel_idx]) % WHEEL_LENGTH;
+    idx = (idx + timer_index_[wheel_idx]) % WHEEL_LENGTH;
 
     all_timer_wheel_[wheel_idx][idx].emplace_back(to);
     return true;
