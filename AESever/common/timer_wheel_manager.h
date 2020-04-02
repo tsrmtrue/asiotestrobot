@@ -95,7 +95,7 @@ struct TimerObj
     bool RunAndCalcTriggerNextTime();
     std::string DebugDump()
     {
-        std::string s = "call count is [" + std::to_string(total_cd) + "]" + "cd is [" + std::to_string(set_cd_ms) + "]" ;
+        std::string s = "call count is [" + std::to_string(total_cd) + "]" + "cd is [" + std::to_string(set_cd_ms) + "]" + " nextcd is [" + std::to_string(next_cd) + "]";
         return s;
     }
 };
@@ -131,7 +131,7 @@ private:
      *问题2，删除的时候需要快速定位。
      */
     void UpdateWheel(uint32_t from_timer);//这里会递归调用
-    bool InsertTimer(TimerObj*);
+    bool InsertTimer(TimerObj*, uint32_t from_timer= WHEEL_COUNT_MAX);
 
     //当拨动时间轮，这里的时间片降级
     bool MoveOnTimer(TimerObj*, uint32_t from_timer);
