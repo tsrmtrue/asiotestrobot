@@ -30,7 +30,7 @@
 #define WHEEL_INDEX_4 (WHEEL_INDEX_3 + 1)
 #define WHEEL_COUNT_MAX (WHEEL_INDEX_4 + 1 )
 
-
+#define MAX_VALID_CD_0 1
 #define MAX_VALID_CD_1 (((((1<<WHEEL_BITS)))) )
 #define MAX_VALID_CD_2 (((((1<<WHEEL_BITS)<<WHEEL_BITS))) ) 
 #define MAX_VALID_CD_3 (((((1<<WHEEL_BITS)<<WHEEL_BITS)<<WHEEL_BITS)) )
@@ -59,24 +59,7 @@ struct TimerObj
         , callback(cb)
     {
         next_cd = set_cd_ms;
-        ////每60位循环 
-        //static uint64_t idx = 0;
-        //idx = (idx + 1) % MAX_TIMER_ID_RANGE;
-        //id = ++idx;
-        //debug_next_triggle_time = std::chrono::system_clock::now();
     }
-    //void SetWheelIndex(uint32_t w_index)
-    //{
-    //    //id |= w_index << WHEEL_IDX_BIT_POS;
-    //}
-    //static uint32_t GetWheelIndex(uint64_t idxid)
-    //{
-    //    return (uint64_t)(idxid & (0xf << WHEEL_IDX_BIT_POS)) >> WHEEL_IDX_BIT_POS;
-    //}
-    //uint32_t GetWheelIndex()
-    //{
-    //    return TimerObj::GetWheelIndex(id);
-    //}
 
     //valid 延迟删除。
     TimerState state{ TimerState::TIMEROBJ_STATE_RUNNING };
@@ -130,20 +113,22 @@ private:
      *问题1，timer每毫秒都必须跳动。
      *问题2，删除的时候需要快速定位。
      */
-    void UpdateWheel(uint32_t from_timer);//这里会递归调用
-    bool InsertTimer(TimerObj*, uint32_t from_timer= WHEEL_COUNT_MAX);
+    void UpdateWheel();//这里会递归调用
+    void UpdateHigherWheel(uint32_t from_timer);//这里会递归调用
+    bool InsertTimer(TimerObj*, bool is_add=true);//插入是再当前基础上累加，还是直接插入
 
     //当拨动时间轮，这里的时间片降级
-    bool MoveOnTimer(TimerObj*, uint32_t from_timer);
+    //bool MoveOnTimer(TimerObj*, uint32_t from_timer);
     void DeleteTimerObj(TimerObj*);
     //依次执行timer对象
     void RunTimerList(TimerObjList list);//传一份拷贝过去，这个必然全部删掉，会重新插入
     //重新投递timer对象
-    void ReDispatchTimerList(TimerObjList list, uint32_t from_timer);//传一份拷贝过去，这个必然全部删掉，会重新插入
+    void ReDispatchTimerList(TimerObjList list);//传一份拷贝过去，这个必然全部删掉，会重新插入
 
 private:
     uint64_t now_time_{ 0 };
     TotalTimer all_timer_wheel_;//四个维度的轮
+    TimerObjList beyond_list_;//外部轮，当前轮子放不下的，当整个轮子走完的时候，要遍历这个外部轮子
     TimerIndex timer_index_{0,0,0,0};//这是记录了四个timer的index，当index抵达指针0的时候，意味着本轮所有的都走完了，需要遍历更高级维度的轮。
     //TimerObjList to_delete_;
     TimerObjHashmap all_timer_object_;//所有的指针在这里，必须同步删掉。

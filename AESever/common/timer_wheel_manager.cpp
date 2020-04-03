@@ -125,7 +125,12 @@ void TimerWheelManager::DebugDump()
         }
         i++;
     }
-
+    std::cout << "最外层" << std::endl;
+    i = 0;
+    for (auto& timerobj : beyond_list_)
+    {
+        std::cout << "pos [" << i << "] " << timerobj->DebugDump() << std::endl;
+    }
 }
 
 
@@ -170,11 +175,11 @@ void TimerWheelManager::TryKillTimer(TIMER_ID handle)
 }
 
 
-void TimerWheelManager::ReDispatchTimerList(TimerObjList list, uint32_t from_timer)//传一份拷贝过去，这个必然全部删掉，会重新插入
+void TimerWheelManager::ReDispatchTimerList(TimerObjList list)//传一份拷贝过去，这个必然全部删掉，会重新插入
 {
     for (auto& timerobj : list)
     {
-        MoveOnTimer(timerobj, from_timer);
+        InsertTimer(timerobj, false);
     }
 }
 
@@ -202,27 +207,14 @@ void TimerWheelManager::RunTimerList(TimerObjList list)
         }
     }
 }
-
-void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
+void TimerWheelManager::UpdateHigherWheel(uint32_t from_timer)//这里会递归调用
 {
-    if (from_timer > WHEEL_INDEX_4)
+    if (from_timer>= WHEEL_COUNT_MAX)
     {
+        TimerObjList temp = beyond_list_;
+        beyond_list_.clear();
+        ReDispatchTimerList(temp);
         return;
-    }
-    bool cross_clock = false; 
-    if (from_timer == WHEEL_INDEX_1)
-    {
-        auto& index_wheel = timer_index_[from_timer];
-        auto& timerwheel = all_timer_wheel_[from_timer];
-        auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
-
-        //得到临时对象 
-        TimerObjList temp = timerlist;
-        timerlist.clear();
-        RunTimerList(temp);
-        index_wheel = (index_wheel + 1) % (WHEEL_LENGTH);//
-
-        cross_clock = (index_wheel == 0);
     }
     else
     {
@@ -236,27 +228,36 @@ void TimerWheelManager::UpdateWheel(uint32_t from_timer)//这里会递归调用
         //得到临时对象 
         TimerObjList temp = timerlist;
         timerlist.clear();
-        ReDispatchTimerList(temp, from_timer);
-
-        cross_clock = (index_wheel == 0);
+        ReDispatchTimerList(temp);
+        if (index_wheel == 0)
+        {
+            UpdateHigherWheel(from_timer + 1);
+        }
     }
-    //后转动
-    if (cross_clock)
+}
+
+void TimerWheelManager::UpdateWheel()//这里会递归调用
+{
+    auto& index_wheel = timer_index_[WHEEL_INDEX_1];
+    auto& timerwheel = all_timer_wheel_[WHEEL_INDEX_1];
+    auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
+
+    //得到临时对象 
+    TimerObjList temp = timerlist;
+    timerlist.clear();
+    RunTimerList(temp);
+    index_wheel = (index_wheel + 1) % (WHEEL_LENGTH);//
+
+    if (index_wheel == 0)
     {
-        UpdateWheel(from_timer + 1);
+        UpdateHigherWheel(WHEEL_INDEX_1 + 1);
     }
 
-
-    //if (from_timer > WHEEL_INDEX_1)
-    //{
-    //    //第二层开始，index默认要从1开始
-    //    index_wheel += 1;
-    //}
 }
 
 void TimerWheelManager::Update(uint64_t time_stampe)
 {
-    UpdateWheel(WHEEL_INDEX_1);
+    UpdateWheel();
     now_time_++;
 }
 
@@ -274,48 +275,48 @@ void TimerWheelManager::DeleteTimerObj(TimerObj* to)
 }
 
 //当拨动时间轮，这里的时间片降级
-bool TimerWheelManager::MoveOnTimer(TimerObj* to, uint32_t from_timer)
-{
-    if (!to)
-    {
-        return false;
-    }
+//bool TimerWheelManager::MoveOnTimer(TimerObj* to, uint32_t from_timer)
+//{
+//    if (!to)
+//    {
+//        return false;
+//    }
+//
+//    InsertTimer(to, from_timer);
+//
+//    //先根据from_timer裁剪 
+//    //重新插入的时候要考虑来源，如果是从上一层重新指派下来的，那么需要忽略上一层的时间，因为已经消耗掉了。
+//
+//    //[0-9, 10-99, 100-999, 1000-9999]
+//    //[10   100    1000     10000]
+//    // 假设有  1566，第四级  1  实际-1 0  
+//    // 降级     566  第三级  5  实际-1 4
+//    // 降级      66  第二级  6  实际-1 5
+//    // 降级       6  第一级  6  实际 6
+//    //uint32_t wheel_idx = 0;
+//    //uint32_t idx = 0; //
+//
+//    //if (from_timer == WHEEL_INDEX_4)
+//    //{
+//    //    //to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_4])*MAX_VALID_CD_3;
+//    //    InsertTimer(to);
+//    //}
+//    //else if (from_timer == WHEEL_INDEX_3)
+//    //{
+//    //    to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_3])* MAX_VALID_CD_2;
+//    //    InsertTimer(to);
+//    //}
+//    //else if (from_timer == WHEEL_INDEX_2)
+//    //{
+//    //    to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_3])* MAX_VALID_CD_2;
+//    //    to->next_cd = to->total_cd % MAX_VALID_CD_1;
+//    //    InsertTimer(to);
+//    //}
+//
+//
+//}
 
-    InsertTimer(to, from_timer);
-
-    //先根据from_timer裁剪 
-    //重新插入的时候要考虑来源，如果是从上一层重新指派下来的，那么需要忽略上一层的时间，因为已经消耗掉了。
-
-    //[0-9, 10-99, 100-999, 1000-9999]
-    //[10   100    1000     10000]
-    // 假设有  1566，第四级  1  实际-1 0  
-    // 降级     566  第三级  5  实际-1 4
-    // 降级      66  第二级  6  实际-1 5
-    // 降级       6  第一级  6  实际 6
-    //uint32_t wheel_idx = 0;
-    //uint32_t idx = 0; //
-
-    //if (from_timer == WHEEL_INDEX_4)
-    //{
-    //    //to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_4])*MAX_VALID_CD_3;
-    //    InsertTimer(to);
-    //}
-    //else if (from_timer == WHEEL_INDEX_3)
-    //{
-    //    to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_3])* MAX_VALID_CD_2;
-    //    InsertTimer(to);
-    //}
-    //else if (from_timer == WHEEL_INDEX_2)
-    //{
-    //    to->next_cd = to->total_cd - (timer_index_[WHEEL_INDEX_3])* MAX_VALID_CD_2;
-    //    to->next_cd = to->total_cd % MAX_VALID_CD_1;
-    //    InsertTimer(to);
-    //}
-
-
-}
-
-bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
+bool TimerWheelManager::InsertTimer(TimerObj* to, bool is_add)
 {
     //不管是调用以后重新执行，还是高层轮降级，都是在临时列表里执行，不会影响原本队列
     if (!to || to->next_cd >= MAX_VALID_CD_4)
@@ -324,49 +325,110 @@ bool TimerWheelManager::InsertTimer(TimerObj* to, uint32_t from_timer)
     }
 
     //递进指针
-    uint64_t total_now = 0;
     uint32_t wheel_lenth = 1;
-    for (uint32_t i = 0 ; i < from_timer; ++i)
-    {
-        total_now += timer_index_[i] * (wheel_lenth);
-        wheel_lenth *= WHEEL_LENGTH;
-    }
-    //uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
-    //uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];
-    //uint32_t wheel_time_3 = timer_index_[WHEEL_INDEX_3];
-    //uint32_t wheel_time_4 = timer_index_[WHEEL_INDEX_4];
+    uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
+    uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];
+    uint32_t wheel_time_3 = timer_index_[WHEEL_INDEX_3];
+    uint32_t wheel_time_4 = timer_index_[WHEEL_INDEX_4];
     uint32_t wheel_idx = WHEEL_INDEX_1;
 
-    //uint64_t total_now = wheel_time_1 + wheel_time_2 * MAX_VALID_CD_1 + wheel_time_3 * MAX_VALID_CD_2 + wheel_time_4 * MAX_VALID_CD_4;
-
-    uint64_t next_time = to->next_cd + total_now;//
     uint32_t idx = 0;
-    if (next_time >= MAX_VALID_CD_3)
+    //auto cdms = to->next_cd;
+    auto next_trigger = wheel_time_1 + to->next_cd;
+    if (next_trigger < MAX_VALID_CD_1)
     {
-        idx = next_time / MAX_VALID_CD_3;
-        to->next_cd = next_time % MAX_VALID_CD_3;
-        wheel_idx = WHEEL_INDEX_4;
-    }
-    else if (next_time >= MAX_VALID_CD_2)
-    {
-        idx = next_time / MAX_VALID_CD_2;
-        to->next_cd = next_time % MAX_VALID_CD_2;
-        wheel_idx = WHEEL_INDEX_3;
-    }
-    else if (next_time >= MAX_VALID_CD_1)
-    {
-        idx = next_time / MAX_VALID_CD_1;
-        to->next_cd = next_time % MAX_VALID_CD_1;
-        wheel_idx = WHEEL_INDEX_2;
-    }
-    else 
-    {
-        idx = next_time;
-        to->next_cd = next_time ;
         wheel_idx = WHEEL_INDEX_1;
+        idx = next_trigger/ MAX_VALID_CD_0;
+        to->next_cd = next_trigger% MAX_VALID_CD_0;
+        all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+        return true;
     }
 
-    all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+
+    to->next_cd -= (MAX_VALID_CD_1 - wheel_time_1);
+    wheel_time_2 += 1;
+    next_trigger = wheel_time_2 * MAX_VALID_CD_1 + to->next_cd;
+    if(next_trigger < MAX_VALID_CD_2)
+    {
+        wheel_idx = WHEEL_INDEX_2;
+        idx = next_trigger/ MAX_VALID_CD_1;
+        to->next_cd = next_trigger % MAX_VALID_CD_1;
+        all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+        return true;
+    }
+
+
+    to->next_cd -= (MAX_VALID_CD_2 - wheel_time_2* MAX_VALID_CD_1);
+    wheel_time_3 += 1;
+    next_trigger = wheel_time_3 * MAX_VALID_CD_2 + to->next_cd;
+    if (next_trigger < MAX_VALID_CD_3)
+    {
+        wheel_idx = WHEEL_INDEX_3;
+        idx = next_trigger / MAX_VALID_CD_2;
+        to->next_cd = next_trigger % MAX_VALID_CD_2;
+        all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+        return true;
+    }
+
+    to->next_cd -= (MAX_VALID_CD_3 - wheel_time_3 * MAX_VALID_CD_2);
+    wheel_time_4 += 1;
+    next_trigger = wheel_time_4 * MAX_VALID_CD_3 + to->next_cd;
+    if (next_trigger < MAX_VALID_CD_4)
+    {
+        wheel_idx = WHEEL_INDEX_4;
+        idx = next_trigger / MAX_VALID_CD_3;
+        to->next_cd = next_trigger % MAX_VALID_CD_3;
+        all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+        return true;
+    }
+
+    to->next_cd = next_trigger - MAX_VALID_CD_4;
+    beyond_list_.emplace_back(to);
     return true;
+
+
+
+
+    //uint64_t total_now = wheel_time_1 + wheel_time_2 * MAX_VALID_CD_1 + wheel_time_3 * MAX_VALID_CD_2 + wheel_time_4 * MAX_VALID_CD_4;
+    //if (! is_add)
+    //{
+    //    total_now = 0;
+    //}
+
+    //uint64_t next_time = to->next_cd + total_now;//
+    //if (next_time >= MAX_VALID_CD_4)
+    //{
+    //    wheel_lenth = MAX_VALID_CD_4;
+    //    to->next_cd = next_time % wheel_lenth;
+    //    beyond_list_.emplace_back(to);
+    //    return true;
+    //}
+    //
+    //if (next_time >= MAX_VALID_CD_3)
+    //{
+    //    wheel_lenth = MAX_VALID_CD_3;
+    //    wheel_idx = WHEEL_INDEX_4;
+    //}
+    //else if (next_time >= MAX_VALID_CD_2)
+    //{
+    //    wheel_lenth = MAX_VALID_CD_2;
+    //    wheel_idx = WHEEL_INDEX_3;
+    //}
+    //else if (next_time >= MAX_VALID_CD_1)
+    //{
+    //    wheel_lenth = MAX_VALID_CD_1;
+    //    wheel_idx = WHEEL_INDEX_2;
+    //}
+    //else 
+    //{
+    //    wheel_lenth = 1;
+    //    to->next_cd = next_time ;
+    //    wheel_idx = WHEEL_INDEX_1;
+    //}
+    //idx = next_time / wheel_lenth;
+    //to->next_cd = next_time % wheel_lenth;
+
+    //all_timer_wheel_[wheel_idx][idx].emplace_back(to);
+    //return true;
 }
 
