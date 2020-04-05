@@ -33,7 +33,7 @@ bool TimerObj::RunAndCalcTriggerNextTime()
     next_cd = set_cd_ms;
 
     //debug 
-    auto now = std::chrono::steady_clock::now();
+    //auto now = std::chrono::steady_clock::now();
     //auto diff = std::chrono::duration_cast<std::chrono::microseconds>(now - debug_next_triggle_time).count();///> 
     //if (diff > 1)
     //{
