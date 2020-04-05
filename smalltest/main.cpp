@@ -788,7 +788,7 @@ bool TestTimerWheel(uint32_t c)
 	auto end = std::chrono::high_resolution_clock::now();
 
 	std::chrono::duration<double> diff = end - start;
-	std::cout << "total used time " << diff.count() <<" seconds"<< std::endl;
+	std::cout << std::endl << "total used time " << diff.count() <<" seconds total count "<< TimerWheelManager::Instance()->GetTotalcount()<< std::endl;
 
 	TimerWheelManager::Instance()->Uninit();
 	TimerWheelManager::DestroyInstance();
