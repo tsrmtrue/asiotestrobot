@@ -766,8 +766,9 @@ bool TestTimerWheel()
     TimerWheelManager::Instance()->Init();
 
 	//≤Â»Î
+	auto start = std::chrono::high_resolution_clock::now();
 
-	for (size_t i = 0; i < 100; i++)
+	for (size_t i = 0; i < 10000; i++)
 	{
 		auto cb = [i]()
 		{
@@ -775,14 +776,19 @@ bool TestTimerWheel()
 		};
 		TimerWheelManager::Instance()->AddTimer(i, 3, cb);
 	}
-	TimerWheelManager::Instance()->DebugDump();
+	//TimerWheelManager::Instance()->DebugDump();
 
-	for (size_t i = 0; i < 100*100; i++)
+	for (size_t i = 0; i < 10000 * 10000; i++)
 	{
 		TimerWheelManager::Instance()->Update(0);
-		TimerWheelManager::Instance()->DebugDump();
+		//TimerWheelManager::Instance()->DebugDump();
+		TimerWheelManager::Instance()->DebugRandomTryKill();
 	}
 
+	auto end = std::chrono::high_resolution_clock::now();
+
+	std::chrono::duration<double> diff = end - start;
+	std::cout << "total used time " << diff.count() <<" seconds"<< std::endl;
 
 	TimerWheelManager::Instance()->Uninit();
 	TimerWheelManager::DestroyInstance();
