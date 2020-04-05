@@ -68,7 +68,7 @@ struct TimerObj
     ///> 单位毫秒。冷却间隔，根据cd来做排序参考值。
     uint64_t set_cd_ms{0};
     ///> 需要触发次数  -1 表示无数次 
-    uint64_t count{ 0 };
+    int64_t count{ 0 };
     ///> 从计时起总的，用来打日志
     uint64_t total_cd{ 0 };
     ///> 下次cd

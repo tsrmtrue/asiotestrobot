@@ -17,7 +17,7 @@ bool TimerObj::RunAndCalcTriggerNextTime()
     }
     count--;
 
-    static uint32_t check_count = 0;
+    //static uint32_t check_count = 0;
 
     //if (check_count == 0)
     //{
