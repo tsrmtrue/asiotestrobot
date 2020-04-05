@@ -305,7 +305,7 @@ bool TimerWheelManager::InsertTimer(TimerObj* to)
     }
 
     //µ›Ω¯±Ì≈Ã÷∏’Î
-    uint32_t wheel_lenth = 1;
+    //uint32_t wheel_lenth = 1;
     uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
     uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];
     uint32_t wheel_time_3 = timer_index_[WHEEL_INDEX_3];
