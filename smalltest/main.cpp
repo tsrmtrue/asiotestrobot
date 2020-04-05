@@ -758,7 +758,7 @@ void TestThreadLockFreeTry(uint32_t count)
 
 
 #include "timer_wheel_manager.h"
-bool TestTimerWheel()
+bool TestTimerWheel(uint32_t c)
 {
 	SINGLETON_CREATE_INIT(ObjectPool::ObjectPoolManager);
 
@@ -848,7 +848,7 @@ int main(int argc, char* argv[])
     //TestNewTcmalloc(count);
     //HeapProfilerStop();  // 添加函数之二
 
-	TestTimerWheel();
+	TestTimerWheel(count);
 
 
     //std::chrono::seconds sec(100);
