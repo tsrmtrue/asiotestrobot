@@ -156,7 +156,7 @@ private:
     ///> 外部轮，当前轮子放不下的，当整个轮子走完的时候，要遍历这个外部轮子
     TimerObjList beyond_list_;
     ///> 这是记录了四个表盘的当前指针，当走满一轮的时候，高级轮表盘指针加1。
-    TimerIndex timer_index_{0};//
+    TimerIndex timer_index_;//
     ///> 所有的指针在这里，必须同步删掉
     TimerObjHashmap all_timer_object_;//。
 };

@@ -60,6 +60,10 @@ bool TimerObj::RunAndCalcTriggerNextTime()
 
 bool TimerWheelManager::Init()
 {
+    timer_index_[WHEEL_INDEX_1] = 0;
+    timer_index_[WHEEL_INDEX_2] = 0;
+    timer_index_[WHEEL_INDEX_3] = 0;
+    timer_index_[WHEEL_INDEX_4] = 0;
     return true;
 };
 void TimerWheelManager::Uninit()
