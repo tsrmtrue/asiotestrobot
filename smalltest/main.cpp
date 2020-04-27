@@ -828,6 +828,44 @@ void TestNewTcmalloc(uint32_t c)
     }
 }
 
+class AA
+{
+public:
+	AA() {};
+	virtual ~AA() 
+	{
+		std::cout << "~ AA" << std::endl;
+	}
+};
+
+
+class BB:public AA
+{
+
+};
+
+class CC : public BB
+{
+
+};
+
+void TestVirtual()
+{
+	{
+		std::cout << "new delete"<<std::endl;
+		CC* c = new CC();
+		delete c;
+	}
+
+	{
+		std::cout << "malloc free " << std::endl;
+		void* temp = malloc(sizeof(CC));
+		CC* c = new(temp)CC();
+		c->~CC();
+		free((void *)c);
+	}
+
+}
 
 int main(int argc, char* argv[])
 {
@@ -848,7 +886,8 @@ int main(int argc, char* argv[])
     //TestNewTcmalloc(count);
     //HeapProfilerStop();  // 添加函数之二
 
-	TestTimerWheel(count);
+	//TestTimerWheel(count);
+	TestVirtual();
 
 
     //std::chrono::seconds sec(100);
