@@ -867,6 +867,172 @@ void TestVirtual()
 
 }
 
+// Ëæ»úÊı²âÊÔ
+size_t Randomsize()
+{
+    //Êı×é³¤¶ÈÔİ¶¨100ÒÔÄÚ
+    static std::default_random_engine generator(time(nullptr));
+    static std::uniform_int_distribution<uint32_t> dis(0, 100);
+    static std::function<uint32_t()> dice = std::bind(dis, generator);
+    return dice();
+}
+
+uint32_t Randomuint32()
+{
+    static std::default_random_engine generator(time(nullptr));
+    static std::uniform_int_distribution<uint32_t > dis(0, 0xff);
+    static std::function<uint32_t()> dice = std::bind(dis, generator);
+    return (uint32_t)((dice() << 24) + (dice() << 16) + (dice() << 8) + dice());
+}
+
+int32_t Randomint32()
+{
+    return (int32_t)Randomuint32();
+}
+
+uint64_t Randomuint64()
+{
+    return ((uint64_t)Randomuint32() << 32) + Randomuint32();
+}
+int64_t Randomint64()
+{
+    return (int64_t)Randomuint64();
+}
+
+bool Randombool()
+{
+    return (Randomuint32() % 2) == 0 ? false : true;
+}
+float Randomfloat()
+{
+    return (float)Randomint32() / 10000;
+}
+double Randomdouble()
+{
+    return (double)Randomint64() / 10000;
+}
+
+int32_t Randomsint32()
+{
+    return Randomint32();
+}
+
+std::string Randomstring()
+{
+    static std::default_random_engine generator(time(nullptr));
+    static std::uniform_int_distribution<uint32_t > dis(1, 0xff);
+    static std::function<uint32_t()> dice = std::bind(dis, generator);
+
+    uint32_t len = dice();
+    std::string s = "";
+    for (uint32_t i = 0; i < len; ++i)
+    {
+        s.push_back(dice());
+    }
+    return s;
+}
+
+void* Randombytes()
+{
+    //Ìî³ä´ø0µÄÑ¡Ïî
+    static int32_t temp[16];
+    for (uint32_t i = 0; i < 16; ++i)
+    {
+        temp[i] = Randomint32();
+    }
+    return (void *)temp;
+}
+
+size_t GetRandomByteCount()
+{
+    static std::default_random_engine generator(time(nullptr));
+    static std::uniform_int_distribution<uint32_t> dis(1, 64);
+    static std::function<uint32_t()> dice = std::bind(dis, generator);
+    return dice();
+}
+
+
+void TestRandom()
+{
+    std::cout << "²âÊÔ Randomsize" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomsize() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomuint32" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomuint32() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomint32" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomint32() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomuint64" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomuint64() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomint64" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomint64() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randombool" << std::endl;
+    for (size_t i = 0; i < 100; i++)
+    {
+        std::cout << Randombool() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomfloat" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomfloat() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomdouble" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomdouble() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randomstring" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randomstring() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ Randombytes" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << Randombytes() <<std::endl;
+    }
+    std::cout << std::endl;
+
+    std::cout << "²âÊÔ GetRandomByteCount" << std::endl;
+    for (size_t i = 0; i < 10; i++)
+    {
+        std::cout << GetRandomByteCount() <<std::endl;
+    }
+    std::cout << std::endl;
+
+}
+
 int main(int argc, char* argv[])
 {
 	//TestObjectPool();
@@ -887,7 +1053,9 @@ int main(int argc, char* argv[])
     //HeapProfilerStop();  // Ìí¼Óº¯ÊıÖ®¶ş
 
 	//TestTimerWheel(count);
-	TestVirtual();
+	//TestVirtual();
+
+    TestRandom();
 
 
     //std::chrono::seconds sec(100);
