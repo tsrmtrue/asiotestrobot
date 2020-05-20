@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include "timer_wheel_manager.h"
 #include "object_pool.h"
 #include <random>
@@ -26,7 +26,7 @@ bool TimerObj::RunAndCalcTriggerNextTime()
 
     if (total_cd != TimerWheelManager::Instance()->GetTotalcount())
     {
-        std::cout <<"error !£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡!!timer acculate elapse  ["<< total_cd << "]" << " system total count ["<< TimerWheelManager::Instance()->GetTotalcount()<<"] " <<std::endl;
+        std::cout <<"error !ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼!!timer acculate elapse  ["<< total_cd << "]" << " system total count ["<< TimerWheelManager::Instance()->GetTotalcount()<<"] " <<std::endl;
     }
     //check_count = total_cd;
     total_cd += set_cd_ms;
@@ -49,10 +49,10 @@ bool TimerObj::RunAndCalcTriggerNextTime()
 
     if (count == 0)
     {    
-        //Èç¹ûÉèÖÃcount 1 ÄÇÃ´¾Í´¥·¢Ò»´Î,, 
+        //å¦‚æœè®¾ç½®count 1 é‚£ä¹ˆå°±è§¦å‘ä¸€æ¬¡,, 
         return false;
     }
-    //´¦Àícd
+    //å¤„ç†cd
     //debug_next_triggle_time += std::chrono::milliseconds(set_cd_ms);
     return true;
 }
@@ -77,7 +77,7 @@ void TimerWheelManager::DebugRandomTryKill()
     {
         return;
     }
-    //Ëæ»úÊıÉú³ÉÆ÷
+    //éšæœºæ•°ç”Ÿæˆå™¨
     static std::random_device r;
     static std::default_random_engine e1(r());
     static std::uniform_int_distribution<int> uniform_dist(1, 10000);
@@ -97,9 +97,9 @@ void TimerWheelManager::DebugDump()
 {
 
     std::cout << std::endl;
-    std::cout << "µ±Ç°Ê±ÖÓ " << "[" << timer_index_[WHEEL_INDEX_1] << "]" << "[" << timer_index_[WHEEL_INDEX_2] << "]" << "[" << timer_index_[WHEEL_INDEX_3] << "]" << "[" << timer_index_[WHEEL_INDEX_4] << "]"  << std::endl;
+    std::cout << "å½“å‰æ—¶é’Ÿ " << "[" << timer_index_[WHEEL_INDEX_1] << "]" << "[" << timer_index_[WHEEL_INDEX_2] << "]" << "[" << timer_index_[WHEEL_INDEX_3] << "]" << "[" << timer_index_[WHEEL_INDEX_4] << "]"  << std::endl;
 
-    std::cout << "µÚÒ»²ã" << std::endl;
+    std::cout << "ç¬¬ä¸€å±‚" << std::endl;
     size_t i = 0;
     for (auto & timerlist : all_timer_wheel_[WHEEL_INDEX_1])
     {
@@ -110,7 +110,7 @@ void TimerWheelManager::DebugDump()
         i++;
     }
 
-    std::cout << "µÚ¶ş²ã" << std::endl;
+    std::cout << "ç¬¬äºŒå±‚" << std::endl;
     i = 0;
     for (auto& timerlist : all_timer_wheel_[WHEEL_INDEX_2])
     {
@@ -122,7 +122,7 @@ void TimerWheelManager::DebugDump()
     }
 
 
-    std::cout << "µÚÈı²ã" << std::endl;
+    std::cout << "ç¬¬ä¸‰å±‚" << std::endl;
     i = 0;
     for (auto& timerlist : all_timer_wheel_[WHEEL_INDEX_3])
     {
@@ -133,7 +133,7 @@ void TimerWheelManager::DebugDump()
         i++;
     }
 
-    std::cout << "µÚËÄ²ã" << std::endl;
+    std::cout << "ç¬¬å››å±‚" << std::endl;
     i = 0;
     for (auto& timerlist : all_timer_wheel_[WHEEL_INDEX_4])
     {
@@ -143,7 +143,7 @@ void TimerWheelManager::DebugDump()
         }
         i++;
     }
-    std::cout << "×îÍâ²ã" << std::endl;
+    std::cout << "æœ€å¤–å±‚" << std::endl;
     i = 0;
     for (auto& timerobj : beyond_list_)
     {
@@ -155,7 +155,7 @@ void TimerWheelManager::DebugDump()
 TIMER_ID TimerWheelManager::AddTimer(uint32_t cdms, int32_t c, TimerCB cb)
 {
     if ( cdms == 0 
-        || cdms > MAX_VALID_CD_4 //32Î»ÓÀÔ¶²»»áÒç³ö 
+        || cdms > MAX_VALID_CD_4 //32ä½æ°¸è¿œä¸ä¼šæº¢å‡º 
         || c == 0
         || cb == nullptr)
     {
@@ -176,7 +176,7 @@ TIMER_ID TimerWheelManager::AddTimer(uint32_t cdms, int32_t c, TimerCB cb)
         all_timer_object_[timerobject] = timerobject;
         return reinterpret_cast<TIMER_ID>((void*)timerobject);
     }
-    //Ö±½Ó·µ»ØÖ¸Õë
+    //ç›´æ¥è¿”å›æŒ‡é’ˆ
     DELETE_MEMORY(timerobject);
     return INVALID_TIMER_ID;
 
@@ -187,7 +187,7 @@ void TimerWheelManager::TryKillTimer(TIMER_ID handle)
     auto to = reinterpret_cast<TimerObj*>(handle);
     if (to && all_timer_object_.find(to) != all_timer_object_.end())
     {
-        //µÈ´ı»Øµ÷µÄÊ±ºòÖ´ĞĞÉ¾³ı 
+        //ç­‰å¾…å›è°ƒçš„æ—¶å€™æ‰§è¡Œåˆ é™¤ 
         to->state = TimerState::TIMEROBJ_STATE_CLOSING;
     }
 }
@@ -203,32 +203,32 @@ void TimerWheelManager::ReDispatchTimerList(TimerObjList list)
 
 void TimerWheelManager::RunTimerList(TimerObjList list)
 {
-    //×¢Òâ´«ÈëµÄÊÇÒ»¸öÁÙÊ±¿½±´£¬²»ÓÃ¹Ü¶ÓÁĞ±¾ÉíµÄÊÍ·Å
-    //Ëã·¨±£Ö¤£¬²»»áÂäµ½Í¬ÑùµÄ²ã£¬¾ÍËãÈÆ¹ıÖÕµã£¬³¬¹ı±¾²ã×î´óÈİÁ¿£¬Ö»»áÂäÈë¸üÉÏ²ã¡£
+    //æ³¨æ„ä¼ å…¥çš„æ˜¯ä¸€ä¸ªä¸´æ—¶æ‹·è´ï¼Œä¸ç”¨ç®¡é˜Ÿåˆ—æœ¬èº«çš„é‡Šæ”¾
+    //ç®—æ³•ä¿è¯ï¼Œä¸ä¼šè½åˆ°åŒæ ·çš„å±‚ï¼Œå°±ç®—ç»•è¿‡ç»ˆç‚¹ï¼Œè¶…è¿‡æœ¬å±‚æœ€å¤§å®¹é‡ï¼Œåªä¼šè½å…¥æ›´ä¸Šå±‚ã€‚
     for (auto& timerobj : list)
     {
         if (timerobj->state == TimerState::TIMEROBJ_STATE_CLOSING)
         {   
-            //ÒÑ¾­±»Âß¼­É¾³ıÁË£¬Ö±½ÓÉ¾³ı
+            //å·²ç»è¢«é€»è¾‘åˆ é™¤äº†ï¼Œç›´æ¥åˆ é™¤
             DeleteTimerObj(timerobj);
         }
         else
         {
             if (timerobj->RunAndCalcTriggerNextTime())
             {
-                //»¹ĞèÒªÖ´ĞĞ£¬
+                //è¿˜éœ€è¦æ‰§è¡Œï¼Œ
                 InsertTimer(timerobj);
             }
             else
             {
-                //É¾³ıtimer¶ÔÏó,´ÎÊıÂúÁË£¬²»ĞèÒªÖ´ĞĞÁË
+                //åˆ é™¤timerå¯¹è±¡,æ¬¡æ•°æ»¡äº†ï¼Œä¸éœ€è¦æ‰§è¡Œäº†
                 DeleteTimerObj(timerobj);
             }
         }
     }
 }
 
-//ÕâÀï»áµİ¹éµ÷ÓÃ
+//è¿™é‡Œä¼šé€’å½’è°ƒç”¨
 void TimerWheelManager::UpdateHigherWheel(uint32_t from_timer)
 {
     if (from_timer>= WHEEL_COUNT_MAX)
@@ -247,7 +247,7 @@ void TimerWheelManager::UpdateHigherWheel(uint32_t from_timer)
 
         auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
 
-        //µÃµ½ÁÙÊ±¶ÔÏó 
+        //å¾—åˆ°ä¸´æ—¶å¯¹è±¡ 
         TimerObjList temp = timerlist;
         timerlist.clear();
         ReDispatchTimerList(temp);
@@ -264,7 +264,7 @@ void TimerWheelManager::UpdateWheel()
     auto& timerwheel = all_timer_wheel_[WHEEL_INDEX_1];
     auto& timerlist = timerwheel[index_wheel % (WHEEL_LENGTH)];
 
-    //µÃµ½ÁÙÊ±¶ÔÏó 
+    //å¾—åˆ°ä¸´æ—¶å¯¹è±¡ 
     TimerObjList temp = timerlist;
     timerlist.clear();
     RunTimerList(temp);
@@ -298,13 +298,13 @@ void TimerWheelManager::DeleteTimerObj(TimerObj* to)
 
 bool TimerWheelManager::InsertTimer(TimerObj* to)
 {
-    //²»¹ÜÊÇµ÷ÓÃÒÔºóÖØĞÂÖ´ĞĞ£¬»¹ÊÇ¸ß²ãÂÖ½µ¼¶£¬¶¼ÊÇÔÚÁÙÊ±ÁĞ±íÀïÖ´ĞĞ£¬²»»áÓ°ÏìÔ­±¾¶ÓÁĞ
+    //ä¸ç®¡æ˜¯è°ƒç”¨ä»¥åé‡æ–°æ‰§è¡Œï¼Œè¿˜æ˜¯é«˜å±‚è½®é™çº§ï¼Œéƒ½æ˜¯åœ¨ä¸´æ—¶åˆ—è¡¨é‡Œæ‰§è¡Œï¼Œä¸ä¼šå½±å“åŸæœ¬é˜Ÿåˆ—
     if (!to || to->next_cd >= MAX_VALID_CD_4)
     {
         return false;
     }
 
-    //µİ½ø±íÅÌÖ¸Õë
+    //é€’è¿›è¡¨ç›˜æŒ‡é’ˆ
     //uint32_t wheel_lenth = 1;
     uint32_t wheel_time_1 = timer_index_[WHEEL_INDEX_1];
     uint32_t wheel_time_2 = timer_index_[WHEEL_INDEX_2];

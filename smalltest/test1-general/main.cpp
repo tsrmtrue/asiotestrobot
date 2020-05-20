@@ -1,10 +1,10 @@
-#include <cstdlib>
+ï»¿#include <cstdlib>
 #include <deque>
 #include <iostream>
 #include <thread>
 #include <list>
 #include <chrono>         
-//#include <gperftools/heap-profiler.h>  todo ¼ÓÈëlib¿â£¬ÒÔ¼°tcmalloc
+//#include <gperftools/heap-profiler.h>  todo åŠ å…¥libåº“ï¼Œä»¥åŠtcmalloc
 #include <vector>
 #include <thread>
 #include <string>
@@ -14,7 +14,7 @@
 #include "ae_lock.h"
 
 
-//²âÊÔÎö¹¹×ÓÀàÎö¹¹º¯ÊıÔÚvoid * ×ª»»ÏÂ
+//æµ‹è¯•ææ„å­ç±»ææ„å‡½æ•°åœ¨void * è½¬æ¢ä¸‹
 class A
 {
 public:
@@ -198,17 +198,17 @@ void TestRawOpenid(uint32_t count)
 
 void TestOpenid(uint32_t count)
 {
-    //Ëæ»ú³õÊ¼»¯ÊıÁ¿
+    //éšæœºåˆå§‹åŒ–æ•°é‡
 	std::cout << "TestOpenid count " << count << std::endl;
 	std::cout << "sizeof Openid is " << sizeof(Openid) << std::endl;
 
     std::unordered_map<Openid, bool> all_keys;
 
-	//Ëæ»úÊıÉú³ÉÆ÷
+	//éšæœºæ•°ç”Ÿæˆå™¨
     std::random_device r;
     std::default_random_engine e1(r());
     std::uniform_int_distribution<int> uniform_dist(1, 0xfffffff);
-	//Éú³ÉÖ¸¶¨ÊıÁ¿µÄÊı¾İ
+	//ç”ŸæˆæŒ‡å®šæ•°é‡çš„æ•°æ®
     {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -244,7 +244,7 @@ void TestOpenid(uint32_t count)
             << id.id[0] << "," << id.id[1] << "," << id.id[2] << "," << id.id[3] << "," << id.id[4] << "," << id.id[5] << "  time " << diff.count() << std::endl;
     }
 
-	//²éÑ¯¼ÆÊ±
+	//æŸ¥è¯¢è®¡æ—¶
     for (uint32_t i = 0; i<10; i++)
     {
         auto start = std::chrono::high_resolution_clock::now();
@@ -343,11 +343,11 @@ void TestStdString(uint32_t count)
 
 void TestWriteOpenid(uint32_t count)
 {
-	//Ëæ»úÊıÉú³ÉÆ÷
+	//éšæœºæ•°ç”Ÿæˆå™¨
 	std::random_device r;
 	std::default_random_engine e1(r());
 	std::uniform_int_distribution<int> uniform_dist(1, 0xfffffff);
-	//µ¥¸öĞ´Èë
+	//å•ä¸ªå†™å…¥
 	{
 		auto start = std::chrono::high_resolution_clock::now();
 
@@ -364,7 +364,7 @@ void TestWriteOpenid(uint32_t count)
 		std::chrono::duration<double> diff = end - start;
 		std::cout << "write single time " << diff.count() << std::endl;
 	}
-	//¶à¸öĞ´Èë
+	//å¤šä¸ªå†™å…¥
 	{
 		auto start = std::chrono::high_resolution_clock::now();
 
@@ -385,7 +385,7 @@ void TestWriteOpenid(uint32_t count)
 
 void TestReadOpenid(uint32_t count)
 {
-	//µ¥¸ö¶ÁÈ¡
+	//å•ä¸ªè¯»å–
 	{
 		auto start = std::chrono::high_resolution_clock::now();
 
@@ -417,7 +417,7 @@ void TestReadOpenid(uint32_t count)
 		std::chrono::duration<double> diff = end - start;
 		std::cout << "read single time " << diff.count() <<"read size "<<size<<" readcount "<< i<< std::endl;
 	}
-	//¶à¸ö¶ÁÈ¡
+	//å¤šä¸ªè¯»å–
 	{
 		auto start = std::chrono::high_resolution_clock::now();
 
@@ -451,7 +451,7 @@ void TestReadOpenid(uint32_t count)
 
 }
 
-//¶ÔÏó³Ø
+//å¯¹è±¡æ± 
 //
 #include "singleton.h"
 #include "object_pool.h"
@@ -480,7 +480,7 @@ bool TestObjectPool()
 
 void TestThreadMutex(uint32_t count)
 {
-	//¶¨Òå±äÁ¿
+	//å®šä¹‰å˜é‡
 	std::mutex g_i_mutex;
 	uint32_t index = 0;
 
@@ -491,7 +491,7 @@ void TestThreadMutex(uint32_t count)
 			for (uint32_t i = 0; i < count; ++i)
 			{
 				std::lock_guard<std::mutex> lock(g_i_mutex);
-				//ÒÔÏÂÂß¼­Îª»¥³â·ÃÎÊ
+				//ä»¥ä¸‹é€»è¾‘ä¸ºäº’æ–¥è®¿é—®
 				{
 					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
 				}
@@ -510,7 +510,7 @@ void TestThreadMutex(uint32_t count)
 			for (uint32_t i = 0; i < count; ++i)
 			{
 				std::lock_guard<std::mutex> lock(g_i_mutex);
-				//ÒÔÏÂÂß¼­Îª»¥³â·ÃÎÊ
+				//ä»¥ä¸‹é€»è¾‘ä¸ºäº’æ–¥è®¿é—®
 				{
 					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
 				}
@@ -529,7 +529,7 @@ void TestThreadMutex(uint32_t count)
 			for (uint32_t i = 0; i < count; ++i)
 			{
 				std::lock_guard<std::mutex> lock(g_i_mutex);
-				//ÒÔÏÂÂß¼­Îª»¥³â·ÃÎÊ
+				//ä»¥ä¸‹é€»è¾‘ä¸ºäº’æ–¥è®¿é—®
 				{
 					std::cout << "index [" << index++ << "]" << "[" << std::this_thread::get_id() << "]" << std::endl;
 				}
@@ -765,7 +765,7 @@ bool TestTimerWheel(uint32_t c)
     TimerWheelManager::CreateInstance();
     TimerWheelManager::Instance()->Init();
 
-	//²åÈë
+	//æ’å…¥
 	auto start = std::chrono::high_resolution_clock::now();
 
 	for (size_t i = 0; i < 10000; i++)
@@ -867,10 +867,10 @@ void TestVirtual()
 
 }
 
-// Ëæ»úÊı²âÊÔ
+// éšæœºæ•°æµ‹è¯•
 size_t Randomsize()
 {
-    //Êı×é³¤¶ÈÔİ¶¨100ÒÔÄÚ
+    //æ•°ç»„é•¿åº¦æš‚å®š100ä»¥å†…
     static std::default_random_engine generator(time(nullptr));
     static std::uniform_int_distribution<uint32_t> dis(0, 100);
     static std::function<uint32_t()> dice = std::bind(dis, generator);
@@ -934,7 +934,7 @@ std::string Randomstring()
 
 void* Randombytes()
 {
-    //Ìî³ä´ø0µÄÑ¡Ïî
+    //å¡«å……å¸¦0çš„é€‰é¡¹
     static int32_t temp[16];
     for (uint32_t i = 0; i < 16; ++i)
     {
@@ -954,77 +954,77 @@ size_t GetRandomByteCount()
 
 void TestRandom()
 {
-    std::cout << "²âÊÔ Randomsize" << std::endl;
+    std::cout << "æµ‹è¯• Randomsize" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomsize() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomuint32" << std::endl;
+    std::cout << "æµ‹è¯• Randomuint32" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomuint32() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomint32" << std::endl;
+    std::cout << "æµ‹è¯• Randomint32" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomint32() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomuint64" << std::endl;
+    std::cout << "æµ‹è¯• Randomuint64" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomuint64() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomint64" << std::endl;
+    std::cout << "æµ‹è¯• Randomint64" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomint64() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randombool" << std::endl;
+    std::cout << "æµ‹è¯• Randombool" << std::endl;
     for (size_t i = 0; i < 100; i++)
     {
         std::cout << Randombool() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomfloat" << std::endl;
+    std::cout << "æµ‹è¯• Randomfloat" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomfloat() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomdouble" << std::endl;
+    std::cout << "æµ‹è¯• Randomdouble" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomdouble() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randomstring" << std::endl;
+    std::cout << "æµ‹è¯• Randomstring" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randomstring() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ Randombytes" << std::endl;
+    std::cout << "æµ‹è¯• Randombytes" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << Randombytes() <<std::endl;
     }
     std::cout << std::endl;
 
-    std::cout << "²âÊÔ GetRandomByteCount" << std::endl;
+    std::cout << "æµ‹è¯• GetRandomByteCount" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
         std::cout << GetRandomByteCount() <<std::endl;
@@ -1033,12 +1033,66 @@ void TestRandom()
 
 }
 
+void TestEpoll()
+{
+#define MAX_EVENTS 10
+    struct epoll_event ev, events[MAX_EVENTS];
+    int listen_sock, conn_sock, nfds, epollfd;
+
+    /* Code to set up listening socket, 'listen_sock',
+       (socket(), bind(), listen()) omitted */
+
+    epollfd = epoll_create1(0);
+    if (epollfd == -1) {
+        perror("epoll_create1");
+        exit(EXIT_FAILURE);
+    }
+
+    ev.events = EPOLLIN;
+    ev.data.fd = listen_sock;
+    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, listen_sock, &ev) == -1) {
+        perror("epoll_ctl: listen_sock");
+        exit(EXIT_FAILURE);
+    }
+
+    for (;;) {
+        nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
+        if (nfds == -1) {
+            perror("epoll_wait");
+            exit(EXIT_FAILURE);
+        }
+
+        for (n = 0; n < nfds; ++n) {
+            if (events[n].data.fd == listen_sock) {
+                conn_sock = accept(listen_sock,
+                    (struct sockaddr *) &addr, &addrlen);
+                if (conn_sock == -1) {
+                    perror("accept");
+                    exit(EXIT_FAILURE);
+                }
+                setnonblocking(conn_sock);
+                ev.events = EPOLLIN | EPOLLET;
+                ev.data.fd = conn_sock;
+                if (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock,
+                    &ev) == -1) {
+                    perror("epoll_ctl: conn_sock");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else {
+                do_use_fd(events[n].data.fd);
+            }
+        }
+    }
+
+}
+
 int main(int argc, char* argv[])
 {
 	//TestObjectPool();
 	//TestStdString();
 
-	//²âÊÔ
+	//æµ‹è¯•
 	uint32_t count = 10;
 	if (argc > 1)
 	{
@@ -1048,9 +1102,9 @@ int main(int argc, char* argv[])
 	//TestWriteOpenid(count);
 	//TestThreadNoLock(count);
 
-    //HeapProfilerStart("heap.profile"); // Ìí¼Óº¯ÊıÖ®Ò»
+    //HeapProfilerStart("heap.profile"); // æ·»åŠ å‡½æ•°ä¹‹ä¸€
     //TestNewTcmalloc(count);
-    //HeapProfilerStop();  // Ìí¼Óº¯ÊıÖ®¶ş
+    //HeapProfilerStop();  // æ·»åŠ å‡½æ•°ä¹‹äºŒ
 
 	//TestTimerWheel(count);
 	//TestVirtual();
